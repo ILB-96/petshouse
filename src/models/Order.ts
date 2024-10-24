@@ -69,4 +69,4 @@ const orderSchema = new Schema<IOrder>(
   { timestamps: true }
 );
 
-export const Order = models?.IOrder || model<IOrder>("Order", orderSchema);
+export const Order = models?.Order || model<IOrder>("Order", orderSchema);

@@ -15,4 +15,4 @@ const categorySchema = new Schema<ICategory>({
 });
 
 export const Category =
-  models?.ICategory || model<ICategory>("Category", categorySchema);
+  models?.Category || model<ICategory>("Category", categorySchema);

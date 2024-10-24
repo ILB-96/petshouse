@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         await connectDB();
         const user = await User.findOne({
-          email: credentials?.email,
+          email: credentials?.email.toLowerCase(),
         }).select("+password");
 
         if (!user) throw new Error("Wrong Email");

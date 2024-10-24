@@ -10,5 +10,4 @@ const companySchema = new Schema<ICompany>({
   url: { type: String },
 });
 
-export const Company =
-  models?.ICompany || model<ICompany>("Company", companySchema);
+export const Company = models?.Company || model<ICompany>("Company", companySchema);

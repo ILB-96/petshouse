@@ -24,7 +24,7 @@ const SessionDropdown = () => {
         <ProfileImage
           width={40}
           height={40}
-          src={user.image || "placeholder.svg"}
+          src={user.image || "/icons/user.svg"}
           alt="User Profile Image"
         />
       </DropdownMenuTrigger>

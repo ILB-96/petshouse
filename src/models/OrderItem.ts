@@ -15,4 +15,4 @@ const orderItemSchema = new Schema<IOrderItem>({
 });
 
 export const OrderItem =
-  models?.IOrderItem || model<IOrderItem>("OrderItem", orderItemSchema);
+  models?.OrderItem || model<IOrderItem>("OrderItem", orderItemSchema);

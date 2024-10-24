@@ -11,4 +11,4 @@ const cartItemSchema = new Schema<ICartItem>({
 });
 
 export const CartItem =
-  models?.ICartItem || model<ICartItem>("CartItem", cartItemSchema);
+  models?.CartItem || model<ICartItem>("CartItem", cartItemSchema);
