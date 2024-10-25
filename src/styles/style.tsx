@@ -203,10 +203,10 @@ export const TextContainer = styled.div`
 `;
 
 export const PrimaryButton = styled(Button)`
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   width: fit-content;
   display: flex;
-  background-color: var(--primary);
+  background-color: rgba(var(--primary));
   color: var(--onprimary);
   transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
   grid-column-start: 7;
@@ -253,7 +253,7 @@ export const SectionTitle = styled.h2`
 export const Paragraph = styled.p`
   display: flex;
   flex-direction: column;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: var(--onsurface);
   text-align: start;
   margin: 1rem 0;

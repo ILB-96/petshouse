@@ -17,8 +17,8 @@ export const SignOutButton = () => {
 
   return (
     <Button
-      variant="link"
-      className="pl-0"
+      variant="ghost"
+      className="pl-0 font-light"
       onClick={handleSignOut}
       disabled={isPending}
     >

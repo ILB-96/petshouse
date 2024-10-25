@@ -18,7 +18,9 @@ const BigNav = () => {
           <NavLink
             key={item.name}
             href={item.href}
-            className={pathname === item.href ? "bg-surface" : ""}
+            className={
+              pathname === item.href ? "bg-blue-400 size-fit" : "size-fit"
+            }
           >
             {item.name}
           </NavLink>

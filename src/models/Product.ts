@@ -1,7 +1,7 @@
 import { models, Schema, Types, Document, model } from "mongoose";
 import { contentBlockSchema, IContentBlock } from "./ContentBlock";
 export interface IProduct extends Document {
-  _id: string;
+  _id: Types.ObjectId;
   name: string;
   sku: string;
   description: string;

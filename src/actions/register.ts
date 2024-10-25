@@ -29,16 +29,13 @@ export const register = async (values: RegisterValues) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create cart and user
-    const cart = new Cart();
     const user = new User({
       name,
       email: email.toLowerCase(),
       password: hashedPassword,
-      cartId: cart._id, // Link cart to user
     });
 
-    // Set the userId in the cart
-    cart.userId = user._id;
+    const cart = new Cart({ userId: user._id });
 
     // Save both cart and user concurrently
     await Promise.all([cart.save(), user.save()]);

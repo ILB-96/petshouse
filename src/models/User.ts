@@ -9,12 +9,11 @@ export enum Role {
 export interface IUser extends Document {
   _id: Types.ObjectId;
   email: string;
-  password: string;
+  password?: string;
   name: string;
   phone?: string;
   image?: string;
   role?: Role;
-  cartId: Types.ObjectId;
   address?: IAddress;
   createdAt: Date;
   updatedAt: Date;
@@ -33,7 +32,6 @@ const userSchema = new Schema<IUser>(
     },
     password: {
       type: String,
-      required: true,
     },
     name: {
       type: String,
@@ -42,7 +40,6 @@ const userSchema = new Schema<IUser>(
     phone: { type: String },
     role: { type: String, enum: Object.values(Role), default: Role.USER }, // Fixed enum definition
     image: { type: String },
-    cartId: { type: Schema.Types.ObjectId, ref: "Cart", required: true },
     address: { type: addressSchema },
   },
   {

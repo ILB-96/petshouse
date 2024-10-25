@@ -2,7 +2,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   BenefitsContainer,
-  FeatureContainer,
   SectionSubtitle,
   HeroContainer,
   HeroTitle,
@@ -14,6 +13,7 @@ import {
   TextContainer,
 } from "@/styles/style";
 import { inclusions } from "@/constants";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
   return (
@@ -22,14 +22,13 @@ export default function Home() {
         <HeroContainer>
           <TextContainer>
             <HeroTitle>
-              Join Forces&nbsp;to<span>Save&nbsp;More</span>
+              Welcome to PetsHouse <span>All In One Store for Your Pet</span>
             </HeroTitle>
             <Paragraph>
-              GetBy helps you connect with others who have similar{" "}
-              <span>
-                purchasing interests to get the best deals and share delivery
-                costs.
-              </span>
+              PetsHouse is your one-stop shop for all pet needs. From food and
+              toys to grooming supplies, we offer everything at great prices.
+              Join our community and enjoy savings and convenience for your
+              beloved pets.
             </Paragraph>
             <PrimaryButton>Get Started</PrimaryButton>
           </TextContainer>
