@@ -7,11 +7,11 @@ export interface IProduct extends Document {
   description: string;
   images: { url: string; caption: string }[];
   price: number;
-  salePrice?: number;
   stock: number;
   categoryId: Types.ObjectId;
   companyId: Types.ObjectId;
   contentBlocks: IContentBlock[];
+  expiredAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,7 +23,6 @@ const productSchema = new Schema<IProduct>(
     description: { type: String, required: true },
     images: [{ url: { type: String }, caption: { type: String } }],
     price: { type: Number, required: true },
-    salePrice: { type: Number },
     stock: { type: Number, required: true },
     categoryId: {
       type: Schema.Types.ObjectId,

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import ErrorBubble from "./error-bubble";
+import ErrorBubble from "../ui/error-bubble";
 import { Icons } from "./icons";
 
 import { contactAction } from "@/actions/contact-action";
@@ -17,15 +17,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-const formSchema = z.object({
-  name: z.string().min(1).max(20),
-  email: z.string().email(),
-  info: z.string().min(5).max(1000),
-});
-type FormSchema = z.infer<typeof formSchema>;
+import { contactSchema } from "@/zod-schemas";
+
+type FormSchema = z.infer<typeof contactSchema>;
 const ContactForm = () => {
   const form = useForm<FormSchema>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(contactSchema),
     defaultValues: {
       name: "",
       email: "",

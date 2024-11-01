@@ -18,9 +18,11 @@ export const register = async (values: RegisterValues) => {
     await connectDB();
 
     // Check if user already exists
-    const userFound = await User.findOne({ email });
+    const userFound = await User.findOne({ email: email.toLowerCase() });
+    console.log(userFound);
     if (userFound) {
       return {
+        message: "User already exists",
         error: "Email already exists!",
       };
     }
@@ -47,7 +49,8 @@ export const register = async (values: RegisterValues) => {
   } catch (e: unknown) {
     console.log(e);
     return {
-      error: "An error occurred during registration. Please try again.",
+      message: "An error occurred during registration",
+      error: e,
     };
   }
 };

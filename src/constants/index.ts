@@ -15,3 +15,41 @@ export const inclusions = [
     icon: "/icons/payment.svg",
   },
 ];
+
+  export const actions = [
+    {
+      name: "Create New Page",
+      // icon: <Icons.pageAdd />,
+      slug: "create-page",
+    },
+    {
+      name: "Create New Product",
+      slug: "create-product",
+      // icon: <Icons.productAdd />,
+    },
+    {
+      name: "Add New Company",
+      // icon: <Icons.companyAdd />,
+      slug: "create-company",
+    },
+    {
+      name: "Add New Category",
+      // icon: <Icons.categoryAdd />,
+      slug: "create-category",
+    },
+    {
+      name: "View Categories",
+      // icon: <Icons.categoryAdd />,
+      slug: "view-categories",
+    },
+    {
+      name: "View Orders",
+      // icon: <Icons.orders />,
+      slug: "view-orders",
+    },
+    {
+      name: "Manage Users",
+      // icon: <Icons.users />,
+      slug: "manage-users",
+    },
+  ];

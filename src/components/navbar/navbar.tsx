@@ -6,14 +6,18 @@ import { authOptions } from "@/lib/auth";
 import BigNav from "./big-nav";
 import { NavContainer } from "@/styles/style";
 import SessionDropdown from "./session-dropdown";
+import { Role } from "@/models/User";
+import AdminNav from "./admin-nav";
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
-
   return (
-    <NavContainer>
-      <BigNav />
-      {session ? <SessionDropdown /> : <SignInButton />}
-    </NavContainer>
+    <>
+      {session?.user?.role === Role.ADMIN ? <AdminNav /> : null}
+      <NavContainer>
+        <BigNav />
+        {session ? <SessionDropdown /> : <SignInButton />}
+      </NavContainer>
+    </>
   );
 };
 

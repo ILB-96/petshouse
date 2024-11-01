@@ -1,9 +1,15 @@
 import { models, Schema, Types, Document, model } from "mongoose";
 
+export enum CartStatus {
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+}
+
 interface ICart extends Document {
-  _id: string;
+  _id: Types.ObjectId;
   userId: Types.ObjectId;
   cartItemId: Types.ObjectId[];
+  status: CartStatus;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -13,10 +19,14 @@ const cartSchema = new Schema<ICart>(
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      unique: true,
       required: true,
     },
-    cartItemId: [{ type: Types.ObjectId, ref: "CartItem", default: [] }],
+    status: {
+      type: String,
+      enum: Object.values(CartStatus),
+      default: CartStatus.ACTIVE,
+    },
+    cartItemId: [{ type: Schema.Types.ObjectId, ref: "CartItem", default: [] }],
   },
   { timestamps: true }
 );

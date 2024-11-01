@@ -1,12 +1,7 @@
 // lib/user.ts
 import { User } from "@/models/User"; // Your User model (update the path accordingly)
 
-/**
- * Fetches the user from the database using their user ID.
- *
- * @param {string} userId - The user's ID (usually from the session token).
- * @returns {Promise<Object | null>} - The user object, including cartId if found.
- */
+
 export async function getUserFromDatabase(email: string) {
   try {
     // Query the MongoDB database using Mongoose to find the user by their ID

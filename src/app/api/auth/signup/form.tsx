@@ -1,9 +1,9 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { register } from "@/actions/register";
+import { getSession } from "next-auth/react";
 
 export const RegisterForm = () => {
   const [loading, setLoading] = useState(false);
@@ -15,11 +15,20 @@ export const RegisterForm = () => {
   const [error, setError] = useState("");
   const router = useRouter();
 
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkSession = async () => {
+      const session = await getSession();
+      if (session?.user) {
+        router.push("/"); // Redirect to home if logged in
+      }
+    };
+    checkSession();
+  }, [router]);
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // setFormValues({ name: "", email: "", password: "" });
-    console.log("HELL:", formValues.email);
+    setFormValues({ name: "", email: "", password: "" });
     const r = await register({
       email: formValues.email,
       password: formValues.password,
@@ -30,7 +39,7 @@ export const RegisterForm = () => {
       setLoading(false);
       return;
     } else {
-      return router.push("/login");
+      return router.push("/api/auth/signin");
     }
   };
 
@@ -38,7 +47,6 @@ export const RegisterForm = () => {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
   };
-
   const input_style =
     "form-control block w-full px-4 py-5 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none";
 

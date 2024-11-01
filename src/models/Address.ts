@@ -11,12 +11,12 @@ export interface IAddress {
 }
 
 export const addressSchema = new Schema<IAddress>({
-  country: { type: String, default: "" },
-  city: { type: String, default: "" },
-  street: { type: String, default: "" },
-  house: { type: String, default: "" },
-  floor: { type: String, default: "" },
-  zip: { type: String, default: "" },
+  country: { type: String, required: true },
+  city: { type: String, required: true },
+  street: { type: String, required: true },
+  house: { type: String },
+  floor: { type: String },
+  zip: { type: String },
 });
 
 const Address = models?.Address || model<IAddress>("Address", addressSchema);

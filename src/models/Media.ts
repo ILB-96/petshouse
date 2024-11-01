@@ -22,3 +22,5 @@ export const mediaSchema = new Schema<IMedia>({
 // Use the correct collection name 'Media' here
 const Media = models?.Media || model<IMedia>("Media", mediaSchema);
 export default Media;
+
+//TODO: Search Thumbnail for Media Type

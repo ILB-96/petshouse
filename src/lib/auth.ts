@@ -79,9 +79,9 @@ export const authOptions: NextAuthOptions = {
 
         if (!existingUser) {
           // If user does not exist, create a new user record
-          const userRecord = new User({
+          userRecord = new User({
             email: profile?.email.toLowerCase(),
-            name: profile?.name || profile?.login,
+            name: profile?.name || profile?.email,
             image: profile?.avatar_url || "",
           });
 
@@ -99,8 +99,7 @@ export const authOptions: NextAuthOptions = {
           let cart = await Cart.findOne({ userId: userRecord._id });
           if (!cart) {
             cart = new Cart({ userId: userRecord._id });
-            await cart.save();
-            await userRecord.save();
+            await Promise.all([cart.save(), userRecord.save()]);
           }
         }
         return true;

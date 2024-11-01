@@ -13,19 +13,21 @@ const BigNav = () => {
       <LogoLink href="/">
         <Image src="/logo.png" alt="PetsGouse logo" width={700} height={405} />
       </LogoLink>
-      {navItems.map((item) => {
-        return (
-          <NavLink
-            key={item.name}
-            href={item.href}
-            className={
-              pathname === item.href ? "bg-blue-400 size-fit" : "size-fit"
-            }
-          >
-            {item.name}
-          </NavLink>
-        );
-      })}
+      <div className="flex my-auto gap-2 h-fit">
+        {navItems.map((item) => {
+          return (
+            <NavLink
+              key={item.name}
+              href={item.href}
+              className={
+                pathname === item.href ? "bg-blue-400 size-fit" : "size-fit"
+              }
+            >
+              {item.name}
+            </NavLink>
+          );
+        })}
+      </div>
     </NavContent>
   );
 };

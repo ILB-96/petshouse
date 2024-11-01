@@ -4,14 +4,14 @@ export interface ICategory extends Document {
   _id: Types.ObjectId;
   name: string;
   slug: string;
-  description?: string;
-  path?: Types.ObjectId[];
+  parent?: string;
+  isDraft?: boolean;
 }
 const categorySchema = new Schema<ICategory>({
   name: { type: String, required: true },
-  slug: { type: String, required: true },
-  description: { type: String },
-  path: [{ type: String, default: [] }],
+  slug: { type: String, required: true, unique: true },
+  parent: { type: String },
+  isDraft: { type: Boolean, required: true },
 });
 
 export const Category =

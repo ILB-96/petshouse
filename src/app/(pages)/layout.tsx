@@ -3,8 +3,6 @@ import "@/styles/global.css";
 import Navbar from "@/components/navbar/navbar";
 import { BodyContainer } from "@/styles/style";
 import Footer from "@/components/footer";
-import { Toaster } from "@/components/ui/toaster";
-import Providers from "@/providers/providers";
 
 export const metadata: Metadata = {
   title: "PetsHouse",
@@ -17,13 +15,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <body>
-        <Providers>
-          {children}
-          <Toaster />
-        </Providers>
-      </body>
-    </html>
+    <BodyContainer>
+      <Navbar />
+      {children}
+      <Footer />
+    </BodyContainer>
   );
 }

@@ -164,3 +164,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+body {
+  font-family: system-ui, sans-serif;
+  
+}

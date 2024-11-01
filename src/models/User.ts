@@ -38,7 +38,7 @@ const userSchema = new Schema<IUser>(
       required: [true, "Name is required"],
     },
     phone: { type: String },
-    role: { type: String, enum: Object.values(Role), default: Role.USER }, // Fixed enum definition
+    role: { type: String, enum: Object.values(Role), default: Role.USER },
     image: { type: String },
     address: { type: addressSchema },
   },

@@ -92,7 +92,7 @@ export const BodyContainer = styled.div`
 
 export const MainContainer = styled.main`
   ${MainStyle}
-
+  min-height: 100vh;
   padding-top: var(--xl);
   place-content: start;
 `;
@@ -113,10 +113,12 @@ export const NavContainer = styled.nav`
   background-color: var(--surfacebright);
   padding: var(--md) 0;
   top: 0;
-  z-index: 50;
-  max-height: 4.5rem;
+  z-index: 999;
+  max-height: 5.5rem;
+  align-items: center;
   transition: opacity 100ms linear;
   visibility: visible;
+
   > button {
     width: fit-content;
     margin-left: auto;
@@ -124,7 +126,7 @@ export const NavContainer = styled.nav`
 `;
 export const LogoLink = styled(Link)`
   margin: 0 1.5rem 0 0;
-  width: 100%;
+  width: 5.5rem;
 `;
 export const ProfileImage = styled(Image)`
   ${ShadowStyle}
@@ -138,11 +140,11 @@ export const NavContent = styled.div`
   :nth-child(2) {
     grid-column-start: 3;
   }
+  height: fit-content;
 `;
 export const NavLink = styled(Link)`
-  width: fit-content;
   padding: var(--sm);
-  margin-right: auto;
+  margin: auto auto 0 0;
   border-radius: var(--2xl);
   position: relative;
   font-weight: 500;

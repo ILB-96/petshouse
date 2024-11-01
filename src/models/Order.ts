@@ -2,26 +2,26 @@ import { models, Schema, Types, Document, model } from "mongoose";
 import { IAddress, addressSchema } from "./Address";
 
 export enum OrderStatus {
-  PENDING,
-  PROCESSING,
-  SHIPPED,
-  DELIVERED,
-  CANCELLED,
+  PENDING = "PENDING",
+  PROCESSING = "PROCESSING",
+  SHIPPED = "SHIPPED",
+  DELIVERED = "DELIVERED",
+  CANCELLED = "CANCELLED",
 }
 
 export enum PaymentStatus {
-  PENDING,
-  PAID,
-  FAILED,
-  REFUNDED,
+  PENDING = "PENDING",
+  PAID = "PAID",
+  FAILED = "FAILED",
+  REFUNDED = "REFUNDED",
 }
 
 export enum PaymentMethod {
-  CREDIT_CARD,
-  PAYPAL,
-  STRIPE,
-  APPLE_PAY,
-  GOOGLE_PAY,
+  CREDIT_CARD = "CREDIT_CARD",
+  PAYPAL = "PAYPAL",
+  STRIPE = "STRIPE",
+  APPLE_PAY = "APPLE_PAY",
+  GOOGLE_PAY = "GOOGLE_PAY",
 }
 
 export interface IOrder extends Document {
@@ -29,14 +29,14 @@ export interface IOrder extends Document {
   userId: Types.ObjectId;
   address: IAddress;
   status: OrderStatus;
-  paymentStatus: PaymentStatus;
-  paymentMethod: PaymentMethod;
+  paymentStatus?: PaymentStatus;
+  paymentMethod?: PaymentMethod;
   subtotal: number;
   tax: number;
   shipping: number;
   paymentIntent?: string;
   notes?: string;
-  orderItemsId: Types.ObjectId[];
+  cartId: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -48,14 +48,17 @@ const orderSchema = new Schema<IOrder>(
       required: true,
     },
     status: {
+      type: String,
       enum: Object.values(OrderStatus),
       default: OrderStatus.PENDING,
     },
     paymentStatus: {
+      type: String,
       enum: Object.values(PaymentStatus),
       default: PaymentStatus.PENDING,
     },
     paymentMethod: {
+      type: String,
       enum: Object.values(PaymentMethod),
       required: true,
     },
@@ -64,7 +67,7 @@ const orderSchema = new Schema<IOrder>(
     shipping: { type: Number, required: true },
     paymentIntent: { type: String },
     notes: { type: String },
-    orderItemsId: [{ type: Schema.Types.ObjectId, ref: "OrderItem" }],
+    cartId: { type: Schema.Types.ObjectId, ref: "OrderItem" },
   },
   { timestamps: true }
 );
