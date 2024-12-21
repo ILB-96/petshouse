@@ -10,12 +10,14 @@ export interface IMedia extends Document {
   _id: Types.ObjectId;
   name: string;
   data: Buffer;
+  caption?: string;
   contentType: MediaType;
 }
 
 export const mediaSchema = new Schema<IMedia>({
   name: { type: String, required: true },
   data: { type: Buffer, required: true },
+  caption: { type: String },
   contentType: { enum: Object.values(MediaType), required: true },
 });
 

@@ -1,5 +1,6 @@
 import { BodyContainer } from "@/styles/style";
 import AdminAccess from "./admin-access";
+import BreadCrumbs from "@/components/BreadCrumbs";
 
 export const metadata = {
   title: "Next.js",
@@ -13,6 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <BodyContainer>
+      <BreadCrumbs />
       <AdminAccess>{children}</AdminAccess>
     </BodyContainer>
   );

@@ -2,41 +2,45 @@
 
 import { MainContainer, SectionContainer } from "@/styles/style";
 import React from "react";
-import GeneralForm from "@/components/general-form";
+import GenericForm from "@/components/GenericForm/GenericForm";
 import { createCategory } from "@/actions/category";
-import { CategorySchema } from "@/zod-schemas";
+import { categorySchemaZod } from "@/models/Category";
 
 const defaultValues = {
   name: "",
   slug: "",
-  parentSlug: "",
+  parent: "",
+  isDraft: false,
 };
 
 const fields = [
   { name: "name", label: "Category Name*", type: "text" },
   { name: "slug", label: "Category Slug*", type: "text" },
-  { name: "parentSlug", label: "Category Parent Slug", type: "text" },
+  { name: "parent", label: "Category Parent Slug", type: "text" },
+  { name: "isDraft", label: "Category Draft Mode", type: "checkbox" },
 ];
 
 const handleSubmit = async ({
   name,
   slug,
-  parentSlug,
+  parent,
+  isDraft,
 }: {
   name: string;
   slug: string;
-  parentSlug: string;
+  parent: string;
+  isDraft: boolean;
 }) => {
-  const { message } = await createCategory({ name, slug, parentSlug });
+  const { message } = await createCategory({ name, slug, parent, isDraft });
   return message; // This will be shown as a toast notification
 };
 
-const CreateCategoryPage = () => {
+const AddCategoryPage = () => {
   return (
     <MainContainer>
       <SectionContainer>
-        <GeneralForm
-          formSchema={CategorySchema}
+        <GenericForm
+          formSchema={categorySchemaZod}
           defaultValues={defaultValues}
           fields={fields}
           onSubmit={handleSubmit}
@@ -46,4 +50,4 @@ const CreateCategoryPage = () => {
   );
 };
 
-export default CreateCategoryPage;
+export default AddCategoryPage;

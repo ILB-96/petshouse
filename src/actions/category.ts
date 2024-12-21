@@ -1,17 +1,11 @@
 "use server";
 import { connectDB } from "@/lib/database";
-import { Category } from "@/models/Category";
+import { Category, ICategory } from "@/models/Category";
+import { revalidatePath } from "next/cache";
 
-// Better type definition instead of `any`
-interface CategoryValues {
-  name: string;
-  slug: string;
-  parentSlug: string;
-}
-
-export const createCategory = async (values: CategoryValues) => {
-  const { name, slug, parentSlug } = values;
-
+export const createCategory = async (values: ICategory) => {
+  console.log("What", values);
+  const { name, slug, parent, isDraft } = values;
   try {
     await connectDB();
 
@@ -24,8 +18,8 @@ export const createCategory = async (values: CategoryValues) => {
       };
     }
 
-    if (parentSlug) {
-      const parentCategory = await Category.findOne({ slug: parentSlug });
+    if (parent) {
+      const parentCategory = await Category.findOne({ slug: parent });
       if (!parentCategory) {
         return {
           message: "Parent category not found!",
@@ -36,12 +30,11 @@ export const createCategory = async (values: CategoryValues) => {
     const category = new Category({
       name,
       slug,
-      isDraft: false,
-      parent: parentSlug,
+      isDraft: isDraft,
+      parent: parent,
     });
-    console.log(category);
-    await category.save();
 
+    await category.save();
     return {
       message: "Category registered successfully",
     };
@@ -55,7 +48,7 @@ export const createCategory = async (values: CategoryValues) => {
 };
 
 export const editCategory = async (values: CategoryValues) => {
-  const { name, slug, parentSlug } = values;
+  const { name, slug, parent } = values;
 
   try {
     await connectDB();
@@ -69,8 +62,8 @@ export const editCategory = async (values: CategoryValues) => {
       };
     }
 
-    if (parentSlug) {
-      const parentCategory = await Category.findOne({ slug: parentSlug });
+    if (parent) {
+      const parentCategory = await Category.findOne({ slug: parent });
       if (!parentCategory) {
         return {
           message: "Parent category not found!",
@@ -79,7 +72,7 @@ export const editCategory = async (values: CategoryValues) => {
       }
     }
 
-    categoryBySlug.parent = parentSlug;
+    categoryBySlug.parent = parent;
     categoryBySlug.name = name;
     categoryBySlug.slug = slug;
     await categoryBySlug.save();
@@ -105,4 +98,46 @@ export const findOneCategory = async (slug: string) => {
     console.log(e);
     return null;
   }
+};
+
+export const getCategories = async (
+  q: string | RegExp,
+  page: number,
+  categories_per_page: number
+) => {
+  const regex = new RegExp(q, "i");
+  try {
+    connectDB();
+    const count = await Category.find({
+      slug: { $regex: regex },
+      deletedAt: null,
+    }).countDocuments();
+    const categories = await Category.find({
+      slug: { $regex: regex },
+      deletedAt: null,
+    })
+      .limit(categories_per_page)
+      .skip(categories_per_page * (page - 1));
+    return { count, categories };
+  } catch (err) {
+    throw new Error("Failed to fetch categories!");
+  }
+};
+
+export const deleteCategory = async (
+  formData: Iterable<readonly [PropertyKey, any]>
+) => {
+  const { slug } = Object.fromEntries(formData);
+
+  try {
+    connectDB();
+    const category = await Category.findOne({ slug });
+    category.deletedAt = new Date();
+    await category.save();
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to delete user!");
+  }
+
+  revalidatePath("/admin/categories");
 };

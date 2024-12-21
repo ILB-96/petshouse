@@ -184,4 +184,35 @@ export const Icons = {
       <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2zM7 7h.01" />
     </svg>
   ),
+  Trash: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+      height="2em"
+      width="2em"
+      {...props}
+    >
+      <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />
+    </svg>
+  ),
+  View: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+      height="2em"
+      width="2em"
+      {...props}
+    >
+      <path d="M5 12s2.545-5 7-5c4.454 0 7 5 7 5s-2.546 5-7 5c-4.455 0-7-5-7-5z" />
+      <path d="M12 13a1 1 0 100-2 1 1 0 000 2zM21 17v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2M21 7V5a2 2 0 00-2-2H5a2 2 0 00-2 2v2" />
+    </svg>
+  ),
 };

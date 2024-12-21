@@ -1,11 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z, ZodObject, ZodRawShape } from "zod";
+import { ZodObject, ZodRawShape } from "zod";
 
 import ErrorBubble from "@/components/ui/error-bubble";
-import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -14,18 +13,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import "./company.css";
+import FormTextArea from "./FormTextArea";
+import FormCheckBox from "./FormCheckBox";
+import FormText from "./FormText";
+import FormGenericType from "./FormGenericType";
+import FormRichText from "./FormRichText";
 
-// Generalized Form Component
-const GeneralForm = ({
+const GenericForm = ({
   formSchema,
   defaultValues,
   fields,
   onSubmit,
 }: {
   formSchema: ZodObject<ZodRawShape>;
-  defaultValues: Record<string, any>;
+  defaultValues: Record<string, unknown>;
   fields: { name: string; type?: string; label: string }[];
-  onSubmit: (data: any) => Promise<string>;
+  onSubmit: (data: unknown) => Promise<string>;
 }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -34,7 +37,7 @@ const GeneralForm = ({
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (data: Record<string, any>) => {
+  const handleSubmit = async (data: Record<string, unknown>) => {
     setIsSubmitting(true);
     const message = await onSubmit(data);
     toast({ description: message });
@@ -58,38 +61,43 @@ const GeneralForm = ({
                 <FormItem className="user-box w-full">
                   <FormControl>
                     {field.type === "textarea" ? (
-                      <Textarea
-                        required
-                        id={field.name}
-                        aria-invalid={!!form.formState.errors[field.name]}
-                        autoComplete="off"
-                        aria-describedby={field.name}
-                        className={cn(
-                          "shadow-muted focus-visible:ring-ring min-h-32 shadow-md rounded-sm",
-                          form.formState.errors[field.name] &&
-                            "border-destructive"
-                        )}
-                        {...formField}
+                      <FormTextArea
+                        field={field}
+                        form={form}
+                        formField={formField}
+                      />
+                    ) : field.type === "rich-text" ? (
+                      <FormRichText
+                        field={field}
+                        form={form}
+                        formField={formField}
+                      />
+                    ) : field.type === "checkbox" ? (
+                      <FormCheckBox
+                        field={field}
+                        form={form}
+                        formField={formField}
+                      />
+                    ) : field.type === "text" ? (
+                      <FormText
+                        field={field}
+                        form={form}
+                        formField={formField}
                       />
                     ) : (
-                      <Input
-                        required
-                        type={field.type || "text"}
-                        id={field.name}
-                        aria-describedby={field.name}
-                        autoComplete={field.name}
-                        aria-invalid={!!form.formState.errors[field.name]}
-                        className={cn(
-                          "shadow-md focus-visible:ring-ring rounded-sm",
-                          form.formState.errors[field.name] &&
-                            "border-destructive"
-                        )}
-                        {...formField}
+                      <FormGenericType
+                        field={field}
+                        form={form}
+                        formField={formField}
                       />
                     )}
                   </FormControl>
-                  <Label htmlFor={field.name}>{field.label}</Label>
-                  <ErrorBubble error={form.formState.errors[field.name]} />
+                  {field.type !== "checkbox" && field.type !== "rich-text" && (
+                    <>
+                      <Label htmlFor={field.name}>{field.label}</Label>
+                      <ErrorBubble error={form.formState.errors[field.name]} />
+                    </>
+                  )}
                 </FormItem>
               )}
             />
@@ -110,4 +118,4 @@ const GeneralForm = ({
   );
 };
 
-export default GeneralForm;
+export default GenericForm;

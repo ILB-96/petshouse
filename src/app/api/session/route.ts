@@ -1,8 +1,10 @@
 import { authOptions } from "@/lib/auth";
+import { connectDB } from "@/lib/database";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
+  await connectDB();
   const session = await getServerSession(authOptions);
 
   if (!session) {

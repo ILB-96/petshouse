@@ -6,7 +6,7 @@ export const contactSchema = z.object({
   info: z.string().min(5).max(1000),
 });
 
-export const CategorySchema = z.object({
+export const companySchemaZod = z.object({
   name: z
     .string()
     .min(1, "Name is required")
@@ -17,17 +17,7 @@ export const CategorySchema = z.object({
     .min(1, "Slug is required")
     .max(20)
     .transform((val) => val.toLowerCase().replace(/\s+/g, "-")),
-  parentSlug: z
-    .string()
-    .optional()
-    .transform((val) => (val ? val.toLowerCase().replace(/\s+/g, "-") : "")),
+  url: z.string().url().optional(),
 });
 
-export const companySchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required")
-    .max(20)
-    .transform((val) => val.charAt(0).toUpperCase() + val.slice(1)),
-  url: z.string().url(),
-});
+export type companyType = z.infer<typeof companySchema>;

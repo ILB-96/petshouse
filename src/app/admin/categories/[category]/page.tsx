@@ -2,29 +2,20 @@
 
 import { HeroTitle, MainContainer, SectionContainer } from "@/styles/style";
 import { useRouter, useParams } from "next/navigation";
-import GeneralForm from "@/components/general-form";
+import GenericForm from "@/components/GenericForm/GenericForm";
 import { editCategory, findOneCategory } from "@/actions/category";
-import { z } from "zod";
 import { useEffect, useState } from "react";
-import { Category, ICategory } from "@/models/Category";
-import { CategorySchema } from "@/zod-schemas";
+import { Category, categorySchemaZod, ICategory } from "@/models/Category";
 
 const fields = [
   { name: "name", label: "Category Name*", type: "text" },
   { name: "slug", label: "Category Slug*", type: "text" },
-  { name: "parentSlug", label: "Category Parent Slug", type: "text" },
+  { name: "parent", label: "Category Parent Slug", type: "text" },
+  { name: "isDraft", label: "Category Draft Mode", type: "checkbox" },
 ];
 
-const handleSubmit = async ({
-  name,
-  slug,
-  parentSlug,
-}: {
-  name: string;
-  slug: string;
-  parentSlug: string;
-}) => {
-  const { message } = await editCategory({ name, slug, parentSlug });
+const handleSubmit = async ({ name, slug, parent }: ICategory) => {
+  const { message } = await editCategory({ name, slug, parent });
   return message;
 };
 
@@ -38,13 +29,12 @@ const CategoryViewPage = () => {
       const slug = params.category;
 
       if (!slug) {
-        router.push("/admin/view-categories");
+        router.push("/admin/categories");
         return;
       }
 
       const category = await findOneCategory(slug as string);
-      if (await category) {
-        console.log(category);
+      if (category) {
         setCategory(category);
       } else {
         router.push("/admin/categories");
@@ -61,15 +51,15 @@ const CategoryViewPage = () => {
   const defaultValues = {
     name: category.name,
     slug: category.slug,
-    parentSlug: category.parent,
+    parent: category.parent,
   };
 
   return (
     <MainContainer>
       <SectionContainer>
         <HeroTitle>{category.slug}</HeroTitle>
-        <GeneralForm
-          formSchema={CategorySchema}
+        <GenericForm
+          formSchema={categorySchemaZod}
           fields={fields}
           defaultValues={defaultValues}
           onSubmit={handleSubmit}

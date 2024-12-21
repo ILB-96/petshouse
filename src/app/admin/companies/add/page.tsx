@@ -1,31 +1,41 @@
 "use client";
 import { MainContainer, SectionContainer } from "@/styles/style";
 import React from "react";
-import GeneralForm from "@/components/general-form";
+import GenericForm from "@/components/GenericForm/GenericForm";
 import { createCompany } from "@/actions/company";
-import { companySchema } from "@/zod-schemas";
+import { companySchemaZod } from "@/models/Company";
 
 const defaultValues = {
   name: "",
+  slug: "",
   url: "",
 };
 
 const fields = [
   { name: "name", label: "Company Name*", type: "text" },
+  { name: "slug", label: "Company Slug*", type: "text" },
   { name: "url", label: "Company URL", type: "text" },
 ];
 
-const handleSubmit = async ({ name, url }: { name: string; url: string }) => {
-  const { message } = await createCompany({ name, url });
-  return message ?? "Company created successfully"; // Ensure a string is always returned
+const handleSubmit = async ({
+  name,
+  slug,
+  url,
+}: {
+  name: string;
+  slug: string;
+  url: string;
+}) => {
+  const { message } = await createCompany({ name, slug, url });
+  return message ?? "Company created successfully";
 };
 
-const CreateCompanyPage = () => {
+const AddCompanyPage = () => {
   return (
     <MainContainer>
       <SectionContainer>
-        <GeneralForm
-          formSchema={companySchema}
+        <GenericForm
+          formSchema={companySchemaZod}
           defaultValues={defaultValues}
           fields={fields}
           onSubmit={handleSubmit}
@@ -35,4 +45,4 @@ const CreateCompanyPage = () => {
   );
 };
 
-export default CreateCompanyPage;
+export default AddCompanyPage;
