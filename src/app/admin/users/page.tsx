@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import Pagination from "@/components/dashboard/pagination/Pagination";
-import SearchComp from "@/components/dashboard/search/Search";
+import SearchComp from "@/components/search/Search";
 import styles from "@/components/dashboard/users/users.module.css";
 import { getUsers, deleteUser } from "@/lib/user";
 
@@ -63,7 +63,7 @@ const UsersPage: React.FC<UsersPageProps> = async ({ searchParams }) => {
                         priority
                       />
                     ) : (
-                      <Icons.User className="size-10" />
+                      <Icons.user className="size-10" />
                     )}
                     {user?.name}
                   </div>
@@ -76,7 +76,7 @@ const UsersPage: React.FC<UsersPageProps> = async ({ searchParams }) => {
                   <div className={styles.buttons}>
                     <Link href={`/admin/users/${user?._id}`}>
                       <Button variant="outline">
-                        <Icons.View />
+                        <Icons.view />
                       </Button>
                     </Link>
                     <form action={deleteUser}>
@@ -86,7 +86,7 @@ const UsersPage: React.FC<UsersPageProps> = async ({ searchParams }) => {
                         value={user?._id.toString("base64")}
                       />
                       <Button variant="destructive">
-                        <Icons.Trash />
+                        <Icons.trash />
                       </Button>
                     </form>
                   </div>

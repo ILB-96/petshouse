@@ -1,81 +1,92 @@
 "use client";
 import { MainContainer, SectionContainer } from "@/styles/style";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import GenericForm from "@/components/GenericForm/GenericForm";
 import { createProduct } from "@/actions/product";
-import { productSchemaZod } from "@/models/Product";
+import { IProduct, productSchemaZod } from "@/models/Product";
+import { findAllCompaniesSlug as findAllCompanies } from "@/actions/company"; // Import your server action for companies
+import { findAllCategories as findAllCategories } from "@/actions/category"; // Assuming there's a similar action for categories
 
-const defaultValues = {
-  name: "",
-  slug: "",
-  sku: "",
-  shortDescription: "",
-  price: 0,
-  stock: 1,
-  categorySlug: "",
-  companySlug: "",
-  description: "",
-  ingredients: "",
-};
-
-const fields = [
-  { name: "name", label: "Company Name*", type: "text" },
-  { name: "slug", label: "Company Slug*", type: "text" },
-  { name: "sku", label: "SKU*", type: "text" },
-  { name: "shortDescription", label: "Short Description*", type: "text" },
-  { name: "price", label: "Price*", type: "number" },
-  { name: "stock", label: "Stock*", type: "number" },
-  { name: "categorySlug", label: "Category Slug*", type: "text" },
-  { name: "companySlug", label: "Company Slug*", type: "text" },
-  { name: "description", label: "Description*", type: "rich-text" },
-  { name: "ingredients", label: "Ingredients", type: "rich-text" },
-];
-
-const handleSubmit = async ({
-  name,
-  slug,
-  sku,
-  shortDescription,
-  price,
-  stock,
-  categorySlug,
-  companySlug,
-  description,
-  ingredients,
-}: {
-  name: string;
-  slug: string;
-  sku: string;
-  shortDescription: string;
-  price: number;
-  stock: number;
-  categorySlug: string;
-  companySlug: string;
-  description: string;
-  ingredients: string;
-}) => {
-  const { message } = await createProduct({
-    name,
-    slug,
-    sku,
-    shortDescription,
-    price,
-    stock,
-    categorySlug,
-    companySlug,
-    description,
-    ingredients,
-  });
+const handleSubmit = async (product: IProduct) => {
+  console.log(product);
+  const { message } = await createProduct(product);
   return message ?? "Product created successfully";
 };
 
-const AddCompanyPage = () => {
+const AddProductPage = () => {
+  const [fields, setFields] = useState([
+    { name: "name", label: "Product Name*", type: "text" },
+    { name: "slug", label: "Product Slug*", type: "text" },
+    { name: "sku", label: "SKU*", type: "text" },
+    { name: "shortDescription", label: "Short Description*", type: "text" },
+    { name: "price", label: "Price*", type: "number", default: 1 },
+    { name: "stock", label: "Stock*", type: "number", default: 1 },
+    {
+      name: "category",
+      label: "Category Slug*",
+      type: "dropdown",
+      values: [],
+    },
+    {
+      name: "company",
+      label: "Company Slug*",
+      type: "dropdown",
+      values: [],
+    },
+    { name: "description", label: "Description*", type: "rich-text" },
+    { name: "ingredients", label: "Ingredients", type: "rich-text" },
+    { name: "images", label: "Images", type: "file" },
+  ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch companies
+        const companies = await findAllCompanies();
+        const companySlugs = companies?.map((company: any) => ({
+          label: company.slug,
+          value: company._id,
+        }));
+
+        // Fetch categories
+        const categories = await findAllCategories();
+        const categorySlugs = categories?.map((category: any) => ({
+          label: category.slug,
+          value: category._id,
+        }));
+
+        setFields((prevFields) =>
+          prevFields.map((field: any) => {
+            if (field.name === "company") {
+              return {
+                ...field,
+                values: companySlugs || [],
+                default: companySlugs?.[0] || "",
+              };
+            }
+            if (field.name === "category") {
+              return {
+                ...field,
+                values: categorySlugs || [],
+                default: categorySlugs?.[0] || "",
+              };
+            }
+            return field;
+          })
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <MainContainer>
       <SectionContainer>
         <GenericForm
           formSchema={productSchemaZod}
-          defaultValues={defaultValues}
           fields={fields}
           onSubmit={handleSubmit}
         />
@@ -84,4 +95,4 @@ const AddCompanyPage = () => {
   );
 };
 
-export default AddCompanyPage;
+export default AddProductPage;

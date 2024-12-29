@@ -94,7 +94,7 @@ export const LoginForm = () => {
           className="inline-block px-7 py-4 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
           disabled={loading}
         >
-          {loading ? <Icons.Loader /> : "Sign In"}
+          {loading ? <Icons.loader /> : "Sign In"}
         </button>
 
         <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
@@ -108,6 +108,15 @@ export const LoginForm = () => {
         >
           <Icons.github className="size-6 mr-2" />
           Continue with GitHub
+        </a>
+        <a
+          className="px-7 py-2 mt-2 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center"
+          style={{ backgroundColor: "#b5342a" }}
+          onClick={() => signIn("google", { callbackUrl })}
+          role="button"
+        >
+          <Icons.google className="size-6 mr-2" />
+          Continue with Google
         </a>
       </form>
       <div className="mt-4 text-center">

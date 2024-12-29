@@ -1,6 +1,6 @@
 "use server";
 import Pagination from "@/components/dashboard/pagination/Pagination";
-import SearchComp from "@/components/dashboard/search/Search";
+import SearchComp from "@/components/search/Search";
 import styles from "@/components/dashboard/users/users.module.css";
 
 import { SearchParams } from "@/models/types";
@@ -60,15 +60,15 @@ const CategoriesPage: React.FC<CategoriesPageProps> = async ({
                 </TableCell>
                 <TableCell className={styles.tableCell}>
                   <div className={styles.buttons}>
-                    <Link href={`/admin/companies/${company?.slug}`}>
-                      <Button variant="outline">
-                        <Icons.View />
-                      </Button>
-                    </Link>
+                    <Button variant="outline" asChild>
+                      <Link href={`/admin/companies/${company?.slug}`}>
+                        <Icons.view />
+                      </Link>
+                    </Button>
                     <form action={deleteCompany}>
                       <input type="hidden" name="slug" value={company?.slug} />
                       <Button variant="destructive">
-                        <Icons.Trash />
+                        <Icons.trash />
                       </Button>
                     </form>
                   </div>

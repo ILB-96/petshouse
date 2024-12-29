@@ -108,7 +108,7 @@ const GroupForm = () => {
     [form.control]
   );
 
-  if (loading) return <Icons.Loader />;
+  if (loading) return <Icons.loader />;
 
   return (
     <SectionContainer>

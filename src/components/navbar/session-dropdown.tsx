@@ -16,7 +16,7 @@ import { sessionNavItems } from "./config";
 import { SignOutButton } from "./sign-out-button";
 const SessionDropdown = () => {
   const { user, loading } = useAuth();
-  if (loading || !user) return <Icons.Loader />;
+  if (loading || !user) return <Icons.loader />;
 
   return (
     <DropdownMenu>

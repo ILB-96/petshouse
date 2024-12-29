@@ -33,6 +33,11 @@ const AdminDashboard = () => {
       // icon: <Icons.users />,
       slug: "users",
     },
+    {
+      name: "Media",
+      // icon: <Icons.users />,
+      slug: "media",
+    },
   ];
 
   return (

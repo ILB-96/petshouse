@@ -13,4 +13,5 @@
   border: none;
   color: var(--text);
   outline: none;
+  width: 30ch;
 }

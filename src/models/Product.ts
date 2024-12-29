@@ -9,7 +9,7 @@ export const productSchemaZod = z.object({
     .transform((val) => val.charAt(0).toUpperCase() + val.slice(1)),
   slug: z
     .string()
-    .min(1, "SKU is required")
+    .min(1, "Slug is required")
     .max(50)
     .transform((val) => val.toLowerCase().replace(/\s+/g, "-")),
   sku: z
@@ -17,12 +17,12 @@ export const productSchemaZod = z.object({
     .min(1, "SKU is required")
     .max(50)
     .transform((val) => val.toUpperCase().replace(/\s+/g, "-")),
-  price: z.number().min(1, "Price is required"),
-  stock: z.number().min(0, "Stock is required").int(),
-  imagesId: z.array(z.string()).min(1, "Images is required"),
+  price: z.coerce.number().min(1, "Price is required").int(),
+  stock: z.coerce.number().min(0, "Stock is required").int(),
+  images: z.array(z.string()).optional(),
   shortDescription: z.string().min(1, "Short Description is required").max(50),
-  companyId: z.string().min(1, "Company is required"),
-  categoryId: z.string().min(1, "Category is required"),
+  company: z.string().min(1, "Company is required"),
+  category: z.string().min(1, "Category is required"),
   description: z.string().min(1, "Description is required"),
   ingredients: z.string().optional(),
   expiredAt: z.date().optional(),
@@ -35,21 +35,20 @@ const productSchema = new Schema<IProduct>(
     slug: { type: String, required: true, unique: true },
     sku: { type: String, required: true },
     shortDescription: { type: String, required: true },
-    imagesId: [
+    images: [
       {
         type: Schema.Types.String,
         ref: "Media",
-        required: true,
       },
     ],
     price: { type: Number, required: true },
     stock: { type: Number, required: true },
-    categoryId: {
+    category: {
       type: Schema.Types.String,
       ref: "Category",
       required: true,
     },
-    companyId: { type: Schema.Types.String, ref: "Company", required: true },
+    company: { type: Schema.Types.String, ref: "Company", required: true },
     description: { type: String, required: true },
     ingredients: { type: String },
     expiredAt: { type: Date },

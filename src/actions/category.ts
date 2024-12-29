@@ -1,6 +1,7 @@
 "use server";
 import { connectDB } from "@/lib/database";
 import { Category, ICategory } from "@/models/Category";
+import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 
 export const createCategory = async (values: ICategory) => {
@@ -17,9 +18,9 @@ export const createCategory = async (values: ICategory) => {
         error: "Category slug already exists!",
       };
     }
-
+    let parentCategory = null;
     if (parent) {
-      const parentCategory = await Category.findOne({ slug: parent });
+      parentCategory = await Category.findOne({ slug: parent });
       if (!parentCategory) {
         return {
           message: "Parent category not found!",
@@ -31,10 +32,10 @@ export const createCategory = async (values: ICategory) => {
       name,
       slug,
       isDraft: isDraft,
-      parent: parent,
+      parent: parentCategory ? parent : undefined,
     });
-
     await category.save();
+
     return {
       message: "Category registered successfully",
     };
@@ -47,7 +48,7 @@ export const createCategory = async (values: ICategory) => {
   }
 };
 
-export const editCategory = async (values: CategoryValues) => {
+export const editCategory = async (values: ICategory) => {
   const { name, slug, parent } = values;
 
   try {
@@ -70,9 +71,8 @@ export const editCategory = async (values: CategoryValues) => {
           error: "Parent category not found!",
         };
       }
+      categoryBySlug.parent = parent;
     }
-
-    categoryBySlug.parent = parent;
     categoryBySlug.name = name;
     categoryBySlug.slug = slug;
     await categoryBySlug.save();
@@ -96,6 +96,36 @@ export const findOneCategory = async (slug: string) => {
     return { ...category, _id: category?._id.toString() };
   } catch (e: unknown) {
     console.log(e);
+    return null;
+  }
+};
+export const findAllCategories = async () => {
+  try {
+    await connectDB();
+    const categories = await Category.find({ deletedAt: null }).lean();
+    return categories.map((category) => ({
+      ...category,
+      _id: category._id.toString(),
+    }));
+  } catch (e: unknown) {
+    console.error("Error finding categories:", e); // Improved error logging
+    return null;
+  }
+};
+export const findMainCategories = async () => {
+  try {
+    await connectDB();
+    const categories = await Category.find({
+      deletedAt: null,
+      isDraft: false,
+      parent: null,
+    }).lean();
+    return categories.map((category) => ({
+      ...category,
+      _id: category._id.toString(),
+    }));
+  } catch (e: unknown) {
+    console.error("Error finding categories:", e); // Improved error logging
     return null;
   }
 };
@@ -141,3 +171,36 @@ export const deleteCategory = async (
 
   revalidatePath("/admin/categories");
 };
+
+// app/actions/getCategoryTree.ts
+
+export async function getCategoryTree(slug: string): Promise<any> {
+  // Helper function to recursively fetch children
+  const buildTree = async (parentSlug: string | null): Promise<any> => {
+    const categories = await Category.find({ parent: parentSlug }).lean();
+
+    // For each category, fetch its children recursively
+    const children = await Promise.all(
+      categories.map(async (category) => ({
+        ...category,
+        _id: (category._id as mongoose.Types.ObjectId).toString(),
+        children: await buildTree(category.slug),
+      }))
+    );
+
+    return children;
+  };
+
+  // Start building the tree from the given slug
+  const rootCategory = await Category.findOne({ slug, isDraft: false }).lean();
+  if (!rootCategory) {
+    throw new Error(`Category with slug "${slug}" not found`);
+  }
+
+  return {
+    ...rootCategory,
+    _id: rootCategory._id.toString(),
+    root: true,
+    children: await buildTree(rootCategory.slug),
+  };
+}

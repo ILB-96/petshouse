@@ -91,6 +91,19 @@ export const findOneCompany = async (slug: string) => {
     return null;
   }
 };
+export const findAllCompaniesSlug = async () => {
+  try {
+    await connectDB();
+    const companies = await Company.find({ deletedAt: null }).lean();
+    return companies.map((company) => ({
+      ...company,
+      _id: company._id.toString(),
+    }));
+  } catch (e: unknown) {
+    console.error("Error finding companies:", e);
+    return null;
+  }
+};
 
 export const getCompanies = async (
   q: string | RegExp,

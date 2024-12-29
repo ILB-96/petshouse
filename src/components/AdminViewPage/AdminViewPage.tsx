@@ -1,7 +1,6 @@
 import { MainContainer, SectionContainer } from "@/styles/style";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { FiEdit, FiTrash } from "react-icons/fi"; // Example icons
 
 interface Item {
   _id: string;

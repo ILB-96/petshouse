@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
@@ -8,6 +7,9 @@ export interface FormFieldProps {
   field: {
     type?: string;
     name: string;
+    label: string;
+    default?: string;
+    values?: { label: string; value: string }[];
   };
   form: {
     formState: {

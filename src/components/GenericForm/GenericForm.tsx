@@ -7,17 +7,17 @@ import { ZodObject, ZodRawShape } from "zod";
 import ErrorBubble from "@/components/ui/error-bubble";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
 import "./company.css";
 import FormTextArea from "./FormTextArea";
 import FormCheckBox from "./FormCheckBox";
 import FormText from "./FormText";
 import FormGenericType from "./FormGenericType";
 import FormRichText from "./FormRichText";
+import FormDropdown from "./FormDropdown";
+import FormNumber from "./FormNumber";
+import FormImages from "./FormImages";
 
 const GenericForm = ({
   formSchema,
@@ -26,18 +26,29 @@ const GenericForm = ({
   onSubmit,
 }: {
   formSchema: ZodObject<ZodRawShape>;
-  defaultValues: Record<string, unknown>;
-  fields: { name: string; type?: string; label: string }[];
+  defaultValues?: Record<string, unknown>;
+  fields: {
+    name: string;
+    type?: string;
+    label: string;
+    values?: any[];
+    default?: any;
+  }[];
   onSubmit: (data: unknown) => Promise<string>;
 }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues:
+      defaultValues ||
+      Object.fromEntries(
+        fields.map((field) => [field.name, field?.default || ""])
+      ),
   });
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (data: Record<string, unknown>) => {
+    console.log("Form data before submission:", data);
     setIsSubmitting(true);
     const message = await onSubmit(data);
     toast({ description: message });
@@ -45,7 +56,7 @@ const GenericForm = ({
   };
 
   return (
-    <div className="login-box relative flex w-full flex-col items-center justify-center shadow-md rounded-sm">
+    <div className="login-box relative flex w-full flex-col items-center justify-center">
       <Form {...form}>
         <form
           noValidate
@@ -84,6 +95,24 @@ const GenericForm = ({
                         form={form}
                         formField={formField}
                       />
+                    ) : field.type === "dropdown" ? (
+                      <FormDropdown
+                        field={field}
+                        form={form}
+                        formField={formField}
+                      />
+                    ) : field.type === "number" ? (
+                      <FormNumber
+                        field={field}
+                        form={form}
+                        formField={formField}
+                      />
+                    ) : field.type === "file" ? (
+                      <FormImages
+                        field={field}
+                        form={form}
+                        formField={formField}
+                      />
                     ) : (
                       <FormGenericType
                         field={field}
@@ -92,18 +121,23 @@ const GenericForm = ({
                       />
                     )}
                   </FormControl>
-                  {field.type !== "checkbox" && field.type !== "rich-text" && (
-                    <>
-                      <Label htmlFor={field.name}>{field.label}</Label>
-                      <ErrorBubble error={form.formState.errors[field.name]} />
-                    </>
-                  )}
+                  {field.type !== "checkbox" &&
+                    field.type !== "rich-text" &&
+                    field.type !== "dropdown" &&
+                    field.type !== "file" && (
+                      <>
+                        <Label htmlFor={field.name}>{field.label}</Label>
+                        <ErrorBubble
+                          error={form.formState.errors[field.name]}
+                        />
+                      </>
+                    )}
                 </FormItem>
               )}
             />
           ))}
-          <div className="my-4 flex w-full justify-center">
-            <Button disabled={isSubmitting}>
+          <div className="my-14 flex w-full justify-center">
+            <Button type="submit" disabled={isSubmitting}>
               <span>Submit</span>
               {/* <Icons.send
                 height="1.3rem"

@@ -46,7 +46,7 @@ const CompanyViewPage = () => {
   }, [params, router]);
 
   if (!company) {
-    return <Icons.Loader />;
+    return <Icons.loader />;
   }
 
   const defaultValues = {

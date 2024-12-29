@@ -22,7 +22,7 @@ export const SignOutButton = () => {
       onClick={handleSignOut}
       disabled={isPending}
     >
-      {isPending && <Icons.Loader />}
+      {isPending && <Icons.loader />}
       Sign out
     </Button>
   );

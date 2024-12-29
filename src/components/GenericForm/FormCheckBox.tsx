@@ -1,8 +1,9 @@
 import React from "react";
 import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";
+import { FormFieldProps } from "./FormGenericType";
 
-const FormCheckBox = ({ field, form, formField }) => {
+const FormCheckBox: React.FC<FormFieldProps> = ({ field, form, formField }) => {
   return (
     <div className="flex justify-start w-[28rem]">
       <Label htmlFor={field.name} className="ml-5">

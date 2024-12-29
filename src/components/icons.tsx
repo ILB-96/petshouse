@@ -5,7 +5,7 @@ export const Icons = {
       stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={2}
+      strokeWidth={3}
       viewBox="0 0 24 24"
       height="2em"
       width="2em"
@@ -91,7 +91,7 @@ export const Icons = {
       <path d="M15 9.354a4 4 0 100 5.292" />
     </svg>
   ),
-  Loader: (props: React.SVGProps<SVGSVGElement>) => (
+  loader: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       fill="none"
       stroke="currentColor"
@@ -106,7 +106,7 @@ export const Icons = {
       <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
     </svg>
   ),
-  Calendar: (props: React.SVGProps<SVGSVGElement>) => (
+  calendar: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       fill="none"
       stroke="currentColor"
@@ -122,7 +122,7 @@ export const Icons = {
       <path d="M16 2v4M8 2v4M3 10h18M10 14l4 4M14 14l-4 4" />
     </svg>
   ),
-  User: (props: React.SVGProps<SVGSVGElement>) => (
+  user: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       fill="none"
       stroke="currentColor"
@@ -138,7 +138,7 @@ export const Icons = {
       <path d="M16 7 A4 4 0 0 1 12 11 A4 4 0 0 1 8 7 A4 4 0 0 1 16 7 z" />
     </svg>
   ),
-  Globe: (props: React.SVGProps<SVGSVGElement>) => (
+  globe: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       fill="none"
       stroke="currentColor"
@@ -154,7 +154,7 @@ export const Icons = {
       <path d="M22 12 A10 10 0 0 1 12 22 A10 10 0 0 1 2 12 A10 10 0 0 1 22 12 z" />
     </svg>
   ),
-  Tags: (props: React.SVGProps<SVGSVGElement>) => (
+  tags: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       fill="none"
       stroke="currentColor"
@@ -169,7 +169,7 @@ export const Icons = {
       <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2zM7 7h.01" />
     </svg>
   ),
-  List: (props: React.SVGProps<SVGSVGElement>) => (
+  list: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       fill="none"
       stroke="currentColor"
@@ -184,7 +184,7 @@ export const Icons = {
       <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2zM7 7h.01" />
     </svg>
   ),
-  Trash: (props: React.SVGProps<SVGSVGElement>) => (
+  trash: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       fill="none"
       stroke="currentColor"
@@ -199,7 +199,7 @@ export const Icons = {
       <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />
     </svg>
   ),
-  View: (props: React.SVGProps<SVGSVGElement>) => (
+  view: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       fill="none"
       stroke="currentColor"
@@ -213,6 +213,92 @@ export const Icons = {
     >
       <path d="M5 12s2.545-5 7-5c4.454 0 7 5 7 5s-2.546 5-7 5c-4.455 0-7-5-7-5z" />
       <path d="M12 13a1 1 0 100-2 1 1 0 000 2zM21 17v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2M21 7V5a2 2 0 00-2-2H5a2 2 0 00-2 2v2" />
+    </svg>
+  ),
+  google: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      height="1.5em"
+      width="1.5em"
+      {...props}
+    >
+      <path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81z" />
+    </svg>
+  ),
+  filter: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      width="1.5em"
+      height="1.5em"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />
+    </svg>
+  ),
+  filterx: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      width="1.5em"
+      height="1.5em"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="M13.013 3H2l8 9.46V19l4 2v-8.54l.9-1.055M22 3l-5 5m0-5 5 5" />
+    </svg>
+  ),
+  chevrondown: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      width="1.5em"
+      height="1.5em"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={3}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  ),
+  chevronup: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      width="1.5em"
+      height="1.5em"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={3}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="m18 15-6-6-6 6" />
+    </svg>
+  ),
+  chevronright: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      width="1.5em"
+      height="1.5em"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={3}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="m9 18 6-6-6-6" />
     </svg>
   ),
 };

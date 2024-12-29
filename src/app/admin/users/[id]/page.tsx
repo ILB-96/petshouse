@@ -34,7 +34,7 @@ const SingleUserPage = async ({ params }) => {
                 priority
               />
             ) : (
-              <Icons.User />
+              <Icons.user />
             )}
           </div>
         </div>

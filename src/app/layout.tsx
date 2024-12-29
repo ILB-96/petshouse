@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import "@/styles/global.css";
-import Navbar from "@/components/navbar/navbar";
-import { BodyContainer } from "@/styles/style";
-import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/providers/providers";
 

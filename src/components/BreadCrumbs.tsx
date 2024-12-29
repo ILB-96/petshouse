@@ -14,7 +14,7 @@ const BreadCrumbs = () => {
   const pathnames = pathname.split("/").filter((x) => x);
 
   return (
-    <Breadcrumb className="w-screen bg-transparent h-10 flex ml-11 sticky top-0">
+    <Breadcrumb className="w-screen h-10 flex ml-11 sticky top-0 backdrop-filter backdrop-blur-lg bg-white bg-opacity-50 z-10">
       <BreadcrumbList className="flex flex-row text-xl">
         <BreadcrumbItem>
           <BreadcrumbLink href="/">Home</BreadcrumbLink>

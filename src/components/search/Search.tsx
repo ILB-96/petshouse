@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import styles from "./search.module.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
+import { Input } from "../ui/input";
 
 const SearchComp = ({ placeholder }) => {
   const searchParams = useSearchParams();
@@ -26,7 +27,7 @@ const SearchComp = ({ placeholder }) => {
   return (
     <div className={styles.container}>
       <Search />
-      <input
+      <Input
         type="text"
         placeholder={placeholder}
         className={styles.input}

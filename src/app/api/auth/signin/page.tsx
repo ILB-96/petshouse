@@ -1,4 +1,4 @@
-import { MainContainer, SectionContainer } from "@/styles/style";
+import { SectionContainer } from "@/styles/style";
 import { LoginForm } from "./form";
 
 export default function LoginPage() {

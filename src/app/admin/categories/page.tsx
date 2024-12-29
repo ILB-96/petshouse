@@ -1,7 +1,7 @@
 "use server";
 
 import Pagination from "@/components/dashboard/pagination/Pagination";
-import SearchComp from "@/components/dashboard/search/Search";
+import SearchComp from "@/components/search/Search";
 import styles from "@/components/dashboard/users/users.module.css";
 import { deleteCategory } from "@/actions/category";
 
@@ -50,7 +50,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = async ({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="max-sm:hidden">Slug</TableHead>
+              <TableHead>Slug</TableHead>
               <TableHead>Parent</TableHead>
               <TableHead>Draft</TableHead>
               <TableHead>Action</TableHead>
@@ -59,7 +59,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = async ({
           <TableBody>
             {categories.map((category: ICategory) => (
               <TableRow key={category.slug}>
-                <TableCell className="max-sm:hidden">
+                <TableCell>
                   <div className={styles.user}>{category?.slug}</div>
                 </TableCell>
                 <TableCell className={styles.tableCell}>
@@ -72,13 +72,13 @@ const CategoriesPage: React.FC<CategoriesPageProps> = async ({
                   <div className={styles.buttons}>
                     <Link href={`/admin/categories/${category?.slug}`}>
                       <Button variant="outline">
-                        <Icons.View />
+                        <Icons.view />
                       </Button>
                     </Link>
                     <form action={deleteCategory}>
                       <input type="hidden" name="slug" value={category?.slug} />
                       <Button variant="destructive">
-                        <Icons.Trash />
+                        <Icons.trash />
                       </Button>
                     </form>
                   </div>
