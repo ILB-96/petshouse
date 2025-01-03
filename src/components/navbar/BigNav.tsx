@@ -2,7 +2,7 @@
 import React from "react";
 import { navItems } from "./config";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { LogoLink, NavContent, NavLink } from "@/styles/style";
+import { LogoLink, NavContent } from "@/styles/style";
 import Image from "next/image";
 import { ICategory } from "@/models/Category";
 import { Button } from "../ui/button";
@@ -18,10 +18,10 @@ const BigNav: React.FC<BigNavProps> = ({ categories }) => {
 
   const goToCategory = (cate) => {
     const params = new URLSearchParams(searchParams);
-
     params.set("category", cate);
     params.set("page", "1");
-    const path = pathname === "/shop" ? pathname : `shop`;
+    params.set("sortby", "newest");
+    const path = pathname === "/shop" ? pathname : `/shop`;
     replace(`${path}?${params}`);
   };
 

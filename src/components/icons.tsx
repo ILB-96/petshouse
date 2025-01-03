@@ -301,4 +301,34 @@ export const Icons = {
       <path d="m9 18 6-6-6-6" />
     </svg>
   ),
+  sortby: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      width="1.5em"
+      height="1.5em"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="m21 16-4 4-4-4m4 4V4M3 8l4-4 4 4M7 4v16" />
+    </svg>
+  ),
+  cart: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      width="2.5em"
+      height="2.5em"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="M9 21a1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 2 0zM20 21a1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 2 0zM2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+    </svg>
+  ),
 };

@@ -4,7 +4,6 @@ import { useTransition } from "react";
 import { signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Icons } from "../icons";
-import { NavLink } from "@/styles/style";
 
 export const SignOutButton = () => {
   const [isPending, startTransition] = useTransition();

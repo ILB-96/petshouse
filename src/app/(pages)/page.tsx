@@ -13,7 +13,6 @@ import {
   TextContainer,
 } from "@/styles/style";
 import { inclusions } from "@/constants";
-import { useSession } from "next-auth/react";
 
 export default function Home() {
   return (

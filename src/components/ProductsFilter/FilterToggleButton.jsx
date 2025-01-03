@@ -16,6 +16,7 @@ const FilterToggleButton = ({
         className="z-40"
         onClick={() => setSidebarOpen(!isSidebarOpen)}
       >
+        Filter
         {isSidebarOpen ? (
           <Icons.exit />
         ) : filterState.size || companyState.size ? (

@@ -327,3 +327,19 @@ export const FooterContainer = styled.footer`
   z-index: 40;
   margin-top: auto;
 `;
+export const FilterContainer = styled.div`
+  margin-bottom: 1rem;
+`;
+
+export const SearchSortContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1rem; /* Add spacing between search and sort components */
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+`;

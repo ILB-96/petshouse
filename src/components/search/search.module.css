@@ -5,7 +5,7 @@
   background-color: none;
   padding: 10px;
   border-radius: 10px;
-  width: max-content;
+  width: 100%;
 }
 
 .input {
@@ -13,5 +13,5 @@
   border: none;
   color: var(--text);
   outline: none;
-  width: 30ch;
+  width: 100%;
 }

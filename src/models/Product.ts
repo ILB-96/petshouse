@@ -5,26 +5,26 @@ export const productSchemaZod = z.object({
   name: z
     .string()
     .min(1, "Name is required")
-    .max(20)
+    .max(200)
     .transform((val) => val.charAt(0).toUpperCase() + val.slice(1)),
   slug: z
     .string()
     .min(1, "Slug is required")
-    .max(50)
+    .max(300)
     .transform((val) => val.toLowerCase().replace(/\s+/g, "-")),
   sku: z
     .string()
     .min(1, "SKU is required")
-    .max(50)
+    .max(100)
     .transform((val) => val.toUpperCase().replace(/\s+/g, "-")),
   price: z.coerce.number().min(1, "Price is required").int(),
   stock: z.coerce.number().min(0, "Stock is required").int(),
   images: z.array(z.string()).optional(),
-  shortDescription: z.string().min(1, "Short Description is required").max(50),
+  shortDescription: z.string().min(1, "Short Description is required").max(300),
   company: z.string().min(1, "Company is required"),
   category: z.string().min(1, "Category is required"),
-  description: z.string().min(1, "Description is required"),
-  ingredients: z.string().optional(),
+  description: z.string().min(1, "Description is required").max(5000),
+  ingredients: z.string().max(5000).optional(),
   expiredAt: z.date().optional(),
 });
 export type IProduct = z.infer<typeof productSchemaZod> & Document;

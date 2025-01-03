@@ -43,7 +43,7 @@ const AdminDashboard = () => {
   return (
     <MainContainer className="bg-gray-100 min-h-screen">
       <SectionContainer className=" bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-3xl font-bold mb-8 text-gray-700">
+        <h1 className="text-3xl font-bold mb-8 text-gray-700 px-10">
           Admin Dashboard
         </h1>
 
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
           {actions.map((action) => (
             <Button
               key={action.slug}
-              className="bg-blue-600 text-white flex items-center p-6 rounded-lg shadow hover:bg-blue-700 transition duration-200"
+              className="bg-blue-500 text-white flex items-center p-6 rounded-lg shadow hover:bg-blue-700 transition duration-200"
               asChild
             >
               <Link href={`/admin/${action.slug}`}>

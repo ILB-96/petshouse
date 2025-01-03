@@ -35,12 +35,13 @@ export const register = async (values: RegisterValues) => {
       name,
       email: email.toLowerCase(),
       password: hashedPassword,
+      role: "ADMIN",
     });
 
-    const cart = new Cart({ userId: user._id });
+    const cart = new Cart({ user: user._id });
 
     // Save both cart and user concurrently
-    await Promise.all([cart.save(), user.save()]);
+    await Promise.all([user.save(), cart.save()]);
 
     return {
       success: true,

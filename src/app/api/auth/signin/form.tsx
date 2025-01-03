@@ -1,7 +1,10 @@
 "use client";
+import Cookies from "js-cookie";
 
+import { syncCart } from "@/actions/cart";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { getCartFromLocalStorage } from "@/lib/cartStorage";
 import { getSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -26,7 +29,12 @@ export const LoginForm = () => {
   }, [router]);
 
   const searchParams = useSearchParams();
+  const cart = getCartFromLocalStorage();
   const callbackUrl = searchParams.get("callbackUrl") || "/profile";
+  const handleSignIn = async (provider: string) => {
+    Cookies.set("cart", cart);
+    await signIn(provider, { callbackUrl });
+  };
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -35,6 +43,7 @@ export const LoginForm = () => {
       const res = await signIn("credentials", {
         email: formValues.email,
         password: formValues.password,
+        cart: cart,
         callbackUrl,
       });
 
@@ -59,7 +68,6 @@ export const LoginForm = () => {
 
   const input_style =
     "form-control block w-full px-4 py-5 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none";
-
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -103,7 +111,7 @@ export const LoginForm = () => {
         <a
           className="px-7 py-2 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center"
           style={{ backgroundColor: "#55acee" }}
-          onClick={() => signIn("github", { callbackUrl })}
+          onClick={() => handleSignIn("github")}
           role="button"
         >
           <Icons.github className="size-6 mr-2" />
@@ -112,7 +120,7 @@ export const LoginForm = () => {
         <a
           className="px-7 py-2 mt-2 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center"
           style={{ backgroundColor: "#b5342a" }}
-          onClick={() => signIn("google", { callbackUrl })}
+          onClick={() => handleSignIn("google")}
           role="button"
         >
           <Icons.google className="size-6 mr-2" />

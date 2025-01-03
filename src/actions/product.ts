@@ -193,6 +193,7 @@ const findCategoryBySlug = (category: any, slug: string): any => {
 export const getFilteredProducts = async (
   q: string | RegExp,
   page: number,
+  sortby: string,
   categories: any,
   filters: string[],
   companiesFilter: string[],
@@ -249,11 +250,31 @@ export const getFilteredProducts = async (
       query.company = { $in: companyIds };
     }
 
+    // Determine sort criteria
+    let sortCriteria: Record<string, 1 | -1> = {};
+    switch (sortby) {
+      case "newest":
+        sortCriteria = { createdAt: -1 }; // Descending order
+        break;
+      case "oldest":
+        sortCriteria = { createdAt: 1 }; // Ascending order
+        break;
+      case "price-low-high":
+        sortCriteria = { price: 1 }; // Ascending order
+        break;
+      case "price-high-low":
+        sortCriteria = { price: -1 }; // Descending order
+        break;
+      default:
+        sortCriteria = {}; // Default: no sorting
+    }
+
     // Get product count
     const count = await Product.find(query).countDocuments();
 
-    // Fetch products with pagination
+    // Fetch products with pagination and sorting
     const products = await Product.find(query)
+      .sort(sortCriteria) // Apply sorting
       .limit(products_per_page)
       .skip(products_per_page * (page - 1));
 
@@ -279,4 +300,5 @@ export const getFilteredProducts = async (
     throw new Error("Failed to fetch products!");
   }
 };
+
 

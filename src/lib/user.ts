@@ -1,5 +1,5 @@
 "use server";
-import { User } from "@/models/User"; // Your User model (update the path accordingly)
+import { Role, User } from "@/models/User"; // Your User model (update the path accordingly)
 import { connectDB } from "./database";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -45,7 +45,7 @@ export const addUser = async (
       username,
       email,
       password: hashedPassword,
-      role,
+      role: Role.ADMIN,
     });
 
     await newUser.save();

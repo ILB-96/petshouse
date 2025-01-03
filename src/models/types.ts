@@ -4,4 +4,5 @@ export interface SearchParams {
   category?: string;
   filters?: string;
   companiesFilter?: string;
+  sortby?: string;
 }

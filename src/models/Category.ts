@@ -6,12 +6,12 @@ export const categorySchemaZod = z.object({
   name: z
     .string()
     .min(1, "Name is required")
-    .max(20)
+    .max(100)
     .transform((val) => val.charAt(0).toUpperCase() + val.slice(1)),
   slug: z
     .string()
     .min(1, "Slug is required")
-    .max(20)
+    .max(200)
     .transform((val) => val.toLowerCase().replace(/\s+/g, "-")),
   parent: z
     .string()

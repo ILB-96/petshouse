@@ -6,9 +6,7 @@ export enum CartStatus {
 }
 
 interface ICart extends Document {
-  _id: Types.ObjectId;
-  userId: Types.ObjectId;
-  cartItemId: Types.ObjectId[];
+  user: Types.ObjectId;
   status: CartStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -16,7 +14,7 @@ interface ICart extends Document {
 
 const cartSchema = new Schema<ICart>(
   {
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -26,9 +24,9 @@ const cartSchema = new Schema<ICart>(
       enum: Object.values(CartStatus),
       default: CartStatus.ACTIVE,
     },
-    cartItemId: [{ type: Schema.Types.ObjectId, ref: "CartItem", default: [] }],
   },
   { timestamps: true }
 );
 
 export const Cart = models?.Cart || model<ICart>("Cart", cartSchema);
+export default Cart;
