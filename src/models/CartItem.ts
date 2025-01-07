@@ -14,7 +14,7 @@ const cartItemSchema = new Schema<ICartItem>({
   productDiscount: { type: Schema.Types.ObjectId, ref: "ProductDiscount" },
   price: { type: Number },
 });
-
+cartItemSchema.index({ cart: 1 });
 export const CartItem =
   models?.CartItem || model<ICartItem>("CartItem", cartItemSchema);
 export default CartItem;

@@ -1,12 +1,10 @@
 "use server";
 import { connectDB } from "@/lib/database";
 import { Category } from "@/models/Category";
-import Media, { IMedia, mediaSchemaZod } from "@/models/Media";
+import Media, { IMedia } from "@/models/Media";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 
-export const createMedia = async (data: z.infer<typeof mediaSchemaZod>) => {
-  console.log("What", data);
+export const createMedia = async (data: IMedia) => {
   try {
     await connectDB();
 
@@ -40,48 +38,6 @@ export const createMedia = async (data: z.infer<typeof mediaSchemaZod>) => {
   }
 };
 
-export const editCategory = async (values: CategoryValues) => {
-  const { name, slug, parent } = values;
-
-  try {
-    await connectDB();
-
-    // Check if user already exists
-    const categoryBySlug = await Category.findOne({ slug });
-    if (!categoryBySlug) {
-      return {
-        message: "Category slug doesn't exists!",
-        error: "Category slug doesn't exists!",
-      };
-    }
-
-    if (parent) {
-      const parentCategory = await Category.findOne({ slug: parent });
-      if (!parentCategory) {
-        return {
-          message: "Parent category not found!",
-          error: "Parent category not found!",
-        };
-      }
-    }
-
-    categoryBySlug.parent = parent;
-    categoryBySlug.name = name;
-    categoryBySlug.slug = slug;
-    await categoryBySlug.save();
-
-    return {
-      message: "Category updated successfully",
-    };
-  } catch (e: unknown) {
-    console.log(e);
-    return {
-      message: "An error occurred during save. Please try again later.",
-      error: JSON.stringify(e),
-    };
-  }
-};
-
 export const findOneMedia = async (name: string) => {
   try {
     await connectDB();
@@ -92,7 +48,7 @@ export const findOneMedia = async (name: string) => {
     return null;
   }
 };
-export const findAllCategories = async () => {
+export const findAllMedia = async () => {
   try {
     await connectDB();
     const items = await Media.find().lean();

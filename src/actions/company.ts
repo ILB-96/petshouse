@@ -1,19 +1,9 @@
 "use server";
 import { connectDB } from "@/lib/database";
-import { Cart } from "@/models/Cart";
-import { Company } from "@/models/Company";
-import { User } from "@/models/User";
-import bcrypt from "bcryptjs";
+import { Company, ICompany } from "@/models/Company";
 import { revalidatePath } from "next/cache";
 
-// Better type definition instead of `any`
-interface CompanyValues {
-  name: string;
-  slug: string;
-  url: string;
-}
-
-export const createCompany = async (values: CompanyValues) => {
+export const createCompany = async (values: ICompany) => {
   const { name, slug, url } = values;
 
   try {
@@ -49,7 +39,7 @@ export const createCompany = async (values: CompanyValues) => {
   }
 };
 
-export const editCompany = async (values: CompanyValues) => {
+export const editCompany = async (values: ICompany) => {
   const { name, slug, url } = values;
 
   try {

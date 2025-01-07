@@ -1,33 +1,23 @@
 import { models, Schema, model, Types } from "mongoose";
 
-export interface IProductDiscount {
+export interface IDiscount {
   _id: Types.ObjectId;
-  productId: Types.ObjectId;
+  product: Types.ObjectId;
   description: string;
-  discountMatrixId: Types.ObjectId;
-  data: string;
+  data: any; // Stores specific discount rules
   startDate: Date;
   endDate?: Date;
 }
-
-export interface IDiscountMatrix {
-  _id: Types.ObjectId;
-  type: string;
-}
-
-export const productDiscountSchema = new Schema<IProductDiscount>({
-  productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+export const discountSchema = new Schema<IDiscount>({
+  product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
   description: { type: String, required: true },
-  discountMatrixId: {
-    type: Schema.Types.ObjectId,
-    ref: "DiscountMatrix",
-    required: true,
-  },
-  data: { type: String, required: true },
+  data: { type: Schema.Types.Mixed, required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date },
 });
 
-export const ProductDiscount =
-  models?.ProductDiscount ||
-  model<IProductDiscount>("Address", productDiscountSchema);
+// Add index for efficient querying
+discountSchema.index({ product: 1, startDate: 1 });
+
+export const Discount =
+  models?.Discount || model<IDiscount>("Discount", discountSchema);

@@ -55,7 +55,6 @@ const handler = async (req, res) => {
           }
           const cookieStore = cookies();
           const cartData = cookieStore.get("cart")?.value || "[]";
-          console.log("REQA", cartData);
           await syncCart(userRecord._id, JSON.parse(cartData));
           cookieStore.delete("cart");
           return true;
@@ -64,16 +63,12 @@ const handler = async (req, res) => {
         return true;
       },
       async jwt({ token, account, user, profile, session }) {
-        console.log("JWT");
         const cart = req.nextUrl.searchParams.get("cart");
-        console.log("HELLO");
         if (cart) {
           profile.cart = cart;
           account.cart = cart;
           user.cart = cart;
         }
-        console.log("WHAT");
-        console.log("RAN", profile?.cart, account?.cart, user?.cart);
         if (account) {
           token.accessToken = account.access_token;
           token.refreshToken = account.refresh_token;

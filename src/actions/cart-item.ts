@@ -1,19 +1,125 @@
 "use server";
 import { connectDB } from "@/lib/database";
-import Cart from "@/models/Cart";
-import CartItem from "@/models/CartItem";
+import { CartItem, User, Cart } from "@/models";
+import { models } from "mongoose";
 export const createCartItem = async (
   product: string,
   user: string,
   quantity: number
 ) => {
   await connectDB();
+
   const cart = await Cart.findOne({ user: user, status: "ACTIVE" });
+
+  if (!cart) {
+    throw new Error("No active cart found for the user.");
+  }
+  const itemExists = await CartItem.findOne({
+    cart: cart._id,
+    product: product,
+  });
+
+  if (itemExists) {
+    itemExists.quantity += quantity;
+    await itemExists.save();
+    return {
+      _id: itemExists._id.toString(),
+      cart: itemExists.cart.toString(),
+      product: itemExists.product.toString(),
+      quantity: itemExists.quantity,
+    };
+  }
+
   const newItem = new CartItem({
     product: product,
     cart: cart._id,
     quantity: quantity,
   });
+
   await newItem.save();
-  return { ...newItem, _id: newItem._id.toString() };
+
+  // Return a plain object with the necessary data
+  return {
+    _id: newItem._id.toString(),
+    cart: newItem.cart.toString(),
+    product: newItem.product.toString(),
+    quantity: newItem.quantity,
+  };
+};
+
+export const getCartItems = async (cartId: string) => {
+  await connectDB();
+
+  const cartItems = await CartItem.find({ cart: cartId });
+
+  return cartItems.map((item) => ({
+    _id: item._id.toString(),
+    product: item.product.toString(),
+    quantity: item.quantity,
+  }));
+};
+
+export const getCartItemsCount = async (email: string) => {
+  await connectDB();
+  const user = await User.findOne({ email });
+  const cart = await Cart.findOne({ user: user._id, status: "ACTIVE" });
+  return await CartItem.find({ cart: cart._id }).countDocuments();
+};
+
+export const increaseQuantity = async (id) => {
+  await connectDB();
+  const item = await CartItem.findById(id);
+  item.quantity += 1;
+  await item.save();
+};
+export const decreaseQuantity = async (id) => {
+  await connectDB();
+  const item = await CartItem.findById(id);
+  item.quantity -= 1;
+  await item.save();
+};
+export const setQuantity = async (id, quantity) => {
+  await connectDB();
+  const item = await CartItem.findById(id);
+  item.quantity = quantity;
+  await item.save();
+};
+
+export const deleteCartItem = async (id) => {
+  await connectDB();
+  await CartItem.deleteOne({ _id: id });
+};
+
+export const findCartItems = async (email: string) => {
+  if (email === "") {
+    // Fetch local cart from localStorage
+    const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    return {
+      cart: { userId: "local", status: "ACTIVE" },
+      items: localCart, // Local cart doesn't have a schema, so we return raw data
+    };
+  }
+  await connectDB();
+
+  const user = await User.findOne({ email });
+  const cart = await Cart.findOne({ user: user._id, status: "ACTIVE" });
+
+  if (!cart) {
+    throw new Error("No active cart found for the user.");
+  }
+
+  // Fetch cart items and populate product and its images
+  const items = await CartItem.find({ cart: cart._id }).populate({
+    path: "product",
+    populate: {
+      path: "images",
+      model: "Media",
+    },
+  });
+
+  return {
+    userId: user._id,
+    cart,
+    items,
+  };
 };

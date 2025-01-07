@@ -1,7 +1,6 @@
 "use server";
 import { connectDB } from "@/lib/database";
-import { Cart } from "@/models/Cart";
-import { User } from "@/models/User";
+import { User, Cart } from "@/models";
 import bcrypt from "bcryptjs";
 
 // Better type definition instead of `any`

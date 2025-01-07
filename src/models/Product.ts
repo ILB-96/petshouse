@@ -1,4 +1,4 @@
-import { models, Schema, Types, Document, model } from "mongoose";
+import mongoose, { models, Schema, Types, Document, model } from "mongoose";
 
 import { z } from "zod";
 export const productSchemaZod = z.object({
@@ -56,5 +56,6 @@ const productSchema = new Schema<IProduct>(
   { timestamps: true }
 );
 
-const Product = models?.Product || model<IProduct>("Product", productSchema);
+const Product =
+  mongoose.models.Product || mongoose.model<IProduct>("Product", productSchema);
 export default Product;

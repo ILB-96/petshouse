@@ -9,7 +9,7 @@ interface ProductsListProps {
 const ProductsList: React.FC<ProductsListProps> = ({ products, count }) => {
   return (
     <SectionContainer>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3  max-lg:grid-cols-2 max-sm:grid-cols-1 gap-2 max-sm:mx-auto max-sm:space-y-4">
         {products.map((product) => (
           <ProductCard key={product.slug} product={product} />
         ))}

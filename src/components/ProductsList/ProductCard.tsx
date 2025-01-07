@@ -21,15 +21,15 @@ const ProductCard: React.FC<IProduct> = ({ product }) => {
     const session = await getSession();
     console.log("session", session);
     if (session?.user) {
-      console.log("Adding to cart");
       await createCartItem(product._id, session.user._id, 1);
     } else {
       const cartItem = { product: product._id, quantity: 1 };
       addItemToLocalStorageCart(cartItem);
     }
+    window.location.reload();
   };
   return (
-    <Card className="max-w-sm overflow-hidden shadow-lg">
+    <Card className="shadow-lg size-fit rounded-md">
       {product.image && (
         <CardContent className="p-0">
           <Image
@@ -37,7 +37,7 @@ const ProductCard: React.FC<IProduct> = ({ product }) => {
             alt={product.name}
             width={300}
             height={300}
-            className="w-full h-36 object-cover"
+            className="w-full h-36 object-cover rounded-md"
           />
         </CardContent>
       )}
@@ -48,7 +48,7 @@ const ProductCard: React.FC<IProduct> = ({ product }) => {
       <CardContent>
         <p>{product.shortDescription}</p>
       </CardContent>
-      <CardFooter className="flex justify-around items-center">
+      <CardFooter className="flex justify-around items-center space-x-2">
         <Button onClick={handleAddToCart}>Add To Cart</Button>
         <Button variant="outline" asChild>
           <Link href={`/shop/${product.slug}`}>View Details</Link>

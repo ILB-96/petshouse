@@ -6,16 +6,10 @@ import { revalidatePath } from "next/cache";
 
 export const createOrder = async (values: IOrder) => {
   console.log("What", values);
-  const { userId, subtotal, tax, shipping, cartId } = values;
+
   try {
     await connectDB();
-    const order = new Order({
-      userId,
-      subtotal,
-      tax,
-      shipping,
-      cartId,
-    });
+    const order = new Order(values);
 
     await order.save();
     return {

@@ -1,4 +1,5 @@
 "use client";
+import { createCartItem } from "@/actions/cart-item";
 import { findOneProduct } from "@/actions/product";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -11,9 +12,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { addItemToLocalStorageCart } from "@/lib/cartStorage";
 import { IProduct } from "@/models/Product";
 import { MainContainer, SectionContainer } from "@/styles/style";
 import { Separator } from "@radix-ui/react-dropdown-menu";
+import { getSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -21,14 +24,15 @@ import React, { useEffect, useState } from "react";
 const ProductPage = () => {
   const [product, setProduct] = useState<IProduct | null>(null);
   const [loading, setLoading] = useState(true);
+  const [addingToCart, setAddingToCart] = useState(false); // For button loading state
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [quantity, setQuantity] = useState(1); // Track selected quantity
   const router = useRouter();
   const params = useParams();
 
   useEffect(() => {
     const fetchProduct = async () => {
       const slug = params.product;
-
       const fetchedProduct = await findOneProduct(slug as string);
       if (fetchedProduct) {
         setProduct(fetchedProduct);
@@ -38,6 +42,25 @@ const ProductPage = () => {
 
     fetchProduct();
   }, [params.product, router]);
+
+  const handleAddToCart = async () => {
+    if (!product) return;
+    setAddingToCart(true); // Start loading
+    const session = await getSession();
+    try {
+      if (session?.user) {
+        await createCartItem(product._id, session.user._id, quantity);
+      } else {
+        const cartItem = { product: product._id, quantity };
+        addItemToLocalStorageCart(cartItem);
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to add to cart:", error);
+    } finally {
+      setAddingToCart(false); // Stop loading
+    }
+  };
 
   if (loading) {
     return (
@@ -61,12 +84,11 @@ const ProductPage = () => {
       </MainContainer>
     );
   }
+
   return (
     <MainContainer>
       <SectionContainer className="max-w-7xl mx-auto px-4 py-8">
-        {/* Product Header */}
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Product Images */}
           <div className="flex flex-col gap-4">
             <Image
               src={
@@ -95,7 +117,7 @@ const ProductPage = () => {
                     alt={image.caption}
                     width={100}
                     height={100}
-                    className=" rounded-lg object-cover w-24 h-24 cursor-pointer border border-gray-200 hover:border-gray-400"
+                    className="rounded-lg object-cover w-24 h-24 cursor-pointer border border-gray-200 hover:border-gray-400"
                   />
                 </Button>
               )) || (
@@ -110,7 +132,6 @@ const ProductPage = () => {
             </div>
           </div>
 
-          {/* Product Details */}
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold">{product.name}</h1>
             <p className="text-gray-600 mt-2">{product.shortDescription}</p>
@@ -120,13 +141,15 @@ const ProductPage = () => {
             </div>
             <Separator className="my-4" />
 
-            {/* Add to Cart Form */}
             <form className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="quantity" className="text-base">
                   Quantity
                 </Label>
-                <Select defaultValue="1">
+                <Select
+                  value={quantity.toString()}
+                  onValueChange={(value) => setQuantity(Number(value))}
+                >
                   <SelectTrigger className="w-32">
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
@@ -139,8 +162,17 @@ const ProductPage = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                Add to Cart
+              <Button
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 flex justify-center items-center"
+                onClick={handleAddToCart}
+                disabled={addingToCart}
+              >
+                {addingToCart ? (
+                  <Icons.loader className="animate-spin w-5 h-5" />
+                ) : (
+                  "Add to Cart"
+                )}
               </Button>
             </form>
             <Separator className="my-4" />
@@ -169,7 +201,6 @@ const ProductPage = () => {
                 />
               </TabsContent>
             </Tabs>
-            {/* Description */}
           </div>
         </div>
       </SectionContainer>

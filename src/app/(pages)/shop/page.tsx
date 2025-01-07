@@ -42,8 +42,8 @@ const CategoryPage: React.FC<PageProps> = async ({ searchParams }) => {
 
   return (
     <MainContainer>
-      <SectionContainer>
-        <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading />}>
+        <SectionContainer className="mx-auto">
           <SearchSortContainer>
             <ProductsFilter categories={categories} companies={companies} />
             <SearchComp placeholder="Search for products by name..." />
@@ -51,8 +51,8 @@ const CategoryPage: React.FC<PageProps> = async ({ searchParams }) => {
           </SearchSortContainer>
           <ProductsList products={products} count={count} />
           <Pagination count={count} items_per_page={products_per_page} />
-        </Suspense>
-      </SectionContainer>
+        </SectionContainer>
+      </Suspense>
     </MainContainer>
   );
 };

@@ -1,4 +1,3 @@
-import { NavContent, NavLink, Paragraph } from "@/styles/style";
 import Link from "next/link";
 import React from "react";
 import { Button } from "../ui/button";

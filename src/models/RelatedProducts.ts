@@ -1,11 +1,11 @@
 import { models, Schema, Types, Document, model } from "mongoose";
-export interface IRelatedProduct extends Document {
+export interface IRelatedProducts extends Document {
   _id: Types.ObjectId;
   productId: Types.ObjectId;
   relatedProductId: Types.ObjectId;
 }
 
-const relatedProductsSchema = new Schema<IRelatedProduct>({
+const relatedProductsSchema = new Schema<IRelatedProducts>({
   productId: { type: Schema.Types.ObjectId, ref: "Order", required: true },
   relatedProductId: {
     type: Schema.Types.ObjectId,
@@ -15,5 +15,7 @@ const relatedProductsSchema = new Schema<IRelatedProduct>({
 });
 
 export const RelatedProducts =
-  models?.RelatedProducts ||
-  model<IRelatedProduct>("RelatedProduct", relatedProductsSchema);
+  models.RelatedProducts ||
+  model<IRelatedProducts>("RelatedProducts", relatedProductsSchema);
+
+export default RelatedProducts;

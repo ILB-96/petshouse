@@ -1,5 +1,4 @@
 import { models, Schema, Types, Document, model } from "mongoose";
-import { IAddress, addressSchema } from "./Address";
 
 export enum OrderStatus {
   PENDING = "PENDING",
@@ -23,30 +22,42 @@ export enum PaymentMethod {
   APPLE_PAY = "APPLE_PAY",
   GOOGLE_PAY = "GOOGLE_PAY",
 }
+import { z } from "zod";
+export const OrderSchemaZod = z.object({
+  user: z.string().min(1, "User is required"),
+  fullname: z
+    .string()
+    .min(1, "Name is required")
+    .max(200)
+    .transform((val) => val.charAt(0).toUpperCase() + val.slice(1)),
+  country: z.string().min(1, "Country is required"),
+  street: z.string().min(1, "street is required"),
+  house: z.string().optional(),
+  floor: z.string().optional(),
+  zip: z.string().optional(),
+  phone: z.string().min(9, "Phone is required").max(15),
+  subtotal: z.coerce.number().min(0, "Subtotal is required"),
+  shipping: z.coerce.number().min(0, "Shipping is required"),
+  tax: z.coerce.number().min(0, "Tax is required"),
+  paymentMethod: z.string().min(1, "Payment Method is required"),
+  paymentStatus: z.string().min(1, "Payment Method is required"),
+  paymentIntent: z.string().optional(),
+  cart: z.string().min(1, "Cart is required"),
+  status: z.string().min(1, "Status is required"),
+  notes: z.string().max(300).optional(),
+});
+export type IOrder = z.infer<typeof OrderSchemaZod> & Document;
 
-export interface IOrder extends Document {
-  _id: Types.ObjectId;
-  userId: Types.ObjectId;
-  address: IAddress;
-  status: OrderStatus;
-  paymentStatus?: PaymentStatus;
-  paymentMethod?: PaymentMethod;
-  subtotal: number;
-  tax: number;
-  shipping: number;
-  paymentIntent?: string;
-  notes?: string;
-  cartId: Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
-}
 const orderSchema = new Schema<IOrder>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    address: {
-      type: addressSchema,
-      required: true,
-    },
+    user: { type: Schema.Types.String, ref: "User", required: true },
+    fullname: { type: String, required: true },
+    country: { type: String, required: true },
+    street: { type: String, required: true },
+    house: { type: String },
+    floor: { type: String },
+    zip: { type: String },
+    phone: { type: String, required: true },
     status: {
       type: String,
       enum: Object.values(OrderStatus),
@@ -67,9 +78,10 @@ const orderSchema = new Schema<IOrder>(
     shipping: { type: Number, required: true },
     paymentIntent: { type: String },
     notes: { type: String },
-    cartId: { type: Schema.Types.ObjectId, ref: "OrderItem" },
+    cart: { type: Schema.Types.String, ref: "Cart", required: true },
   },
   { timestamps: true }
 );
 
 export const Order = models?.Order || model<IOrder>("Order", orderSchema);
+export default Order;

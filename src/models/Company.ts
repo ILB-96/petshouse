@@ -24,5 +24,7 @@ const companySchema = new Schema<ICompany>({
   deletedAt: { type: Date },
 });
 
+
 export const Company =
   models?.Company || model<ICompany>("Company", companySchema);
+export default Company;

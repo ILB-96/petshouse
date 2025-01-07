@@ -33,14 +33,7 @@ const categorySchema = new Schema<ICategory>({
   deletedAt: { type: Date },
 });
 
+
 export const Category =
   models?.Category || model<ICategory>("Category", categorySchema);
-
-// Example usage of Zod validation
-export const validateCategory = (data: unknown) => {
-  const result = categorySchemaZod.safeParse(data);
-  if (!result.success) {
-    throw new Error(`Validation error: ${result.error.message}`);
-  }
-  return result.data;
-};
+export default Category;

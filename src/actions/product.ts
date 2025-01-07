@@ -1,9 +1,8 @@
 "use server";
 import { connectDB } from "@/lib/database";
-import { Category } from "@/models/Category";
-import { Company } from "@/models/Company";
+import { Category, Product, Company } from "@/models";
 import Media from "@/models/Media";
-import Product, { IProduct } from "@/models/Product";
+import { IProduct } from "@/models/Product";
 import { revalidatePath } from "next/cache";
 
 // Better type definition instead of `any`

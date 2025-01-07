@@ -1,7 +1,5 @@
 "use server";
-
-import { Cart } from "@/models/Cart";
-import { CartItem } from "@/models/CartItem";
+import { Cart, CartItem } from "@/models";
 import { connectDB } from "@/lib/database";
 
 export const syncCart = async (user: string, localCartItems: any[]) => {
@@ -40,31 +38,4 @@ export const syncCart = async (user: string, localCartItems: any[]) => {
   return activeCart;
 };
 
-export const findCart = async (userId: string) => {
-  await connectDB();
 
-  if (userId === "") {
-    // Fetch local cart from localStorage
-    const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    return {
-      cart: { userId: "local", status: "ACTIVE" },
-      items: localCart, // Local cart doesn't have a schema, so we return raw data
-    };
-  }
-
-  if (!cart) {
-    // If no cart exists, return an empty cart
-    return {
-      cart: null,
-      items: [],
-    };
-  }
-
-  // Fetch all cart items
-  const items = await CartItem.find({ cart: cart._id }).populate("product");
-
-  return {
-    cart,
-    items,
-  };
-};
