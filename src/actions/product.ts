@@ -275,20 +275,24 @@ export const getFilteredProducts = async (
     const products = await Product.find(query)
       .sort(sortCriteria) // Apply sorting
       .limit(products_per_page)
-      .skip(products_per_page * (page - 1));
+      .skip(products_per_page * (page - 1))
+      .select("name slug shortDescription category company price images");
 
     // Fetch related data for each product
     const enrichedProducts = await Promise.all(
       products.map(async (product) => {
-        const category = await Category.findById(product.category);
-        const company = await Company.findById(product.company);
-        const image = await Media.findById(product.images[0] || "");
+        const category = await Category.findById(product.category).lean();
+        const company = await Company.findById(product.company).lean();
+        const image = await Media.findById(product.images[0] || "").lean();
 
         return {
           ...product.toObject(),
-          category,
-          company,
-          image,
+          _id: product._id.toString(),
+          category: category
+            ? { ...category, _id: category._id.toString() }
+            : null,
+          company: company ? { ...company, _id: company._id.toString() } : null,
+          image: image ? { ...image, _id: image._id.toString() } : null,
         };
       })
     );

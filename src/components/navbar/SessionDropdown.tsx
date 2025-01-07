@@ -28,7 +28,7 @@ const SessionDropdown = () => {
           alt="User Profile Image"
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-surface">
+      <DropdownMenuContent className="bg-surface z-[1000]">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {sessionNavItems.map((item) => (

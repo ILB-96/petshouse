@@ -28,6 +28,7 @@ const ProductCard: React.FC<IProduct> = ({ product }) => {
     }
     window.location.reload();
   };
+
   return (
     <Card className="shadow-lg size-fit rounded-md">
       {product.image && (
@@ -43,9 +44,15 @@ const ProductCard: React.FC<IProduct> = ({ product }) => {
       )}
       <CardHeader>
         <CardTitle>{product.name}</CardTitle>
-        <CardDescription>{`${product.company.name}, ${product.category.name}`}</CardDescription>
+        <CardDescription>
+          {`${product.company.name}, ${product.category.name}`}
+        </CardDescription>
       </CardHeader>
       <CardContent>
+        {/* Add the product price here */}
+        <p className="text-lg font-semibold text-gray-800">
+          {`$${product.price.toFixed(2)}`}
+        </p>
         <p>{product.shortDescription}</p>
       </CardContent>
       <CardFooter className="flex justify-around items-center space-x-2">

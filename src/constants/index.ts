@@ -15,6 +15,39 @@ export const inclusions = [
     icon: "/icons/payment.svg",
   },
 ];
+export const features = [
+  {
+    title: "Admin Dashboard",
+    description:
+      "Easily manage your store, products, and customer orders with our intuitive admin dashboard.",
+    icon: "",
+  },
+  {
+    title: "Advanced Filtering",
+    description:
+      "Find exactly what you need with advanced filtering options for products and categories.",
+    icon: "",
+  },
+  {
+    title: "Personalized Recommendations",
+    description:
+      "Get product suggestions tailored to your pet's unique needs and preferences.",
+    icon: "",
+  },
+  {
+    title: "Community Forums",
+    description:
+      "Connect with other pet owners, share tips, and get advice from experts.",
+    icon: "",
+  },
+  {
+    title: "Subscription Options",
+    description:
+      "Enjoy hassle-free recurring deliveries for your pet's favorite products.",
+    icon: "",
+  },
+];
+
 
   export const actions = [
     {

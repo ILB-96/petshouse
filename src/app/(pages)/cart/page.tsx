@@ -1,23 +1,15 @@
-import { findCartItems } from "@/actions/cart-item";
-import CartList from "@/components/Cart/CartList";
-import CartSummaryCard from "@/components/Cart/CartSummaryCard";
-import { authOptions } from "@/lib/auth";
-import { MainContainer, SectionContainer } from "@/styles/style";
-import { getServerSession } from "next-auth";
-import React from "react";
+import Loading from "@/components/Loading";
+import { MainContainer } from "@/styles/style";
+import React, { Suspense } from "react";
+import Cart from "./cart";
 
 const CartPage = async () => {
-  const session = await getServerSession(authOptions);
-  const { items } = await findCartItems(session?.user?.email || "");
   return (
-    <MainContainer>
-      <SectionContainer>
-        <CartList cartItems={items} />
-      </SectionContainer>
-      <SectionContainer>
-        <CartSummaryCard cartItems={items} />
-      </SectionContainer>
-    </MainContainer>
+    <Suspense fallback={<Loading />}>
+      <MainContainer>
+        <Cart />
+      </MainContainer>
+    </Suspense>
   );
 };
 

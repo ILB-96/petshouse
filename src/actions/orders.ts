@@ -34,6 +34,16 @@ export const findOneOrder = async (orderId: string) => {
     return null;
   }
 };
+export const findUserOrders = async (userId: string) => {
+  try {
+    await connectDB();
+    const orders = await Order.find({ user: userId }).lean();
+    return orders.map((order) => ({ ...order, _id: order._id.toString() }));
+  } catch (e: unknown) {
+    console.log(e);
+    return null;
+  }
+};
 
 export const getOrders = async (
   q: string | RegExp,

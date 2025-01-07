@@ -22,7 +22,7 @@ const CartSummaryCard = ({ cartItems }: { cartItems: Item[] }) => {
         <p className="text-right">{total}$</p>
         <h3>Shipping</h3>
         <p className="text-right">11$</p>
-        <h3>Taxes</h3>
+        <h3>Tax</h3>
         <p className="text-right">0$</p>
       </CardContent>
       <CardFooter className="grid grid-cols-2 items-start text-xl">

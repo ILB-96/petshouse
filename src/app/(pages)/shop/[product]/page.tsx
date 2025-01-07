@@ -2,6 +2,7 @@
 import { createCartItem } from "@/actions/cart-item";
 import { findOneProduct } from "@/actions/product";
 import { Icons } from "@/components/icons";
+import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -63,13 +64,7 @@ const ProductPage = () => {
   };
 
   if (loading) {
-    return (
-      <MainContainer className="flex justify-center items-center w-screen h-screen m-auto">
-        <SectionContainer className="w-screen flex justify-center items-center h-screen m-auto">
-          <Icons.loader className="animate-spin w-10 h-10 text-gray-600" />
-        </SectionContainer>
-      </MainContainer>
-    );
+    return <Loading />;
   }
 
   if (!product) {

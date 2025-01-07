@@ -24,8 +24,10 @@ const Navbar = async () => {
       {session?.user?.role === Role.ADMIN ? <AdminNav /> : null}
       <NavContainer>
         <BigNav categories={categories} />
-        <div className="col-span-2">
+        <div className="-col-start-3">
           <CartButton count={cartItemsCount} />
+        </div>
+        <div className="col-span-1">
           {session ? <SessionDropdown /> : <SignInButton />}
         </div>
       </NavContainer>
