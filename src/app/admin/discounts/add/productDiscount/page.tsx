@@ -7,7 +7,7 @@ import { discountSchemaZod, IDiscount } from "@/models/Discount";
 import { createDiscount } from "@/actions/discount";
 import { findOneProduct } from "@/actions/product";
 
-const defaultValues = {
+export const defaultValues = {
   name: "",
   slug: "",
   description: "",
@@ -19,7 +19,7 @@ const defaultValues = {
   discountPercentage: 0,
 };
 
-const fields = [
+export const fields = [
   {
     name: "type",
     label: "Discount Type",
@@ -38,7 +38,7 @@ const fields = [
   { name: "discountPercentage", label: "Discount Percentage", type: "number" },
 ];
 
-const handleSubmit = async (data: unknown) => {
+export const handleSubmit = async (data: unknown) => {
   const formData = data as IDiscount;
   if (formData.discountAmount && formData.discountPercentage) {
     return "You can only set either Discount Amount or Discount Percentage!";

@@ -99,20 +99,15 @@ export const findOneProduct = async (slug: string) => {
     await connectDB();
 
     // Use populate to fetch referenced data for category, company, and images
-    const product = await Product.findOne({ slug })
+    const product: IProduct = await Product.findOne({ slug })
       .populate("category", "name slug parent") // Populate categoryId with specific fields
       .populate("company", "name slug") // Populate companyId with specific fields
-      .populate("images", "source caption") // Populate imagesId array with specific fields
-      .lean(); // Convert Mongoose document to plain JavaScript object
+      .populate("images", "source caption"); // Populate imagesId array with specific fields
 
     if (!product) {
       return null;
     }
-
-    return {
-      ...product,
-      _id: product._id.toString(),
-    };
+    return JSON.parse(JSON.stringify(product));
   } catch (e: unknown) {
     console.error(e);
     return null;

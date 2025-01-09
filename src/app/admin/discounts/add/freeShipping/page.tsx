@@ -6,7 +6,7 @@ import GenericForm from "@/components/GenericForm/GenericForm";
 import { discountSchemaZod, IDiscount } from "@/models/Discount";
 import { createDiscount } from "@/actions/discount";
 
-const defaultValues = {
+export const defaultValues = {
   name: "",
   slug: "",
   minSubtotal: 1,
@@ -15,7 +15,7 @@ const defaultValues = {
   type: "freeShipping",
 };
 
-const fields = [
+export const fields = [
   {
     name: "type",
     label: "Discount Type",
@@ -31,7 +31,7 @@ const fields = [
   { name: "minSubtotal", label: "Minimum Purchese*", type: "number" },
 ];
 
-const handleSubmit = async (data: unknown) => {
+export const handleSubmit = async (data: unknown) => {
   const formData = data as IDiscount;
   const { message } = await createDiscount(formData);
   return message;

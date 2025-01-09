@@ -12,10 +12,11 @@ export const createDiscount = async (discountData: IDiscount) => {
   try {
     const cleanedData = Object.fromEntries(
       Object.entries(discountData).filter(
-        ([_, value]) =>
+        ([, value]) =>
           value != undefined &&
           !(Array.isArray(value) && value.length === 0) &&
-          value !== ""
+          value !== "" &&
+          value !== 0
       )
     );
     await connectDB();
@@ -105,5 +106,5 @@ export const findOneDiscount = async (id: string) => {
   if (!discount) {
     return null;
   }
-  return { discount, _id: discount._id.toString() };
+  return JSON.parse(JSON.stringify(discount));
 };
