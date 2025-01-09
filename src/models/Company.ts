@@ -1,4 +1,4 @@
-import { models, Schema, Document, model } from "mongoose";
+import { models, Schema, Document, model, Types } from "mongoose";
 import { z } from "zod";
 export const companySchemaZod = z.object({
   name: z
@@ -15,7 +15,8 @@ export const companySchemaZod = z.object({
   deletedAt: z.date().optional(),
 });
 
-export type ICompany = z.infer<typeof companySchemaZod> & Document;
+export type ICompany = z.infer<typeof companySchemaZod> &
+  Document & { _id: string | Types.ObjectId };
 
 const companySchema = new Schema<ICompany>({
   name: { type: String, required: true },
@@ -24,7 +25,5 @@ const companySchema = new Schema<ICompany>({
   deletedAt: { type: Date },
 });
 
-
-export const Company =
-  models?.Company || model<ICompany>("Company", companySchema);
+const Company = models?.Company || model<ICompany>("Company", companySchema);
 export default Company;

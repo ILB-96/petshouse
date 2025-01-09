@@ -1,7 +1,7 @@
 "use server";
 import { connectDB } from "@/lib/database";
-import { Category } from "@/models/Category";
-import Media, { IMedia } from "@/models/Media";
+import { Category, Media } from "@/models";
+import { IMedia } from "@/models/Media";
 import { revalidatePath } from "next/cache";
 
 export const createMedia = async (data: IMedia) => {

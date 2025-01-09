@@ -1,7 +1,8 @@
 "use server";
 import { connectDB } from "@/lib/database";
-import { Category, ICategory } from "@/models/Category";
-import mongoose from "mongoose";
+import { ICategory } from "@/models/Category";
+import { Category } from "@/models";
+import mongoose, { Types } from "mongoose";
 import { revalidatePath } from "next/cache";
 
 export const createCategory = async (values: ICategory) => {
@@ -93,7 +94,13 @@ export const findOneCategory = async (slug: string) => {
   try {
     await connectDB();
     const category = await Category.findOne({ slug }).lean();
-    return { ...category, _id: category?._id.toString() };
+    if (!category || Array.isArray(category)) {
+      return null;
+    }
+    return {
+      ...category,
+      _id: (category._id as Types.ObjectId).toString(),
+    };
   } catch (e: unknown) {
     console.log(e);
     return null;

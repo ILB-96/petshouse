@@ -1,6 +1,7 @@
 "use server";
 import { connectDB } from "@/lib/database";
-import { Company, ICompany } from "@/models/Company";
+import { ICompany } from "@/models/Company";
+import { Company } from "@/models";
 import { revalidatePath } from "next/cache";
 
 export const createCompany = async (values: ICompany) => {

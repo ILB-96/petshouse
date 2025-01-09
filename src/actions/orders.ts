@@ -1,12 +1,10 @@
 "use server";
 import { connectDB } from "@/lib/database";
-import { Category, ICategory } from "@/models/Category";
-import { IOrder, Order } from "@/models/Order";
+import { IOrder } from "@/models/Order";
+import { Order, Category } from "@/models";
 import { revalidatePath } from "next/cache";
 
 export const createOrder = async (values: IOrder) => {
-  console.log("What", values);
-
   try {
     await connectDB();
     const order = new Order(values);

@@ -1,12 +1,15 @@
 import { models, Schema, Types, Document, model } from "mongoose";
+import { IUser } from "./User";
+import { IDiscount } from "./Discount";
 
 export enum CartStatus {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
 }
 
-interface ICart extends Document {
-  user: Types.ObjectId;
+export interface ICart extends Document {
+  user: Types.ObjectId | string | IUser;
+  cartDiscount?: Types.ObjectId | string | IDiscount;
   status: CartStatus;
   createdAt: Date;
   updatedAt: Date;

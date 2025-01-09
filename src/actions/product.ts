@@ -1,7 +1,6 @@
 "use server";
 import { connectDB } from "@/lib/database";
-import { Category, Product, Company } from "@/models";
-import Media from "@/models/Media";
+import { Category, Product, Company, Media } from "@/models";
 import { IProduct } from "@/models/Product";
 import { revalidatePath } from "next/cache";
 

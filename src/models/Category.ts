@@ -22,7 +22,8 @@ export const categorySchemaZod = z.object({
 });
 
 // TypeScript type based on Zod schema
-export type ICategory = z.infer<typeof categorySchemaZod> & Document;
+export type ICategory = z.infer<typeof categorySchemaZod> &
+  Document & { _id: string | Types.ObjectId };
 
 // Define Mongoose schema
 const categorySchema = new Schema<ICategory>({
@@ -33,7 +34,6 @@ const categorySchema = new Schema<ICategory>({
   deletedAt: { type: Date },
 });
 
-
-export const Category =
+const Category =
   models?.Category || model<ICategory>("Category", categorySchema);
 export default Category;

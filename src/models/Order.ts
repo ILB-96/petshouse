@@ -24,7 +24,10 @@ export enum PaymentMethod {
 }
 import { z } from "zod";
 export const OrderSchemaZod = z.object({
-  user: z.string().min(1, "User is required"),
+  user: z.union([
+    z.string().min(1, "User is required"),
+    z.instanceof(Types.ObjectId),
+  ]),
   fullname: z
     .string()
     .min(1, "Name is required")
@@ -42,11 +45,16 @@ export const OrderSchemaZod = z.object({
   paymentMethod: z.string().min(1, "Payment Method is required"),
   paymentStatus: z.string().min(1, "Payment Method is required"),
   paymentIntent: z.string().optional(),
-  cart: z.string().min(1, "Cart is required"),
+  cart: z.union([
+    z.string().min(1, "Cart is required"),
+    z.instanceof(Types.ObjectId),
+  ]),
   status: z.string().min(1, "Status is required"),
   notes: z.string().max(300).optional(),
 });
-export type IOrder = z.infer<typeof OrderSchemaZod> & Document;
+
+export type IOrder = z.infer<typeof OrderSchemaZod> &
+  Document & { _id: string | Types.ObjectId };
 
 const orderSchema = new Schema<IOrder>(
   {
@@ -83,5 +91,5 @@ const orderSchema = new Schema<IOrder>(
   { timestamps: true }
 );
 
-export const Order = models?.Order || model<IOrder>("Order", orderSchema);
+const Order = models?.Order || model<IOrder>("Order", orderSchema);
 export default Order;

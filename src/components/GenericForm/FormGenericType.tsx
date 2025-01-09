@@ -2,6 +2,7 @@ import React from "react";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
+import { Label } from "../ui/label";
 
 export interface FormFieldProps {
   field: {
@@ -9,6 +10,7 @@ export interface FormFieldProps {
     name: string;
     label: string;
     default?: string;
+    hidden?: boolean;
     values?: { label: string; value: string }[];
   };
   form: {
@@ -18,7 +20,10 @@ export interface FormFieldProps {
       };
     };
   };
-  formField: object;
+  formField: {
+    value: any;
+    onChange: (value: any) => void;
+  };
 }
 
 const FormGenericType: React.FC<FormFieldProps> = ({
@@ -26,6 +31,7 @@ const FormGenericType: React.FC<FormFieldProps> = ({
   form,
   formField,
 }) => {
+  const isDate = field.type === "date";
   return (
     <Input
       required
@@ -38,7 +44,10 @@ const FormGenericType: React.FC<FormFieldProps> = ({
         "shadow-md focus-visible:ring-ring rounded-sm",
         form.formState.errors[field.name] && "border-destructive"
       )}
-      {...formField}
+      onChange={(e) => {
+        const newValue = isDate ? new Date(e.target.value) : e.target.value;
+        formField.onChange(newValue);
+      }}
     />
   );
 };

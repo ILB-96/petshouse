@@ -3,7 +3,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { connectDB } from "@/lib/database";
-import { Role, User } from "@/models/User";
+import { Role } from "@/models/User";
+import { User } from "@/models";
 import bcrypt from "bcryptjs";
 
 declare module "next-auth" {

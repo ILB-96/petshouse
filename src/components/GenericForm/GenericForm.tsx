@@ -31,6 +31,7 @@ const GenericForm = ({
     name: string;
     type?: string;
     label: string;
+    hidden?: boolean;
     values?: any[];
     default?: any;
   }[];
@@ -69,7 +70,12 @@ const GenericForm = ({
               control={form.control}
               name={field.name}
               render={({ field: formField }) => (
-                <FormItem className="user-box w-full">
+                <FormItem
+                  className={`${
+                    field.type === "date" ? "" : ""
+                  } w-full user-box`}
+                  hidden={field.hidden || false}
+                >
                   <FormControl>
                     {field.type === "textarea" ? (
                       <FormTextArea
@@ -126,7 +132,12 @@ const GenericForm = ({
                     field.type !== "dropdown" &&
                     field.type !== "file" && (
                       <>
-                        <Label htmlFor={field.name}>{field.label}</Label>
+                        <Label
+                          className={field.type === "date" ? "ml-40" : ""}
+                          htmlFor={field.name}
+                        >
+                          {field.label}
+                        </Label>
                         <ErrorBubble
                           error={form.formState.errors[field.name]}
                         />

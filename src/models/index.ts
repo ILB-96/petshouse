@@ -9,11 +9,13 @@ import Order from "./Order";
 import Media from "./Media";
 import ProductOptions from "./ProductOptions";
 import RelatedProducts from "./RelatedProducts";
+import Discount from "./Discount";
 
 export {
   Product,
   User,
   Category,
+  Discount,
   Cart,
   CartItem,
   Address,

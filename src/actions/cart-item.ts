@@ -1,7 +1,6 @@
 "use server";
 import { connectDB } from "@/lib/database";
 import { CartItem, User, Cart } from "@/models";
-import { models } from "mongoose";
 export const createCartItem = async (
   product: string,
   user: string,
@@ -63,7 +62,10 @@ export const getCartItemsCount = async (email: string) => {
   await connectDB();
   const user = await User.findOne({ email });
   const cart = await Cart.findOne({ user: user._id, status: "ACTIVE" });
-  return await CartItem.find({ cart: cart._id }).countDocuments();
+  return {
+    user: user,
+    cartItemsCount: await CartItem.find({ cart: cart._id }).countDocuments(),
+  };
 };
 
 export const increaseQuantity = async (id) => {

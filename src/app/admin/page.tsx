@@ -14,6 +14,11 @@ const AdminDashboard = () => {
       // icon: <Icons.productAdd />,
     },
     {
+      name: "Discounts",
+      slug: "discounts",
+      // icon: <Icons.productAdd />,
+    },
+    {
       name: "Companies",
       // icon: <Icons.companyAdd />,
       slug: "companies",

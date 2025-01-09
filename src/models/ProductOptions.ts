@@ -15,7 +15,7 @@ const productOptionsSchema = new Schema<IProductOptions>({
   ],
 });
 
-export const ProductOptions =
+const ProductOptions =
   models?.ProductOptions ||
   model<IProductOptions>("ProductOptions", productOptionsSchema);
 export default ProductOptions;

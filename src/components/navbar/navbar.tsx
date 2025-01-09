@@ -11,17 +11,20 @@ import AdminNav from "./AdminNav";
 import { findMainCategories } from "@/actions/category";
 import CartButton from "./CartButton";
 import { getCartItemsCount } from "@/actions/cart-item";
-import { getSession } from "next-auth/react";
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
   const categories = await findMainCategories();
   let cartItemsCount = 0;
+  let user = null;
   if (session?.user) {
-    cartItemsCount = await getCartItemsCount(session.user?.email);
+    const values = await getCartItemsCount(session.user?.email);
+    cartItemsCount = values.cartItemsCount;
+    user = values.user;
   }
+  console.log(user);
   return (
     <>
-      {session?.user?.role === Role.ADMIN ? <AdminNav /> : null}
+      {user?.role === Role.ADMIN ? <AdminNav /> : null}
       <NavContainer>
         <BigNav categories={categories} />
         <div className="-col-start-3">

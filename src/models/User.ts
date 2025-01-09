@@ -7,7 +7,7 @@ export enum Role {
 }
 
 export interface IUser extends Document {
-  _id: Types.ObjectId;
+  _id: Types.ObjectId | string;
   email: string;
   password?: string;
   name: string;
@@ -47,5 +47,5 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-export const User = models?.User || model<IUser>("User", userSchema);
+const User = models?.User || model<IUser>("User", userSchema);
 export default User;

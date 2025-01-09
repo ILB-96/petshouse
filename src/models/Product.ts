@@ -1,4 +1,4 @@
-import mongoose, { models, Schema, Types, Document, model } from "mongoose";
+import { models, Schema, Types, Document, model } from "mongoose";
 
 import { z } from "zod";
 export const productSchemaZod = z.object({
@@ -21,13 +21,20 @@ export const productSchemaZod = z.object({
   stock: z.coerce.number().min(0, "Stock is required").int(),
   images: z.array(z.string()).optional(),
   shortDescription: z.string().min(1, "Short Description is required").max(300),
-  company: z.string().min(1, "Company is required"),
-  category: z.string().min(1, "Category is required"),
+  company: z.union([
+    z.string().min(1, "Company is required"),
+    z.instanceof(Types.ObjectId),
+  ]),
+  category: z.union([
+    z.string().min(1, "Category is required"),
+    z.instanceof(Types.ObjectId),
+  ]),
   description: z.string().min(1, "Description is required").max(5000),
   ingredients: z.string().max(5000).optional(),
   expiredAt: z.date().optional(),
 });
-export type IProduct = z.infer<typeof productSchemaZod> & Document;
+export type IProduct = z.infer<typeof productSchemaZod> &
+  Document & { _id: string | Types.ObjectId };
 
 const productSchema = new Schema<IProduct>(
   {
@@ -41,7 +48,7 @@ const productSchema = new Schema<IProduct>(
         ref: "Media",
       },
     ],
-    price: { type: Number, required: true },
+    price: { type: Number, required: true, min: 1 },
     stock: { type: Number, required: true },
     category: {
       type: Schema.Types.String,
@@ -56,6 +63,5 @@ const productSchema = new Schema<IProduct>(
   { timestamps: true }
 );
 
-const Product =
-  mongoose.models.Product || mongoose.model<IProduct>("Product", productSchema);
+const Product = models?.Product || model<IProduct>("Product", productSchema);
 export default Product;

@@ -1,10 +1,13 @@
 import { models, Schema, Types, Document, model } from "mongoose";
+import { IProduct } from "./Product";
+import { IDiscount } from "./Discount";
+import { ICart } from "./Cart";
 
 export interface ICartItem extends Document {
-  product: Types.ObjectId;
-  cart: Types.ObjectId;
+  product: Types.ObjectId | string | IProduct;
+  cart: Types.ObjectId | string | ICart;
   quantity: number;
-  productDiscount?: Types.ObjectId;
+  productDiscount?: Types.ObjectId | string | IDiscount;
   price?: number;
 }
 const cartItemSchema = new Schema<ICartItem>({
@@ -15,6 +18,6 @@ const cartItemSchema = new Schema<ICartItem>({
   price: { type: Number },
 });
 cartItemSchema.index({ cart: 1 });
-export const CartItem =
+const CartItem =
   models?.CartItem || model<ICartItem>("CartItem", cartItemSchema);
 export default CartItem;

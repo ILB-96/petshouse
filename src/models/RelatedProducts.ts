@@ -14,8 +14,8 @@ const relatedProductsSchema = new Schema<IRelatedProducts>({
   },
 });
 
-export const RelatedProducts =
-  models.RelatedProducts ||
+const RelatedProducts =
+  models?.RelatedProducts ||
   model<IRelatedProducts>("RelatedProducts", relatedProductsSchema);
 
 export default RelatedProducts;

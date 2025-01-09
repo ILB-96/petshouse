@@ -8,7 +8,7 @@ const FormText: React.FC<FormFieldProps> = ({ field, form, formField }) => {
   return (
     <Input
       required
-      type={"text"}
+      type="text"
       id={field.name}
       aria-describedby={field.name}
       autoComplete={field.name}

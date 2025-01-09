@@ -1,4 +1,4 @@
-import { models, Schema, Document, model } from "mongoose";
+import { models, Schema, Document, model, Types } from "mongoose";
 import { z } from "zod";
 export enum MediaType {
   JPEG = "image/jpeg",
@@ -14,7 +14,8 @@ export const mediaSchemaZod = z.object({
   type: z.nativeEnum(MediaType),
 });
 
-export type IMedia = z.infer<typeof mediaSchemaZod> & Document;
+export type IMedia = z.infer<typeof mediaSchemaZod> &
+  Document & { _id: string | Types.ObjectId };
 
 export const mediaSchema = new Schema<IMedia>({
   name: { type: String, required: true, unique: true },

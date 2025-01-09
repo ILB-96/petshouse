@@ -1,5 +1,6 @@
 "use server";
-import { Role, User } from "@/models/User"; // Your User model (update the path accordingly)
+import { Role } from "@/models/User"; // Your User model (update the path accordingly)
+import { User } from "@/models";
 import { connectDB } from "./database";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
