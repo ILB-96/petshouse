@@ -15,6 +15,7 @@ import {
   TextContainer,
 } from "@/styles/style";
 import { inclusions, features } from "@/constants";
+import Promotion from "@/components/Promotion/Promotion";
 
 // Styled-components for Features section
 const FeaturesGrid = styled.div`
@@ -48,6 +49,7 @@ export default function Home() {
   return (
     <MainContainer>
       {/* Hero Section */}
+      <Promotion />
       <SectionContainer role="contentinfo" id="hero">
         <HeroContainer>
           <TextContainer>

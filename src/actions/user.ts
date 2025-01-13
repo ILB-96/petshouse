@@ -1,7 +1,7 @@
 "use server";
 import { Role } from "@/models/User"; // Your User model (update the path accordingly)
 import { User } from "@/models";
-import { connectDB } from "./database";
+import { connectDB } from "@/lib/database";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
@@ -37,7 +37,7 @@ export const addUser = async (
   const { username, email, password, role } = Object.fromEntries(formData);
 
   try {
-    connectDB();
+    await connectDB();
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -63,9 +63,8 @@ export const updateUser = async (
   formData: Iterable<readonly [PropertyKey, any]>
 ) => {
   const { id, name, email, password, role } = Object.fromEntries(formData);
-  console.log(id, name, email, password, role);
   try {
-    connectDB();
+    await connectDB();
 
     const updateFields: { [key: string]: any } = {
       name,
@@ -97,7 +96,7 @@ export const deleteUser = async (
   const { id } = Object.fromEntries(formData);
 
   try {
-    connectDB();
+    await connectDB();
     await User.findByIdAndDelete(id);
   } catch (err) {
     console.log(err);
@@ -135,7 +134,7 @@ export const getUsers = async (
 ) => {
   const regex = new RegExp(q, "i");
   try {
-    connectDB();
+    await connectDB();
     const count = await User.find({
       name: { $regex: regex },
     }).countDocuments();

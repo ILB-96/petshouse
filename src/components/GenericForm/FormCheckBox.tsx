@@ -2,6 +2,7 @@ import React from "react";
 import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";
 import { FormFieldProps } from "./FormGenericType";
+import { Input } from "@/components/ui/input";
 
 const FormCheckBox: React.FC<FormFieldProps> = ({ field, form, formField }) => {
   return (
@@ -9,7 +10,7 @@ const FormCheckBox: React.FC<FormFieldProps> = ({ field, form, formField }) => {
       <Label htmlFor={field.name} className="ml-5">
         {field.label}
       </Label>
-      <input
+      <Input
         type="checkbox"
         id={field.name}
         checked={formField.value}

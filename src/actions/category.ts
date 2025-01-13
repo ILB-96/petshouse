@@ -126,14 +126,11 @@ export const findMainCategories = async () => {
       deletedAt: null,
       isDraft: false,
       parent: null,
-    }).lean();
-    return categories.map((category) => ({
-      ...category,
-      _id: category._id.toString(),
-    }));
+    });
+    return JSON.parse(JSON.stringify(categories));
   } catch (e: unknown) {
     console.error("Error finding categories:", e); // Improved error logging
-    return null;
+    return [];
   }
 };
 

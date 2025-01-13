@@ -24,6 +24,7 @@ const GenericForm = ({
   defaultValues,
   fields,
   onSubmit,
+  buttonName = "Submit",
 }: {
   formSchema: ZodObject<ZodRawShape>;
   defaultValues?: Record<string, unknown>;
@@ -32,9 +33,10 @@ const GenericForm = ({
     type?: string;
     label: string;
     hidden?: boolean;
-    values?: any[];
-    default?: any;
+    values?: unknown[];
+    default?: unknown;
   }[];
+  buttonName?: string;
   onSubmit: (data: unknown) => Promise<string>;
 }) => {
   const form = useForm({
@@ -149,7 +151,7 @@ const GenericForm = ({
           ))}
           <div className="my-14 flex w-full justify-center">
             <Button type="submit" disabled={isSubmitting}>
-              <span>Submit</span>
+              <span>{buttonName}</span>
               {/* <Icons.send
                 height="1.3rem"
                 width="1.3rem"

@@ -3,39 +3,8 @@
 import { MainContainer, SectionContainer } from "@/styles/style";
 import React from "react";
 import GenericForm from "@/components/GenericForm/GenericForm";
-import { discountSchemaZod, IDiscount } from "@/models/Discount";
-import { createDiscount } from "@/actions/discount";
-
-export const defaultValues = {
-  name: "",
-  slug: "",
-  minSubtotal: 1,
-  descrption: "",
-  code: "",
-  type: "freeShipping",
-};
-
-export const fields = [
-  {
-    name: "type",
-    label: "Discount Type",
-    type: "text",
-    hidden: true,
-  },
-  { name: "name", label: "Discount Name*", type: "text" },
-  { name: "slug", label: "Discount Slug*", type: "text" },
-  { name: "description", label: "Description", type: "textarea" },
-  { name: "code", label: "Coupon Code", type: "text" },
-  { name: "startDate", label: "Start Date*", type: "date" },
-  { name: "endDate", label: "End Date", type: "date" },
-  { name: "minSubtotal", label: "Minimum Purchese*", type: "number" },
-];
-
-export const handleSubmit = async (data: unknown) => {
-  const formData = data as IDiscount;
-  const { message } = await createDiscount(formData);
-  return message;
-};
+import { discountSchemaZod } from "@/models/Discount";
+import { defaultValues, fields, handleSubmit } from "./formData";
 
 const AddFreeShippingDiscountPage = () => {
   return (
@@ -46,6 +15,7 @@ const AddFreeShippingDiscountPage = () => {
           defaultValues={defaultValues}
           fields={fields}
           onSubmit={handleSubmit}
+          buttonName="Create"
         />
       </SectionContainer>
     </MainContainer>

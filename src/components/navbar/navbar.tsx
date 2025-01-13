@@ -17,11 +17,10 @@ const Navbar = async () => {
   let cartItemsCount = 0;
   let user = null;
   if (session?.user) {
-    const values = await getCartItemsCount(session.user?.email);
+    const values = await getCartItemsCount(session.user?.email as string);
     cartItemsCount = values.cartItemsCount;
     user = values.user;
   }
-  console.log(user);
   return (
     <>
       {user?.role === Role.ADMIN ? <AdminNav /> : null}

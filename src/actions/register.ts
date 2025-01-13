@@ -18,7 +18,6 @@ export const register = async (values: RegisterValues) => {
 
     // Check if user already exists
     const userFound = await User.findOne({ email: email.toLowerCase() });
-    console.log(userFound);
     if (userFound) {
       return {
         message: "User already exists",

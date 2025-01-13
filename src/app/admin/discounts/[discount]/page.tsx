@@ -4,45 +4,20 @@ import { HeroTitle, MainContainer, SectionContainer } from "@/styles/style";
 import { useRouter, useParams } from "next/navigation";
 import GenericForm from "@/components/GenericForm/GenericForm";
 import { useEffect, useState } from "react";
-import { findOneDiscount, updateDiscount } from "@/actions/discount";
+import { findOneDiscount } from "@/actions/discount";
 import { discountSchemaZod, IDiscount } from "@/models/Discount";
-import {
-  fields as buyXgetYFields,
-  defaultValues as buyXgetYDefaultValues,
-  handleSubmit as buyXgetYHandleSubmit,
-} from "../add/buyXgetY/page";
-import {
-  fields as categoryFields,
-  defaultValues as categoryDefaultValues,
-  handleSubmit as categoryHandleSubmit,
-} from "../add/categoryDiscount/page";
-import {
-  fields as companyFields,
-  defaultValues as companyDefaultValues,
-  handleSubmit as companyHandleSubmit,
-} from "../add/companyDiscount/page";
-import {
-  fields as freeShippingFields,
-  defaultValues as freeShippingDefaultValues,
-  handleSubmit as freeShippingHandleSubmit,
-} from "../add/freeShipping/page";
-import {
-  fields as productFields,
-  defaultValues as productDefaultValues,
-  handleSubmit as productHandleSubmit,
-} from "../add/productDiscount/page";
-import {
-  fields as cartFields,
-  defaultValues as cartDefaultValues,
-  handleSubmit as cartHandleSubmit,
-} from "../add/cartDiscount/page";
+import { getDiscountSchemaByType } from "../discountSchemaByType";
+
 const DiscountViewPage = () => {
-  const [discount, setDiscount] = useState<IDiscount | null>();
-  const [defaultValues, setDefaultValues] = useState(null);
-  const [fields, setFields] = useState(null);
-  const [handleSubmit, setHandleSubmit] = useState(null);
+  const [discount, setDiscount] = useState<IDiscount | null>(null); // Ensure null is properly handled
+  const [defaultValues, setDefaultValues] = useState({});
+  const [fields, setFields] = useState<any[]>([]);
+  const [handleSubmit, setHandleSubmit] = useState<
+    ((data: unknown) => Promise<void>) | undefined
+  >(undefined);
   const router = useRouter();
   const params = useParams();
+
   useEffect(() => {
     const fetchDiscount = async () => {
       const id = params.discount;
@@ -52,39 +27,28 @@ const DiscountViewPage = () => {
         return;
       }
 
-      const discount = await findOneDiscount(id as string);
-      if (discount) {
-        setDiscount(discount);
-        if (discount?.type === "buyXgetY") {
-          setDefaultValues(buyXgetYDefaultValues);
-          setFields(buyXgetYFields);
-          setHandleSubmit(buyXgetYHandleSubmit);
-        } else if (discount?.type === "categoryDiscount") {
-          setDefaultValues(categoryDefaultValues);
-          setFields(categoryFields);
-          setHandleSubmit(categoryHandleSubmit);
-        } else if (discount?.type === "companyDiscount") {
-          setDefaultValues(companyDefaultValues);
-          setFields(companyFields);
-          setHandleSubmit(companyHandleSubmit);
-        } else if (discount?.type === "freeShipping") {
-          setDefaultValues(freeShippingDefaultValues);
-          setFields(freeShippingFields);
-          setHandleSubmit(freeShippingHandleSubmit);
-        } else if (discount?.type === "productDiscount") {
-          setDefaultValues({
-            ...productDefaultValues,
-            ...discount,
-          });
-          setFields(productFields);
-          setHandleSubmit(productHandleSubmit);
-        } else if (discount?.type === "cartDiscount") {
-          setDefaultValues(cartDefaultValues);
-          setFields(cartFields);
-          setHandleSubmit(cartHandleSubmit);
+      try {
+        const discount = await findOneDiscount(id as string);
+        if (discount) {
+          setDiscount(discount);
+          const { info, fields, defaultValues, handleSubmit } =
+            await getDiscountSchemaByType(discount);
+
+          const handleUpdate = async (data: unknown) => {
+            if (handleSubmit) {
+              return await handleSubmit(data, discount._id);
+            }
+          };
+          const defaultData = { ...defaultValues, ...discount, ...info };
+          console.log(defaultData);
+          setDefaultValues({ ...defaultValues, ...discount, ...info });
+          setFields(fields);
+          setHandleSubmit(() => handleUpdate);
+        } else {
+          router.push("/admin/discounts");
         }
-        console.log(discount.startDate.toString().split("T")[0]);
-      } else {
+      } catch (error) {
+        console.error("Failed to fetch discount:", error);
         router.push("/admin/discounts");
       }
     };
@@ -92,7 +56,7 @@ const DiscountViewPage = () => {
     fetchDiscount();
   }, [params, router]);
 
-  if (!discount) {
+  if (!discount || !defaultValues || fields.length == 0 || !handleSubmit) {
     return <div>Loading...</div>;
   }
   return (
@@ -104,6 +68,7 @@ const DiscountViewPage = () => {
           fields={fields}
           defaultValues={defaultValues}
           onSubmit={handleSubmit}
+          buttonName="Update"
         />
       </SectionContainer>
     </MainContainer>

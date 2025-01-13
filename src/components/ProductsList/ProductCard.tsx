@@ -1,6 +1,6 @@
 "use client";
 import { IProduct } from "@/models/Product";
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -15,11 +15,36 @@ import Link from "next/link";
 import { getSession } from "next-auth/react";
 import { addItemToLocalStorageCart } from "@/lib/cartStorage";
 import { createCartItem } from "@/actions/cart-item";
+import { findDiscountsByProduct } from "@/actions/discount";
+import { IDiscount } from "@/models/Discount";
 
 const ProductCard: React.FC<IProduct> = ({ product }) => {
+  const [discount, setDiscount] = useState<IDiscount>();
+  const [price, setPrice] = useState<number>();
+  useEffect(() => {
+    const fetchDiscounts = async () => {
+      const response = await findDiscountsByProduct(
+        product._id,
+        product.company._id,
+        product.category,
+        product.price
+      );
+      let price = product.price;
+      if (response?.highestValue) {
+        price -= response.highestValue;
+      }
+      setPrice(price);
+      if (response?.buyXgetYDiscount) {
+        setDiscount(response?.buyXgetYDiscount);
+      }
+    };
+    fetchDiscounts();
+    return () => {
+      console.log("ProductCard unmounted");
+    };
+  }, [product]);
   const handleAddToCart = async () => {
     const session = await getSession();
-    console.log("session", session);
     if (session?.user) {
       await createCartItem(product._id, session.user._id, 1);
     } else {
@@ -51,7 +76,16 @@ const ProductCard: React.FC<IProduct> = ({ product }) => {
       <CardContent>
         {/* Add the product price here */}
         <p className="text-lg font-semibold text-gray-800">
-          {`$${product.price.toFixed(2)}`}
+          {price && price < product.price ? (
+            <>
+              <span className="line-through text-red-500">{`$${product.price.toFixed(
+                2
+              )}`}</span>
+              <span className="ml-2 font-bold">{`$${price.toFixed(2)}`}</span>
+            </>
+          ) : (
+            `$${product.price.toFixed(2)}`
+          )}
         </p>
         <p>{product.shortDescription}</p>
       </CardContent>

@@ -44,9 +44,16 @@ const FormGenericType: React.FC<FormFieldProps> = ({
         "shadow-md focus-visible:ring-ring rounded-sm",
         form.formState.errors[field.name] && "border-destructive"
       )}
+      value={
+        isDate && formField.value
+          ? new Date(formField.value).toISOString().split("T")[0] // Display string format for date input
+          : formField.value
+      }
       onChange={(e) => {
-        const newValue = isDate ? new Date(e.target.value) : e.target.value;
-        formField.onChange(newValue);
+        const newValue = isDate
+          ? new Date(e.target.value) // Convert string to Date object
+          : e.target.value;
+        formField.onChange(newValue); // Update state with Date object
       }}
     />
   );

@@ -1,7 +1,7 @@
 import { syncCart } from "@/actions/cart";
 import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/database";
-import { getUserFromDatabase } from "@/lib/user";
+import { getUserFromDatabase } from "@/actions/user";
 import { User, Cart } from "@/models";
 import NextAuth from "next-auth";
 import { cookies } from "next/headers";

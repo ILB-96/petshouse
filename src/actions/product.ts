@@ -93,6 +93,14 @@ export const editProduct = async (productData: IProduct) => {
     };
   }
 };
+export const findOneProductById = async (id: string) => {
+  await connectDB();
+  const product = await Product.findById(id);
+  if (!product) {
+    return null;
+  }
+  return JSON.parse(JSON.stringify(product));
+};
 
 export const findOneProduct = async (slug: string) => {
   try {
