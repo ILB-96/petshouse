@@ -141,10 +141,8 @@ export const findDiscountsByProduct = async (
   await connectDB();
   const date = new Date();
 
-  // Step 1: Fetch all relevant categories (including parent categories)
   const getAllParentCategories = async (slug) => {
     const categoryDoc = await Category.findOne({ slug });
-    console.log(categoryDoc);
     if (!categoryDoc.parent) return [categoryDoc._id.toString()];
     const parentCategories = await getAllParentCategories(
       categoryDoc.parent as string
@@ -152,32 +150,22 @@ export const findDiscountsByProduct = async (
     return [categoryDoc._id.toString(), ...parentCategories];
   };
   const categories = await getAllParentCategories(category.slug);
-  console.log(categories);
-  // Step 2: Find all discounts that apply to the product
   const discounts = await Discount.find({
     $and: [
-      { startDate: { $lte: date } }, // Discounts that have started
+      { startDate: { $lte: date } },
       {
-        $or: [
-          { endDate: null }, // Discounts with no expiration
-          { endDate: { $gt: date } }, // Discounts that are still valid
-        ],
+        $or: [{ endDate: null }, { endDate: { $gt: date } }],
       },
       {
-        $or: [
-          { product }, // Discounts directly tied to the product
-          { company }, // Discounts tied to the product's company
-          { category: { $in: categories } }, // Discounts tied to the category or its parents
-        ],
+        $or: [{ product }, { company }, { category: { $in: categories } }],
       },
     ],
   });
 
   if (!discounts || discounts.length === 0) {
-    return null; // No discounts found
+    return null;
   }
 
-  // Step 3: Filter and find the best discounts
   let buyXgetYDiscount = null;
   let bestDiscount = null;
   let highestValue = 0;
