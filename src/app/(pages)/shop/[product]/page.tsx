@@ -1,5 +1,6 @@
 "use client";
 import { createCartItem } from "@/actions/cart-item";
+import { findDiscountsByProduct } from "@/actions/discount";
 import { findOneProduct } from "@/actions/product";
 import { Icons } from "@/components/icons";
 import Loading from "@/components/Loading";
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { addItemToLocalStorageCart } from "@/lib/cartStorage";
+import { IDiscount } from "@/models/Discount";
 import { IProduct } from "@/models/Product";
 import { MainContainer, SectionContainer } from "@/styles/style";
 import { Separator } from "@radix-ui/react-dropdown-menu";
@@ -24,6 +26,8 @@ import React, { useEffect, useState } from "react";
 
 const ProductPage = () => {
   const [product, setProduct] = useState<IProduct | null>(null);
+  const [discount, setDiscount] = useState<IDiscount>();
+  const [price, setPrice] = useState<number>();
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false); // For button loading state
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -37,9 +41,25 @@ const ProductPage = () => {
       const fetchedProduct = await findOneProduct(slug as string);
       if (fetchedProduct) {
         setProduct(fetchedProduct);
+        const response = await findDiscountsByProduct(
+          fetchedProduct._id,
+          fetchedProduct.company._id,
+          fetchedProduct.category,
+          fetchedProduct.price
+        );
+        let price = fetchedProduct.price;
+        if (response?.highestValue) {
+          price -= response.highestValue;
+        }
+        setPrice(price);
+        if (response?.buyXgetYDiscount) {
+          setDiscount(response?.buyXgetYDiscount);
+        }
       }
       setLoading(false);
     };
+    const fetchDiscounts = async () => {};
+    fetchDiscounts();
 
     fetchProduct();
   }, [params.product, router]);
@@ -131,9 +151,20 @@ const ProductPage = () => {
             <h1 className="text-2xl sm:text-3xl font-bold">{product.name}</h1>
             <p className="text-gray-600 mt-2">{product.shortDescription}</p>
             <Separator className="my-4" />
-            <div className="text-xl font-bold text-green-600">
-              ${product.price}
-            </div>
+            <p className="text-xl font-semibold text-gray-800">
+              {price && price < product.price ? (
+                <>
+                  <span className="line-through text-red-500">{`$${product.price.toFixed(
+                    2
+                  )}`}</span>
+                  <span className="ml-2 font-bold">{`$${price.toFixed(
+                    2
+                  )}`}</span>
+                </>
+              ) : (
+                `$${product.price.toFixed(2)}`
+              )}
+            </p>
             <Separator className="my-4" />
 
             <form className="grid gap-4">

@@ -1,6 +1,7 @@
 "use server";
 import { connectDB } from "@/lib/database";
-import { CartItem, User, Cart } from "@/models";
+import { CartItem, User, Cart, Category } from "@/models";
+import { findDiscountsByProduct } from "./discount";
 export const createCartItem = async (
   product: string,
   user: string,
@@ -118,10 +119,38 @@ export const findCartItems = async (email: string) => {
       model: "Media",
     },
   });
+  const newItems = await Promise.all(
+    items.map(async (item) => {
+      const category = await Category.findById(item.product.category);
+      const discounts = await findDiscountsByProduct(
+        item._id.toString(),
+        item.product.company,
+        category,
+        item.product.price
+      );
 
+      const { buyXgetYDiscount, highestValue } = discounts || {
+        buyXgetYDiscount: null,
+        highestValue: 0,
+      };
+
+      // Convert Mongoose document to plain object
+      const product = item.product.toObject();
+
+      return {
+        ...item.toObject(),
+        product: {
+          ...product,
+          newPrice: product.price - highestValue,
+          discount: buyXgetYDiscount,
+        },
+      };
+    })
+  );
+  console.log(newItems);
   return {
     userId: user._id,
     cart,
-    items,
+    items: newItems,
   };
 };

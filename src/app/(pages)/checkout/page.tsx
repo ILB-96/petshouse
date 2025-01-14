@@ -6,8 +6,6 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { MainContainer, SectionContainer } from "@/styles/style";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -61,7 +59,7 @@ const CheckoutPage = async () => {
                           <span>{item.product.name}</span>
                           <span className="mx-auto">{item.quantity}</span>
                           <span className="ml-auto">
-                            ${item.quantity * item.product.price}
+                            ${item.quantity * item.product.newPrice}
                           </span>
                         </div>
                       );

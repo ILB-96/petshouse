@@ -19,9 +19,21 @@ const CartItemCard = async ({ item }: { item: any }) => {
 
       <div className="w-full md:w-1/2 mt-4 md:mt-0 md:pl-6">
         <h2 className="text-lg text-gray-800">{item.product.name}</h2>
-        <h4 className="text-xl font-semibold text-gray-900 mt-2">
-          ${item.product.price}
-        </h4>
+        <p className="text-lg font-semibold text-gray-800">
+          {item.product.newPrice &&
+          item.product.newPrice < item.product.price ? (
+            <>
+              <span className="line-through text-red-500">{`$${item.product.price.toFixed(
+                2
+              )}`}</span>
+              <span className="ml-2 font-bold">{`$${item.product.newPrice.toFixed(
+                2
+              )}`}</span>
+            </>
+          ) : (
+            `$${item.product.price.toFixed(2)}`
+          )}
+        </p>
         {item.product.stock < 10 ||
           (item.product.stock < item.quantity && (
             <p className="text-red-400">{item.product.stock} left in stock.</p>
