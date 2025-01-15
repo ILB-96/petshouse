@@ -1,5 +1,4 @@
-import { updateUser } from "@/lib/user";
-import { getUserById } from "@/lib/user";
+import { updateUser, getUserById } from "@/actions/user";
 import styles from "@/components/dashboard/users/singleUser/singleUser.module.css";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -10,13 +9,12 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Icons } from "@/components/icons";
 import { MainContainer, SectionContainer } from "@/styles/style";
-const SingleUserPage = async ({ params }) => {
+const SingleUserPage = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const user = await getUserById(id);
 

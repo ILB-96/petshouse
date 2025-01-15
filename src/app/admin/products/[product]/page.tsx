@@ -32,7 +32,6 @@ const CompanyViewPage = () => {
         router.push("/admin/companies");
         return;
       }
-      console.log("slug", slug);
 
       const company = await findOneCompany(slug as string);
       if (company) {

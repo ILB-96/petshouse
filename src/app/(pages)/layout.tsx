@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "@/styles/global.css";
-import Navbar from "@/components/Navbar/Navbar";
 import { BodyContainer } from "@/styles/style";
 import Footer from "@/components/footer";
+import Navbar from "@/components/Navbar/Navbar";
 
 export const metadata: Metadata = {
   title: "PetsHouse",

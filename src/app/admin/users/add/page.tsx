@@ -1,4 +1,3 @@
-import styles from "@/components/dashboard/users/addUser/addUser.module.css";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { addUser } from "@/lib/user";
+import { addUser } from "@/actions/user";
 
 const AddUserPage = () => {
   return (

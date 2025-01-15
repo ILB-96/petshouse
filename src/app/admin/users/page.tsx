@@ -6,7 +6,7 @@ import Link from "next/link";
 import Pagination from "@/components/dashboard/pagination/Pagination";
 import SearchComp from "@/components/search/Search";
 import styles from "@/components/dashboard/users/users.module.css";
-import { getUsers, deleteUser } from "@/lib/user";
+import { getUsers, deleteUser } from "@/actions/user";
 
 import { SearchParams } from "@/models/types";
 import {
