@@ -2,7 +2,6 @@ import React from "react";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
-import { Label } from "../ui/label";
 
 export interface FormFieldProps {
   field: {
@@ -21,8 +20,8 @@ export interface FormFieldProps {
     };
   };
   formField: {
-    value: any;
-    onChange: (value: any) => void;
+    value: string | number | readonly string[] | undefined;
+    onChange: (value: string | number | readonly string[] | undefined) => void;
   };
 }
 

@@ -2,8 +2,9 @@ import React from "react";
 import { Card } from "../ui/card";
 import Image from "next/image";
 import CartItemButtons from "./CartItemButtons";
+import { ICartItem } from "@/models/CartItem";
 
-const CartItemCard = async ({ item }: { item: any }) => {
+const CartItemCard = async ({ item }: { item: ICartItem }) => {
   return (
     <Card className="mb-4 flex flex-col md:flex-row justify-between items-center p-4">
       {/* Product Image */}

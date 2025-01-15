@@ -2,12 +2,7 @@ import React from "react";
 import { FormFieldProps } from "./FormGenericType";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "../ui/button";
-import {
-  FormControl,
-  FormDescription,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { FormControl, FormLabel, FormMessage } from "../ui/form";
 import { Popover, PopoverContent } from "../ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import {
@@ -26,7 +21,7 @@ interface Option {
 }
 
 const FormDropdown: React.FC<FormFieldProps> = ({ field, form, formField }) => {
-  const options: Option[] = field.values || []; // Ensure `field.values` is an array
+  const options: Option[] = field.values || [];
 
   return (
     <div className="flex flex-col space-y-8 mt-5">

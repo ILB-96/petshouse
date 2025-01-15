@@ -6,9 +6,11 @@ import { createProduct } from "@/actions/product";
 import { IProduct, productSchemaZod } from "@/models/Product";
 import { findAllCompaniesSlug as findAllCompanies } from "@/actions/company"; // Import your server action for companies
 import { findAllCategories as findAllCategories } from "@/actions/category"; // Assuming there's a similar action for categories
+import { ICompany } from "@/models/Company";
+import { ICategory } from "@/models/Category";
 
-const handleSubmit = async (product: IProduct) => {
-  console.log(product);
+const handleSubmit = async (formData: unknown) => {
+  const product = formData as IProduct;
   const { message } = await createProduct(product);
   return message ?? "Product created successfully";
 };
@@ -43,20 +45,20 @@ const AddProductPage = () => {
       try {
         // Fetch companies
         const companies = await findAllCompanies();
-        const companySlugs = companies?.map((company: any) => ({
+        const companySlugs = companies?.map((company: ICompany) => ({
           label: company.slug,
           value: company._id,
         }));
 
         // Fetch categories
         const categories = await findAllCategories();
-        const categorySlugs = categories?.map((category: any) => ({
+        const categorySlugs = categories?.map((category: ICategory) => ({
           label: category.slug,
           value: category._id,
         }));
 
         setFields((prevFields) =>
-          prevFields.map((field: any) => {
+          prevFields.map((field: (typeof fields)[0]) => {
             if (field.name === "company") {
               return {
                 ...field,

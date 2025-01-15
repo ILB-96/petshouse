@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { addItemToLocalStorageCart } from "@/lib/cartStorage";
-import { IDiscount } from "@/models/Discount";
 import { IProduct } from "@/models/Product";
 import { MainContainer, SectionContainer } from "@/styles/style";
 import { Separator } from "@radix-ui/react-dropdown-menu";
@@ -26,7 +25,7 @@ import React, { useEffect, useState } from "react";
 
 const ProductPage = () => {
   const [product, setProduct] = useState<IProduct | null>(null);
-  const [setDiscount] = useState<IDiscount>();
+  // const [discount, setDiscount] = useState<IDiscount>();
   const [price, setPrice] = useState<number>();
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false); // For button loading state
@@ -52,9 +51,9 @@ const ProductPage = () => {
           price -= response.highestValue;
         }
         setPrice(price);
-        if (response?.buyXgetYDiscount) {
-          setDiscount(response?.buyXgetYDiscount);
-        }
+        // if (response?.buyXgetYDiscount) {
+        //   setDiscount(response?.buyXgetYDiscount);
+        // }
       }
       setLoading(false);
     };
@@ -70,7 +69,7 @@ const ProductPage = () => {
     const session = await getSession();
     try {
       if (session?.user) {
-        await createCartItem(product._id, session.user._id, quantity);
+        await createCartItem(product._id as string, session.user._id, quantity);
       } else {
         const cartItem = { product: product._id, quantity };
         addItemToLocalStorageCart(cartItem);

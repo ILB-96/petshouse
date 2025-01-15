@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 interface Item {
   _id: string;
-  [key: string]: any;
+  [key: string]: string;
 }
 
 interface AdminViewPageProps {

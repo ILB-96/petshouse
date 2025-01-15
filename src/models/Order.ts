@@ -28,7 +28,7 @@ export const OrderSchemaZod = z.object({
     z.string().min(1, "User is required"),
     z.instanceof(Types.ObjectId),
   ]),
-  fullname: z
+  fullName: z
     .string()
     .min(1, "Name is required")
     .max(200)

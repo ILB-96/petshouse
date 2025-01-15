@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 
-import { Icons } from "@/components/icons"; // Import your icons here or use a library like FontAwesome
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { MainContainer, SectionContainer } from "@/styles/style";

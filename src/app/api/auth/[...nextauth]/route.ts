@@ -3,14 +3,15 @@ import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/database";
 import { getUserFromDatabase } from "@/actions/user";
 import { User, Cart } from "@/models";
-import NextAuth from "next-auth";
+import NextAuth, { Account, Profile, Session, TokenSet } from "next-auth";
 import { cookies } from "next/headers";
+import { IUser } from "@/models/User";
 
 const handler = async (req, res) => {
   const customAuthOptions = {
     ...authOptions,
     callbacks: {
-      async session({ session, token }) {
+      async session({ session, token }: { session: Session; token: TokenSet }) {
         const userFromDB = token.sub
           ? await getUserFromDatabase(token?.email)
           : null;
@@ -25,10 +26,18 @@ const handler = async (req, res) => {
         }
         return session;
       },
-      async redirect({ url, baseUrl }) {
+      async redirect({ baseUrl }: { baseUrl: string }) {
         return baseUrl;
       },
-      async signIn({ user, account, profile, credentials }) {
+      async signIn({
+        account,
+        profile,
+        credentials,
+      }: {
+        account: Account;
+        profile: Profile;
+        credentials: Credential;
+      }) {
         await connectDB();
         const existingUser = await User.findOne({ email: profile?.email });
         if (account?.provider !== "credentials") {
@@ -36,8 +45,9 @@ const handler = async (req, res) => {
           let userRecord;
           if (!existingUser) {
             // If user does not exist, create a new user record
+
             userRecord = new User({
-              email: profile?.email.toLowerCase(),
+              email: profile?.email?.toLowerCase() ?? "",
               name: profile?.name || profile?.email,
               image:
                 profile?.avatar_url || profile?.image || profile?.picture || "",
@@ -61,7 +71,17 @@ const handler = async (req, res) => {
         await syncCart(existingUser._id, JSON.parse(credentials?.cart));
         return true;
       },
-      async jwt({ token, account, user, profile, session }) {
+      async jwt({
+        token,
+        account,
+        user,
+        profile,
+      }: {
+        token: TokenSet;
+        account: Account;
+        user: IUser;
+        profile: Profile;
+      }) {
         const cart = req.nextUrl.searchParams.get("cart");
         if (cart) {
           profile.cart = cart;

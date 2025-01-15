@@ -33,7 +33,7 @@ const CheckoutForm = ({ userId, cartId, subtotal }: CheckoutFormProps) => {
 
     const orderData: IOrder = {
       user: userId,
-      fullname: data.fullname,
+      fullName: data.fullName,
       country: data.country,
       city: data.city,
       street: data.street,

@@ -1,7 +1,6 @@
 "use client";
 import Cookies from "js-cookie";
 
-import { syncCart } from "@/actions/cart";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { getCartFromLocalStorage } from "@/lib/cartStorage";

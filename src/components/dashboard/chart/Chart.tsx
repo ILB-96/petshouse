@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const Chart = (data: { data: any[] | undefined }) => {
+const Chart = (data: { data: unknown[] | undefined }) => {
   const tooltipStyle = {
     backgroundColor: "white",
     borderColor: "black",

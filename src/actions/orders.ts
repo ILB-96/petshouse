@@ -25,8 +25,8 @@ export const createOrder = async (values: IOrder) => {
 export const findOneOrder = async (orderId: string) => {
   try {
     await connectDB();
-    const category = await Category.findOne({ orderId }).lean();
-    return { ...category, _id: category?._id.toString() };
+    const order = await Order.findById(orderId).lean();
+    return JSON.parse(JSON.stringify(order));
   } catch (e: unknown) {
     console.log(e);
     return null;
@@ -36,7 +36,7 @@ export const findUserOrders = async (userId: string) => {
   try {
     await connectDB();
     const orders = await Order.find({ user: userId }).lean();
-    return orders.map((order) => ({ ...order, _id: order._id.toString() }));
+    return JSON.parse(JSON.stringify(orders));
   } catch (e: unknown) {
     console.log(e);
     return null;

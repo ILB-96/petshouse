@@ -1,21 +1,13 @@
 "use client";
 import { MainContainer, SectionContainer } from "@/styles/style";
-import React, { useEffect, useState } from "react";
-import GenericForm from "@/components/GenericForm/GenericForm";
-import { createProduct } from "@/actions/product";
-import { IProduct, productSchemaZod } from "@/models/Product";
-import { findAllCompaniesSlug as findAllCompanies } from "@/actions/company"; // Import your server action for companies
-import { findAllCategories as findAllCategories } from "@/actions/category"; // Assuming there's a similar action for categories
-import { IMedia, MediaType } from "@/models/Media";
+import React, { useState } from "react";
+import { MediaType } from "@/models/Media";
 import { createMedia } from "@/actions/media";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
 
-const handleSubmit = async (media: IMedia) => {
-  console.log(media);
-};
 
 const AddMediaPage = () => {
   const { toast } = useToast();

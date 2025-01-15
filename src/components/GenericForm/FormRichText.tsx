@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { FormFieldProps } from "./FormGenericType";
@@ -10,7 +10,9 @@ import { Label } from "../ui/label";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const FormRichText: React.FC<FormFieldProps> = ({ field, form, formField }) => {
-  const [value, setValue] = useState<string>(formField.value || "");
+  const [value, setValue] = useState<string | number | readonly string[]>(
+    formField.value || ""
+  );
 
   const handleChange = (content: string) => {
     setValue(content);

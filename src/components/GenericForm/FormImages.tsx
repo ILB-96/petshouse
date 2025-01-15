@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Input } from "../ui/input";
 import { FormFieldProps } from "./FormGenericType";
 import { Label } from "../ui/label";
@@ -12,17 +12,20 @@ import {
 } from "@/components/ui/popover"; // Shadcn's Popover components
 import { Button } from "../ui/button";
 import { getMedia } from "@/actions/media"; // Assuming this is the API to fetch media
+import { IMedia } from "@/models/Media";
 
-const FormImages: React.FC<FormFieldProps> = ({ field, form, formField }) => {
+const FormImages: React.FC<FormFieldProps> = ({ field, formField }) => {
   const [previews, setPreviews] = useState<string[]>([]); // Stores selected image URLs
-  const [files, setFiles] = useState<any[]>([]); // Media files with URLs
+  const [files, setFiles] = useState<IMedia[]>([]); // Media files with URLs
   const [searchQuery, setSearchQuery] = useState<string>(""); // Search query
   const [currentPage, setCurrentPage] = useState<number>(1); // Current page for pagination
   const [totalCount, setTotalCount] = useState<number>(0); // Total count of media items
   const items_per_page = 9; // Items per page
 
   // Fetch media items based on search query and pagination
-  const fetchMedia = async () => {
+
+  // Fetch files from the media API when the popover opens or when the search query/page changes
+  const fetchMedia = useCallback(async () => {
     const { count, items } = await getMedia(
       searchQuery,
       currentPage,
@@ -30,15 +33,14 @@ const FormImages: React.FC<FormFieldProps> = ({ field, form, formField }) => {
     );
     setFiles(items);
     setTotalCount(count);
-  };
-
-  // Fetch files from the media API when the popover opens or when the search query/page changes
+  }, [searchQuery, currentPage, items_per_page]);
   useEffect(() => {
     fetchMedia();
-  }, [searchQuery, currentPage]);
+  }, [searchQuery, currentPage, fetchMedia]);
 
   // Handle selecting/deselecting a file from the list
   const handleSelectFile = (fileUrl: string, fileId: string) => {
+    console.log(fileId);
     const isAlreadySelected = previews.includes(fileUrl);
     if (isAlreadySelected) {
       const updatedPreviews = previews.filter((url) => url !== fileUrl);
@@ -171,3 +173,4 @@ const FormImages: React.FC<FormFieldProps> = ({ field, form, formField }) => {
 };
 
 export default FormImages;
+

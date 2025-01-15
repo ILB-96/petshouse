@@ -2,10 +2,8 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
 
 import { getOAuth2Client, uploadFileToDrive } from "@/lib/drive";
-import { createMedia } from "@/actions/media";
-import { MediaType } from "@/models/Media";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new Response(JSON.stringify({ message: "Unauthorized" }), {

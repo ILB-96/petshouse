@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/database";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET() {
   await connectDB();
   const session = await getServerSession(authOptions);
 
