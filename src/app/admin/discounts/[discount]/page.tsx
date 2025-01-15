@@ -11,7 +11,16 @@ import { getDiscountSchemaByType } from "../discountSchemaByType";
 const DiscountViewPage = () => {
   const [discount, setDiscount] = useState<IDiscount | null>(null); // Ensure null is properly handled
   const [defaultValues, setDefaultValues] = useState({});
-  const [fields, setFields] = useState<any[]>([]);
+  const [fields, setFields] = useState<
+    {
+      name: string;
+      type?: string;
+      label: string;
+      hidden?: boolean;
+      values?: unknown[];
+      default?: unknown;
+    }[]
+  >([]);
   const [handleSubmit, setHandleSubmit] = useState<
     ((data: unknown) => Promise<void>) | undefined
   >(undefined);
@@ -34,9 +43,9 @@ const DiscountViewPage = () => {
           const { info, fields, defaultValues, handleSubmit } =
             await getDiscountSchemaByType(discount);
 
-          const handleUpdate = async (data: unknown) => {
+          const handleUpdate = async (data: unknown): Promise<void> => {
             if (handleSubmit) {
-              return await handleSubmit(data, discount._id);
+              await handleSubmit(data, discount._id);
             }
           };
           const defaultData = { ...defaultValues, ...discount, ...info };

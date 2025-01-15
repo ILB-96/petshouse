@@ -26,7 +26,7 @@ import React, { useEffect, useState } from "react";
 
 const ProductPage = () => {
   const [product, setProduct] = useState<IProduct | null>(null);
-  const [discount, setDiscount] = useState<IDiscount>();
+  const [setDiscount] = useState<IDiscount>();
   const [price, setPrice] = useState<number>();
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false); // For button loading state

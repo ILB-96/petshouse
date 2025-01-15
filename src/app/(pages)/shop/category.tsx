@@ -9,7 +9,6 @@ import { SearchParams } from "@/models/types";
 import { SectionContainer, SearchSortContainer } from "@/styles/style";
 import React from "react";
 import ProductsSortBy from "@/components/ProductsSortBy/ProductsSortBy";
-import { getDiscounts } from "@/actions/discount";
 import { ShoppingBag } from "lucide-react";
 
 interface PageProps {

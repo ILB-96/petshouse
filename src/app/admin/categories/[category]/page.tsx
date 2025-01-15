@@ -5,7 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import GenericForm from "@/components/GenericForm/GenericForm";
 import { editCategory, findOneCategory } from "@/actions/category";
 import { useEffect, useState } from "react";
-import { Category, categorySchemaZod, ICategory } from "@/models/Category";
+import { categorySchemaZod, ICategory } from "@/models/Category";
 
 const fields = [
   { name: "name", label: "Category Name*", type: "text" },
