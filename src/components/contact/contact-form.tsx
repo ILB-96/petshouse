@@ -17,7 +17,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { contactSchema } from "@/zod-schemas";
+
+const contactSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  info: z.string().min(1, "Message is required"),
+});
 
 type FormSchema = z.infer<typeof contactSchema>;
 const ContactForm = () => {

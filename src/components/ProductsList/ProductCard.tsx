@@ -18,7 +18,8 @@ import { createCartItem } from "@/actions/cart-item";
 import { findDiscountsByProduct } from "@/actions/discount";
 // import { IDiscount } from "@/models/Discount";
 
-const ProductCard: React.FC<IProduct> = ({ product }) => {
+
+const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   // const [discount, setDiscount] = useState<IDiscount>();
   const [price, setPrice] = useState<number>();
   useEffect(() => {
@@ -46,7 +47,7 @@ const ProductCard: React.FC<IProduct> = ({ product }) => {
   const handleAddToCart = async () => {
     const session = await getSession();
     if (session?.user) {
-      await createCartItem(product._id, session.user._id, 1);
+      await createCartItem(product._id as string, session.user._id, 1);
     } else {
       const cartItem = { product: product._id, quantity: 1 };
       addItemToLocalStorageCart(cartItem);
