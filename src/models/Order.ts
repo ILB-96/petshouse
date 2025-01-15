@@ -34,6 +34,7 @@ export const OrderSchemaZod = z.object({
     .max(200)
     .transform((val) => val.charAt(0).toUpperCase() + val.slice(1)),
   country: z.string().min(1, "Country is required"),
+  city: z.string().min(1, "City is required"),
   street: z.string().min(1, "street is required"),
   house: z.string().optional(),
   floor: z.string().optional(),
@@ -61,6 +62,7 @@ const orderSchema = new Schema<IOrder>(
     user: { type: Schema.Types.String, ref: "User", required: true },
     fullname: { type: String, required: true },
     country: { type: String, required: true },
+    city: { type: String, required: true },
     street: { type: String, required: true },
     house: { type: String },
     floor: { type: String },

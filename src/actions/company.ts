@@ -76,7 +76,7 @@ export const findOneCompany = async (slug: string) => {
   try {
     await connectDB();
     const company = await Company.findOne({ slug }).lean();
-    return { ...company, _id: company?._id.toString() };
+    return JSON.parse(JSON.stringify(company));
   } catch (e: unknown) {
     console.log(e);
     return null;
@@ -86,10 +86,7 @@ export const findAllCompaniesSlug = async () => {
   try {
     await connectDB();
     const companies = await Company.find({ deletedAt: null }).lean();
-    return companies.map((company) => ({
-      ...company,
-      _id: company._id.toString(),
-    }));
+    return JSON.parse(JSON.stringify(companies));
   } catch (e: unknown) {
     console.error("Error finding companies:", e);
     return null;
@@ -116,12 +113,13 @@ export const getCompanies = async (
       .skip(categories_per_page * (page - 1));
     return { count, companies };
   } catch (err) {
+    console.error("Error finding companies:", err);
     throw new Error("Failed to fetch companies!");
   }
 };
 
 export const deleteCompany = async (
-  formData: Iterable<readonly [PropertyKey, any]>
+  formData: Iterable<readonly [PropertyKey, unknown]>
 ) => {
   const { slug } = Object.fromEntries(formData);
 

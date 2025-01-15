@@ -6,46 +6,52 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CountryDropdown } from "@/components/ui/country-dropdown";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { createOrder } from "@/actions/orders";
+import { IOrder } from "@/models/Order";
 
-const CheckoutForm = ({ userId, cartId, subtotal }) => {
+interface CheckoutFormProps {
+  userId: string;
+  cartId: string;
+  subtotal: string;
+}
+
+const CheckoutForm = ({ userId, cartId, subtotal }: CheckoutFormProps) => {
   const [loading, setLoading] = useState(false);
 
   // Use React Hook Form
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: {},
     setValue,
   } = useForm();
 
   // Form submission handler
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (formData: unknown) => {
+    const data = formData as IOrder;
     setLoading(true);
 
-    const orderData = {
+    const orderData: IOrder = {
       user: userId,
-      fullname: data.fullName,
+      fullname: data.fullname,
       country: data.country,
       city: data.city,
       street: data.street,
-      house: data.house || null,
-      floor: data.floor || null,
-      zip: data.zip || null,
-      phone: data.phone || null,
+      house: data.house,
+      floor: data.floor,
+      zip: data.zip,
+      phone: data.phone,
       status: "PENDING",
       paymentStatus: "PENDING",
       paymentMethod: data.paymentMethod,
-      subtotal: parseFloat(subtotal) || 0,
+      subtotal: parseFloat(subtotal),
       tax: 0,
       shipping: 11,
-      paymentIntent: null,
-      notes: data.notes || "",
+      paymentIntent: undefined,
+      notes: data.notes,
       cart: cartId,
     };
 
-    console.log("Order Data:", orderData);
     await createOrder(orderData);
     setLoading(false);
     alert("Order placed successfully!");

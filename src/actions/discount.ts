@@ -2,14 +2,13 @@
 import { connectDB } from "@/lib/database";
 import { IDiscount } from "@/models/Discount";
 import { Category, Discount } from "@/models";
-import { json } from "stream/consumers";
-import { findOneCategory } from "./category";
+import { ICategory } from "@/models/Category";
 
 export const findByCode = async (code: string) => {
   await connectDB();
   return await Discount.findOne({ code });
 };
-const getCleanedData = (data) => {
+const getCleanedData = (data: IDiscount) => {
   return Object.fromEntries(
     Object.entries(data).filter(
       ([, value]) =>
@@ -119,6 +118,7 @@ export const getDiscounts = async (
       .skip(items_per_page * (page - 1));
     return { count, discounts };
   } catch (err) {
+    console.log(err);
     throw new Error("Failed to fetch categories!");
   }
 };
@@ -133,15 +133,15 @@ export const findOneDiscount = async (id: string) => {
 };
 
 export const findDiscountsByProduct = async (
-  product,
-  company,
-  category,
-  productPrice
+  product: string,
+  company: string,
+  category: ICategory,
+  productPrice: number
 ) => {
   await connectDB();
   const date = new Date();
 
-  const getAllParentCategories = async (slug) => {
+  const getAllParentCategories = async (slug: string): Promise<string[]> => {
     const categoryDoc = await Category.findOne({ slug });
     if (!categoryDoc.parent) return [categoryDoc._id.toString()];
     const parentCategories = await getAllParentCategories(
@@ -192,6 +192,7 @@ export const findDiscountsByProduct = async (
   return {
     buyXgetYDiscount,
     highestValue,
+    bestDiscount,
   };
 };
 

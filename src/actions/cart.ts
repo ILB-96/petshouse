@@ -1,8 +1,9 @@
 "use server";
 import { Cart, CartItem } from "@/models";
 import { connectDB } from "@/lib/database";
+import { ICartItem } from "@/models/CartItem";
 
-export const syncCart = async (user: string, localCartItems: any[]) => {
+export const syncCart = async (user: string, localCartItems: ICartItem[]) => {
   await connectDB();
 
   // Find the user's active cart
@@ -20,15 +21,15 @@ export const syncCart = async (user: string, localCartItems: any[]) => {
     dbCartItems.map((item) => [item.product.toString(), item])
   );
   for (const localItem of localCartItems) {
-    if (dbCartItemsMap.has(localItem.productId)) {
+    if (dbCartItemsMap.has(localItem.product)) {
       // Update quantity if item exists
-      const existingItem = dbCartItemsMap.get(localItem.productId);
+      const existingItem = dbCartItemsMap.get(localItem.product);
       existingItem.quantity = localItem.quantity;
       await existingItem.save();
     } else {
       // Add new item to the cart
       const newItem = new CartItem({
-        product: localItem.productId,
+        product: localItem.product,
         cart: activeCart._id,
         quantity: localItem.quantity,
       });

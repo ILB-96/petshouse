@@ -110,10 +110,7 @@ export const findAllCategories = async () => {
   try {
     await connectDB();
     const categories = await Category.find({ deletedAt: null }).lean();
-    return categories.map((category) => ({
-      ...category,
-      _id: category._id.toString(),
-    }));
+    return JSON.parse(JSON.stringify(categories));
   } catch (e: unknown) {
     console.error("Error finding categories:", e); // Improved error logging
     return null;
@@ -154,12 +151,13 @@ export const getCategories = async (
       .skip(categories_per_page * (page - 1));
     return { count, categories };
   } catch (err) {
+    console.log(err);
     throw new Error("Failed to fetch categories!");
   }
 };
 
 export const deleteCategory = async (
-  formData: Iterable<readonly [PropertyKey, any]>
+  formData: Iterable<readonly [PropertyKey, unknown]>
 ) => {
   const { slug } = Object.fromEntries(formData);
 
@@ -178,16 +176,30 @@ export const deleteCategory = async (
 
 // app/actions/getCategoryTree.ts
 
-export async function getCategoryTree(slug: string): Promise<any> {
+interface CategoryTree {
+  _id: string;
+  name: string;
+  slug: string;
+  parent?: string | null;
+  isDraft: boolean;
+  children: CategoryTree[];
+}
+
+export async function getCategoryTree(slug: string): Promise<CategoryTree> {
   // Helper function to recursively fetch children
-  const buildTree = async (parentSlug: string | null): Promise<any> => {
+  const buildTree = async (
+    parentSlug: string | null
+  ): Promise<CategoryTree[]> => {
     const categories = await Category.find({ parent: parentSlug }).lean();
 
     // For each category, fetch its children recursively
     const children = await Promise.all(
       categories.map(async (category) => ({
-        ...category,
         _id: (category._id as mongoose.Types.ObjectId).toString(),
+        name: category.name,
+        slug: category.slug,
+        parent: category.parent,
+        isDraft: category.isDraft,
         children: await buildTree(category.slug),
       }))
     );
@@ -196,7 +208,10 @@ export async function getCategoryTree(slug: string): Promise<any> {
   };
 
   // Start building the tree from the given slug
-  const rootCategory = await Category.findOne({ slug, isDraft: false }).lean();
+  const rootCategory = (await Category.findOne({
+    slug,
+    isDraft: false,
+  }).lean()) as CategoryTree | null;
   if (!rootCategory) {
     throw new Error(`Category with slug "${slug}" not found`);
   }
@@ -204,7 +219,6 @@ export async function getCategoryTree(slug: string): Promise<any> {
   return {
     ...rootCategory,
     _id: rootCategory._id.toString(),
-    root: true,
-    children: await buildTree(rootCategory.slug),
+    children: await buildTree(rootCategory?.slug),
   };
 }

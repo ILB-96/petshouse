@@ -61,12 +61,13 @@ export const getOrders = async (
       .skip(orders_per_page * (page - 1));
     return { count, orders };
   } catch (err) {
+    console.log(err);
     throw new Error("Failed to fetch categories!");
   }
 };
 
 export const deleteOrder = async (
-  formData: Iterable<readonly [PropertyKey, any]>
+  formData: Iterable<readonly [PropertyKey, unknown]>
 ) => {
   const { orderId } = Object.fromEntries(formData);
 

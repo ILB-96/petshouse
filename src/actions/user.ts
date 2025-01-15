@@ -24,17 +24,14 @@ export async function getUserFromDatabase(email: string) {
       _id: user._id,
       role: user.role,
       image: user.image || null,
-      // You can add more fields here if needed
     };
   } catch (error) {
     console.error(`Error fetching user from database: ${error}`);
     return null;
   }
 }
-export const addUser = async (
-  formData: Iterable<readonly [PropertyKey, any]>
-) => {
-  const { username, email, password, role } = Object.fromEntries(formData);
+export const addUser = async (formData: Iterable<readonly [PropertyKey, string]>) => {
+  const { username, email, password } = Object.fromEntries(formData);
 
   try {
     await connectDB();
@@ -60,13 +57,13 @@ export const addUser = async (
 };
 
 export const updateUser = async (
-  formData: Iterable<readonly [PropertyKey, any]>
+  formData: Iterable<readonly [PropertyKey, unknown]>
 ) => {
   const { id, name, email, password, role } = Object.fromEntries(formData);
   try {
     await connectDB();
 
-    const updateFields: { [key: string]: any } = {
+    const updateFields: { [key: string]: unknown } = {
       name,
       email,
       password,
@@ -91,7 +88,7 @@ export const updateUser = async (
 };
 
 export const deleteUser = async (
-  formData: Iterable<readonly [PropertyKey, any]>
+  formData: Iterable<readonly [PropertyKey, unknown]>
 ) => {
   const { id } = Object.fromEntries(formData);
 
@@ -143,6 +140,7 @@ export const getUsers = async (
       .skip(user_per_page * (page - 1));
     return { count, users };
   } catch (err) {
+    console.log(err);
     throw new Error("Failed to fetch users!");
   }
 };
@@ -168,6 +166,7 @@ export const getUsersStatistics = async () => {
 
     return { totalUsers, usersChange: usersChange.toFixed(2) };
   } catch (error) {
+    console.log(error);
     throw new Error("Failed to fetch users statistics");
   }
 };
@@ -199,7 +198,6 @@ export const getUsersChart = async () => {
       return acc;
     }, {});
 
-    // Format data for the chart
     const formattedData = Object.keys(groupedData).map((date) => ({
       date,
       count: groupedData[date],

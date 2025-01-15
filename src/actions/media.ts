@@ -42,7 +42,7 @@ export const findOneMedia = async (name: string) => {
   try {
     await connectDB();
     const item = await Media.findOne({ name }).lean();
-    return { ...item, _id: item?._id.toString() };
+    return JSON.parse(JSON.stringify(item));
   } catch (e: unknown) {
     console.log(e);
     return null;
@@ -52,10 +52,7 @@ export const findAllMedia = async () => {
   try {
     await connectDB();
     const items = await Media.find().lean();
-    return items.map((item) => ({
-      ...item,
-      _id: item._id.toString(),
-    }));
+    return JSON.parse(JSON.stringify(items));
   } catch (e: unknown) {
     console.error("Error finding categories:", e); // Improved error logging
     return null;
@@ -86,7 +83,7 @@ export const getMedia = async (
 };
 
 export const deleteMedia = async (
-  formData: Iterable<readonly [PropertyKey, any]>
+  formData: Iterable<readonly [PropertyKey, unknown]>
 ) => {
   const { name } = Object.fromEntries(formData);
   try {

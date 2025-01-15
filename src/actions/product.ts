@@ -4,9 +4,9 @@ import { Category, Product, Company, Media } from "@/models";
 import { IProduct } from "@/models/Product";
 import { revalidatePath } from "next/cache";
 
-// Better type definition instead of `any`
 
 import { productSchemaZod } from "@/models/Product";
+import { ICategory } from "@/models/Category";
 
 export const createProduct = async (productData: IProduct) => {
   try {
@@ -142,12 +142,13 @@ export const getProducts = async (
       .skip(products_per_page * (page - 1));
     return { count, products };
   } catch (err) {
+    console.log(err);
     throw new Error("Failed to fetch companies!");
   }
 };
 
 export const deleteProduct = async (
-  formData: Iterable<readonly [PropertyKey, any]>
+  formData: Iterable<readonly [PropertyKey, unknown]>
 ) => {
   const { slug } = Object.fromEntries(formData);
 
@@ -163,12 +164,14 @@ export const deleteProduct = async (
 
   revalidatePath("/admin/products");
 };
-
+interface CategoryTree extends ICategory {
+  children?: CategoryTree[]; // Recursive definition
+}
 // Helper function to collect all category IDs from a category tree
-const getAllCategoryIds = (category: any): string[] => {
+const getAllCategoryIds = (category: CategoryTree): string[] => {
   let ids = [category._id];
   if (category.children && category.children.length > 0) {
-    category.children.forEach((child: any) => {
+    category.children.forEach((child: ICategory) => {
       ids = [...ids, ...getAllCategoryIds(child)];
     });
   }
@@ -176,7 +179,10 @@ const getAllCategoryIds = (category: any): string[] => {
 };
 
 // Helper function to find a category by slug in the tree
-const findCategoryBySlug = (category: any, slug: string): any => {
+const findCategoryBySlug = (
+  category: CategoryTree,
+  slug: string
+): ICategory | null => {
   if (category.slug === slug) {
     return category;
   }
@@ -195,7 +201,7 @@ export const getFilteredProducts = async (
   q: string | RegExp,
   page: number,
   sortby: string,
-  categories: any,
+  categories: CategoryTree,
   filters: string[],
   companiesFilter: string[],
   products_per_page: number
@@ -205,7 +211,7 @@ export const getFilteredProducts = async (
     connectDB();
 
     // Build the query object
-    const query: any = {
+    const query: Record<string, unknown> = {
       slug: { $regex: regex },
       deletedAt: null,
     };
@@ -290,11 +296,9 @@ export const getFilteredProducts = async (
         return {
           ...product.toObject(),
           _id: product._id.toString(),
-          category: category
-            ? { ...category, _id: category._id.toString() }
-            : null,
-          company: company ? { ...company, _id: company._id.toString() } : null,
-          image: image ? { ...image, _id: image._id.toString() } : null,
+          category: category ? JSON.parse(JSON.stringify(category)) : null,
+          company: company ? JSON.parse(JSON.stringify(company)) : null,
+          image: image ? JSON.parse(JSON.stringify(image)) : null,
         };
       })
     );
