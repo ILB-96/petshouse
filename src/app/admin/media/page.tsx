@@ -18,7 +18,7 @@ import { Icons } from "@/components/icons";
 
 import Link from "next/link";
 import Image from "next/image";
-import { getProducts, deleteProduct } from "@/actions/product";
+import { deleteProduct } from "@/actions/product";
 import { getMedia } from "@/actions/media";
 import { IMedia } from "@/models/Media";
 

@@ -147,7 +147,6 @@ export const findCartItems = async (email: string) => {
       };
     })
   );
-  console.log(newItems);
   return {
     userId: user._id,
     cart,
