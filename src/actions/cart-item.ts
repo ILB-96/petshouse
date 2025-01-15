@@ -69,26 +69,26 @@ export const getCartItemsCount = async (email: string) => {
   };
 };
 
-export const increaseQuantity = async (id) => {
+export const increaseQuantity = async (id: string) => {
   await connectDB();
   const item = await CartItem.findById(id);
   item.quantity += 1;
   await item.save();
 };
-export const decreaseQuantity = async (id) => {
+export const decreaseQuantity = async (id: string) => {
   await connectDB();
   const item = await CartItem.findById(id);
   item.quantity -= 1;
   await item.save();
 };
-export const setQuantity = async (id, quantity) => {
+export const setQuantity = async (id: string, quantity: number) => {
   await connectDB();
   const item = await CartItem.findById(id);
   item.quantity = quantity;
   await item.save();
 };
 
-export const deleteCartItem = async (id) => {
+export const deleteCartItem = async (id: string) => {
   await connectDB();
   await CartItem.deleteOne({ _id: id });
 };

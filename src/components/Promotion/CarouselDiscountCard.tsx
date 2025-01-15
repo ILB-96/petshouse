@@ -1,6 +1,5 @@
-import { IDiscount } from "@/models/Discount";
 import React from "react";
-import BuyXGetYCard from "./buyXgetYCard";
+import BuyXGetYCard from "./BuyXGetYCard";
 import ProductDiscountCard from "./ProductDiscountCard";
 import { DiscountCarouselItemProps } from "./CarouselDiscountList";
 import GenericDiscountCard from "./GenericDiscountCard";

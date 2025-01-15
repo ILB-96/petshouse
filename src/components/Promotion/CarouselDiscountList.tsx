@@ -1,6 +1,5 @@
 import React from "react";
 import { CarouselItem } from "../ui/carousel";
-import { Card, CardContent, CardFooter } from "../ui/card";
 import { IDiscount } from "@/models/Discount";
 import CarouselDiscountCard from "./CarouselDiscountCard";
 

@@ -1,4 +1,3 @@
-import { IDiscount } from "@/models/Discount";
 import React from "react";
 import { DiscountCarouselItemProps } from "./CarouselDiscountList";
 import { Card, CardContent, CardFooter } from "../ui/card";

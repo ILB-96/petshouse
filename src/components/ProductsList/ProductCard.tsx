@@ -1,6 +1,6 @@
 "use client";
 import { IProduct } from "@/models/Product";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -16,10 +16,10 @@ import { getSession } from "next-auth/react";
 import { addItemToLocalStorageCart } from "@/lib/cartStorage";
 import { createCartItem } from "@/actions/cart-item";
 import { findDiscountsByProduct } from "@/actions/discount";
-import { IDiscount } from "@/models/Discount";
+// import { IDiscount } from "@/models/Discount";
 
 const ProductCard: React.FC<IProduct> = ({ product }) => {
-  const [discount, setDiscount] = useState<IDiscount>();
+  // const [discount, setDiscount] = useState<IDiscount>();
   const [price, setPrice] = useState<number>();
   useEffect(() => {
     const fetchDiscounts = async () => {
@@ -34,9 +34,9 @@ const ProductCard: React.FC<IProduct> = ({ product }) => {
         price -= response.highestValue;
       }
       setPrice(price);
-      if (response?.buyXgetYDiscount) {
-        setDiscount(response?.buyXgetYDiscount);
-      }
+      // if (response?.buyXgetYDiscount) {
+      //   setDiscount(response?.buyXgetYDiscount);
+      // }
     };
     fetchDiscounts();
     return () => {
