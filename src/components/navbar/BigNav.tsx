@@ -16,7 +16,7 @@ const BigNav: React.FC<BigNavProps> = ({ categories }) => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  const goToCategory = (cate) => {
+  const goToCategory = (cate: string) => {
     const params = new URLSearchParams(searchParams);
     params.set("category", cate);
     params.set("page", "1");

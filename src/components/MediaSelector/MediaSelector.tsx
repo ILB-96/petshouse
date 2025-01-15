@@ -15,9 +15,9 @@ import { getMedia } from "@/actions/media";
 import { IMedia } from "@/models/Media";
 
 interface MediaSelectorProps {
-  onSelect: (file: IMedia) => void; // Callback for when a file is selected
-  selectedFiles: IMedia[]; // Array of currently selected files
-  allowMultiple?: boolean; // Allow selecting multiple files
+  onSelect: (file: IMedia) => void;
+  selectedFiles: IMedia[];
+  allowMultiple?: boolean;
 }
 
 const MediaSelector: React.FC<MediaSelectorProps> = ({
