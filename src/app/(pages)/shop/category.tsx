@@ -5,7 +5,7 @@ import ProductsFilter from "@/components/ProductsFilter/ProductsFilter";
 import ProductsList from "@/components/ProductsList/ProductsList";
 import SearchComp from "@/components/search/Search";
 import Pagination from "@/components/dashboard/pagination/Pagination";
-import { SearchParams } from "@/models/types";
+import { SearchParams } from "@/types";
 import { SectionContainer, SearchSortContainer } from "@/styles/style";
 import React from "react";
 import ProductsSortBy from "@/components/ProductsSortBy/ProductsSortBy";

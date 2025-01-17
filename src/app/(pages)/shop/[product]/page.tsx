@@ -16,18 +16,16 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { addItemToLocalStorageCart } from "@/lib/cartStorage";
 import { IMedia } from "@/models/Media";
-import { IProduct } from "@/models/Product";
 import { MainContainer, SectionContainer } from "@/styles/style";
+import { PopulatedProduct } from "@/types";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { getSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const ProductPage: React.FC = () => {
-  const [product, setProduct] = useState<
-    (IProduct & { images: IMedia[] }) | null
-  >(null);
+const ProductPage = () => {
+  const [product, setProduct] = useState<PopulatedProduct | null>(null);
   // const [discount, setDiscount] = useState<IDiscount>();
   const [price, setPrice] = useState<number>();
   const [loading, setLoading] = useState(true);

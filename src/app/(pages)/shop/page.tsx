@@ -1,5 +1,5 @@
 import Loading from "@/components/Loading";
-import { SearchParams } from "@/models/types";
+import { SearchParams } from "@/types";
 import { MainContainer } from "@/styles/style";
 import React, { Suspense } from "react";
 import Category from "./category";

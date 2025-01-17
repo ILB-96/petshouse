@@ -22,7 +22,7 @@ import { findUserOrders } from "@/actions/orders";
 import Loading from "@/components/Loading";
 import { IOrder } from "@/models/Order";
 
-const Profile: React.FC = () => {
+const Profile = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [orderHistory, setOrderHistory] = React.useState([]);
