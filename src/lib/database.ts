@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 export const connectDB = async () => {
   try {
     const connection = await mongoose.connect(
-      (process.env.DATABASE_URI as string) || ""
+      (process.env.DATABASE_URI as string) ||
+        "mongodb://localhost:27017/petshouse"
     );
     console.log("Database connected:", connection.connection.host);
     return true;
