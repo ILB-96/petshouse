@@ -13,9 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <BodyContainer>
+    <>
       <BreadCrumbs />
       <AdminAccess>{children}</AdminAccess>
-    </BodyContainer>
+    </>
   );
 }

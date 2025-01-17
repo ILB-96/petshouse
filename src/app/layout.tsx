@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/providers/providers";
 import Footer from "@/components/footer";
 import Navbar from "@/components/Navbar";
+import { BodyContainer } from "@/styles/style";
 
 export const metadata: Metadata = {
   title: "PetsHouse",
@@ -19,10 +20,12 @@ export default function RootLayout({
     <html>
       <body>
         <Providers>
-          <Navbar />
-          {children}
-          <Toaster />
-          <Footer
+          <BodyContainer>
+            <Navbar />
+            {children}
+            <Toaster />
+            <Footer />
+          </BodyContainer>
         </Providers>
       </body>
     </html>
