@@ -1,4 +1,3 @@
-import { BodyContainer } from "@/styles/style";
 import AdminAccess from "./admin-access";
 import BreadCrumbs from "@/components/BreadCrumbs";
 

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "@/styles/global.css";
-import { BodyContainer } from "@/styles/style";
 
 export const metadata: Metadata = {
   title: "PetsHouse",
