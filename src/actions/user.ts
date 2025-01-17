@@ -10,7 +10,6 @@ import { startOfDay, subDays } from "date-fns";
 
 export async function getUserFromDatabase(email: string) {
   try {
-    // Query the MongoDB database using Mongoose to find the user by their ID
     await connectDB();
     const user = await User.findOne({ email: email.toLowerCase() });
 
@@ -30,7 +29,9 @@ export async function getUserFromDatabase(email: string) {
     return null;
   }
 }
-export const addUser = async (formData: Iterable<readonly [PropertyKey, string]>) => {
+export const addUser = async (
+  formData: Iterable<readonly [PropertyKey, string]>
+) => {
   const { username, email, password } = Object.fromEntries(formData);
 
   try {

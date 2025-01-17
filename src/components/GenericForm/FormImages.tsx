@@ -1,30 +1,26 @@
 "use client";
-
 import React, { useState, useEffect, useCallback } from "react";
-import { Input } from "../ui/input";
-import { FormFieldProps } from "./FormGenericType";
-import { Label } from "../ui/label";
-import Image from "next/image"; // for image preview
+import { Input } from "@/components/ui/input";
+import { FormFieldProps } from "@/types";
+import { Label } from "@/components/ui/label";
+import Image from "next/image";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/ui/popover"; // Shadcn's Popover components
-import { Button } from "../ui/button";
-import { getMedia } from "@/actions/media"; // Assuming this is the API to fetch media
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { getMedia } from "@/actions/media";
 import { IMedia } from "@/models/Media";
 
 const FormImages: React.FC<FormFieldProps> = ({ field, formField }) => {
-  const [previews, setPreviews] = useState<string[]>([]); // Stores selected image URLs
-  const [files, setFiles] = useState<IMedia[]>([]); // Media files with URLs
-  const [searchQuery, setSearchQuery] = useState<string>(""); // Search query
-  const [currentPage, setCurrentPage] = useState<number>(1); // Current page for pagination
-  const [totalCount, setTotalCount] = useState<number>(0); // Total count of media items
-  const items_per_page = 9; // Items per page
+  const [previews, setPreviews] = useState<string[]>([]);
+  const [files, setFiles] = useState<IMedia[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const items_per_page = 9;
 
-  // Fetch media items based on search query and pagination
-
-  // Fetch files from the media API when the popover opens or when the search query/page changes
   const fetchMedia = useCallback(async () => {
     const { count, items } = await getMedia(
       searchQuery,
@@ -38,33 +34,33 @@ const FormImages: React.FC<FormFieldProps> = ({ field, formField }) => {
     fetchMedia();
   }, [searchQuery, currentPage, fetchMedia]);
 
-  // Handle selecting/deselecting a file from the list
   const handleSelectFile = (fileUrl: string, fileId: string) => {
     console.log(fileId);
     const isAlreadySelected = previews.includes(fileUrl);
     if (isAlreadySelected) {
-      const updatedPreviews = previews.filter((url) => url !== fileUrl);
+      const updatedPreviews: string[] = previews.filter(
+        (url) => url !== fileUrl
+      );
       setPreviews(updatedPreviews);
       formField.onChange(
         updatedPreviews.map(
-          (url) => files.find((file) => file.source === url)?._id
+          (url) => files.find((file) => file.source === url)?._id as string
         )
-      ); // Update form value with IDs
+      );
     } else {
       const updatedPreviews = [...previews, fileUrl];
       setPreviews(updatedPreviews);
       formField.onChange(
         updatedPreviews.map(
-          (url) => files.find((file) => file.source === url)?._id
+          (url) => files.find((file) => file.source === url)?._id as string
         )
-      ); // Update form value with IDs
+      );
     }
   };
 
-  // Handle changing the search query
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1); // Reset to first page on search change
+    setCurrentPage(1);
   };
 
   // Handle pagination
@@ -75,13 +71,12 @@ const FormImages: React.FC<FormFieldProps> = ({ field, formField }) => {
   function handleRemoveImage(index: number): void {
     const updatedPreviews = previews.filter((_, i) => i !== index);
     setPreviews(updatedPreviews);
-    formField.onChange(updatedPreviews); // Update form field value
+    formField.onChange(updatedPreviews);
   }
   return (
     <div className="flex flex-col space-y-8 mt-20">
       <Label htmlFor={field.name}>{field.label}</Label>
 
-      {/* Popover Trigger */}
       <Popover>
         <PopoverTrigger
           asChild
@@ -113,7 +108,9 @@ const FormImages: React.FC<FormFieldProps> = ({ field, formField }) => {
                 className={`border rounded-sm p-2 cursor-pointer hover:bg-gray-100 ${
                   previews.includes(file.source) ? "bg-blue-100" : ""
                 }`}
-                onClick={() => handleSelectFile(file.source)} // Toggle selection
+                onClick={() =>
+                  handleSelectFile(file.source, file._id as string)
+                }
               >
                 <Image
                   src={file.source}
@@ -173,4 +170,3 @@ const FormImages: React.FC<FormFieldProps> = ({ field, formField }) => {
 };
 
 export default FormImages;
-

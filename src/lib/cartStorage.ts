@@ -1,4 +1,5 @@
 import { ICartItem } from "@/models/CartItem";
+import { Types } from "mongoose";
 
 export const getCartFromLocalStorage = () => {
   const cart = localStorage.getItem("cart");
@@ -12,7 +13,10 @@ export const saveCartToLocalStorage = (cart: ICartItem[]) => {
 export const clearLocalStorageCart = () => {
   localStorage.removeItem("cart");
 };
-export const addItemToLocalStorageCart = (item: ICartItem) => {
+export const addItemToLocalStorageCart = (item: {
+  product: string | Types.ObjectId;
+  quantity: number;
+}) => {
   const cart = JSON.parse(getCartFromLocalStorage());
   const existingItem = cart.find((i: ICartItem) => i.product === item.product);
 

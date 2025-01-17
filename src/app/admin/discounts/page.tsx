@@ -3,8 +3,7 @@
 import Pagination from "@/components/dashboard/pagination/Pagination";
 import SearchComp from "@/components/search/Search";
 import styles from "@/components/dashboard/users/users.module.css";
-
-import { SearchParams } from "@/models/types";
+import { SearchParams } from "@/types";
 import {
   Table,
   TableBody,
@@ -65,10 +64,10 @@ const CategoriesPage: React.FC<CategoriesPageProps> = async ({
                   {discount?.code}
                 </TableCell>
                 <TableCell className={styles.tableCell}>
-                  {discount?.startDate.toISOString().split("T")[0]}
+                  {discount?.startDate.toString().split("T")[0]}
                 </TableCell>
                 <TableCell className={styles.tableCell}>
-                  {discount?.endDate?.toISOString().split("T")[0]}
+                  {discount?.endDate?.toString().split("T")[0]}
                 </TableCell>
                 <TableCell className={styles.tableCell}>
                   <div className={styles.buttons}>

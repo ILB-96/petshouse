@@ -3,49 +3,75 @@ import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/database";
 import { getUserFromDatabase } from "@/actions/user";
 import { User, Cart } from "@/models";
-import NextAuth, { Account, Profile, Session, TokenSet } from "next-auth";
+import NextAuth, {
+  Account,
+  AuthOptions,
+  Profile,
+  User as NextAuthUser,
+} from "next-auth";
 import { cookies } from "next/headers";
-import { IUser } from "@/models/User";
+import { NextRequest, NextResponse } from "next/server";
+import { AdapterUser } from "next-auth/adapters";
+import { NextApiRequest, NextApiResponse } from "next";
+import { JWT } from "next-auth/jwt";
+import { AuthSession } from "@/types";
 
-const handler = async (req, res) => {
-  const customAuthOptions = {
+interface SessionCallbackParams {
+  session: AuthSession;
+  token: JWT;
+  user: AdapterUser;
+  newSession: unknown;
+  trigger: "update";
+}
+
+interface RedirectCallbackParams {
+  baseUrl: string;
+}
+
+interface SignInCallbackParams {
+  user: AdapterUser | NextAuthUser;
+  account: Account | null;
+  profile?: Profile & { avatar_url?: string; picture?: string };
+  email?: { verificationRequest?: boolean | undefined } | undefined;
+  credentials?: Record<string, unknown>;
+}
+
+interface JwtCallbackParams {
+  token: JWT;
+  account: Account | null;
+  user: (AdapterUser & { cart?: string }) | (NextAuthUser & { cart?: string });
+  profile?: Profile & { cart?: string };
+}
+
+const handler = async (
+  req: NextApiRequest & NextRequest,
+  res: NextApiResponse & NextResponse
+) => {
+  const customAuthOptions: AuthOptions = {
     ...authOptions,
     callbacks: {
-      async session({ session, token }: { session: Session; token: TokenSet }) {
+      async session({ session, token }: SessionCallbackParams) {
         const userFromDB = token.sub
-          ? await getUserFromDatabase(token?.email)
+          ? await getUserFromDatabase(token?.email as string)
           : null;
-        // Add custom fields like cartId to the session object
         if (userFromDB) {
           session.user._id = userFromDB._id;
           session.user.role = userFromDB.role;
-          session.user.image = userFromDB.image || session.user.picture;
+          session.user.image = userFromDB.image || session.user.image;
           session.accessToken = token.accessToken;
           session.refreshToken = token.refreshToken;
-          session.expiresAt = token.expiresAt;
         }
         return session;
       },
-      async redirect({ baseUrl }: { baseUrl: string }) {
+      async redirect({ baseUrl }: RedirectCallbackParams) {
         return baseUrl;
       },
-      async signIn({
-        account,
-        profile,
-        credentials,
-      }: {
-        account: Account;
-        profile: Profile;
-        credentials: Credential;
-      }) {
+      async signIn({ account, profile, credentials }: SignInCallbackParams) {
         await connectDB();
         const existingUser = await User.findOne({ email: profile?.email });
         if (account?.provider !== "credentials") {
-          // Check if the user already exists in the database
           let userRecord;
           if (!existingUser) {
-            // If user does not exist, create a new user record
-
             userRecord = new User({
               email: profile?.email?.toLowerCase() ?? "",
               name: profile?.name || profile?.email,
@@ -53,13 +79,9 @@ const handler = async (req, res) => {
                 profile?.avatar_url || profile?.image || profile?.picture || "",
               role: "ADMIN",
             });
-
-            // Create a new cart associated with the new user
             const cart = new Cart({ user: userRecord._id });
-
-            await Promise.all([userRecord.save(), cart.save()]); // Save both user and cart
+            await Promise.all([userRecord.save(), cart.save()]);
           } else {
-            // If the user exists, retrieve the user record
             userRecord = existingUser;
           }
           const cookieStore = cookies();
@@ -68,24 +90,18 @@ const handler = async (req, res) => {
           cookieStore.delete("cart");
           return true;
         }
-        await syncCart(existingUser._id, JSON.parse(credentials?.cart));
+        await syncCart(
+          existingUser._id,
+          JSON.parse(credentials?.cart as string)
+        );
         return true;
       },
-      async jwt({
-        token,
-        account,
-        user,
-        profile,
-      }: {
-        token: TokenSet;
-        account: Account;
-        user: IUser;
-        profile: Profile;
-      }) {
-        const cart = req.nextUrl.searchParams.get("cart");
+      async jwt({ token, account, user, profile }: JwtCallbackParams) {
+        const url = new URL(req.url as string);
+        const cart = url.searchParams.get("cart"); // Use searchParams for query params
         if (cart) {
-          profile.cart = cart;
-          account.cart = cart;
+          if (profile) profile.cart = cart;
+          if (account) account.cart = cart;
           user.cart = cart;
         }
         if (account) {
@@ -101,5 +117,4 @@ const handler = async (req, res) => {
   return NextAuth(req, res, customAuthOptions);
 };
 
-// Export the handler for both GET and POST methods
 export { handler as GET, handler as POST };

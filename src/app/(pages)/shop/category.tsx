@@ -1,4 +1,4 @@
-import { getCategoryTree } from "@/actions/category";
+import { getCategoryTree, CategoryTree } from "@/actions/category";
 import { findAllCompaniesSlug as findAllCompanies } from "@/actions/company";
 import { getFilteredProducts } from "@/actions/product";
 import ProductsFilter from "@/components/ProductsFilter/ProductsFilter";
@@ -26,7 +26,7 @@ const Category: React.FC<PageProps> = async ({ searchParams }) => {
   if (!rootCategory) {
     return null;
   }
-  const categories = await getCategoryTree(rootCategory);
+  const categories: CategoryTree = await getCategoryTree(rootCategory);
   const companies = await findAllCompanies();
   const { count, products } = await getFilteredProducts(
     q,

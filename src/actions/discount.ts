@@ -60,15 +60,12 @@ export const findAllActiveDiscounts = async () => {
   const discounts: IDiscount[] = await Discount.find({
     startDate: { $lte: date },
     endDate: { $gt: date },
-  }).lean();
+  });
   if (!discounts) {
     return [];
   }
 
-  return discounts.map((discount: IDiscount) => ({
-    ...discount,
-    _id: discount._id.toString(),
-  }));
+  return JSON.parse(JSON.stringify(discounts));
 };
 
 export const findAllDiscounts = async () => {
@@ -116,7 +113,7 @@ export const getDiscounts = async (
     })
       .limit(items_per_page)
       .skip(items_per_page * (page - 1));
-    return { count, discounts };
+    return { count, discounts: JSON.parse(JSON.stringify(discounts)) };
   } catch (err) {
     console.log(err);
     throw new Error("Failed to fetch categories!");
@@ -190,9 +187,9 @@ export const findDiscountsByProduct = async (
 
   // Step 4: Return the relevant discounts
   return {
-    buyXgetYDiscount,
+    buyXgetYDiscount: JSON.parse(JSON.stringify(buyXgetYDiscount)),
     highestValue,
-    bestDiscount,
+    bestDiscount: JSON.parse(JSON.stringify(bestDiscount)),
   };
 };
 

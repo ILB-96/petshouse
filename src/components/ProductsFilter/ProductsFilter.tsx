@@ -9,8 +9,15 @@ import CategoriesFilter from "./CategoriesFilter";
 import FilterToggleButton from "./FilterToggleButton";
 import ClearAllFiltersButton from "./ClearAllFiltersButton";
 import { useURLState } from "@/hooks/use-url";
+import { CategoryTree } from "@/actions/category";
+import { ICompany } from "@/models/Company";
 
-const ProductsFilter = ({ categories, companies }) => {
+interface ProductsFilterProps {
+  categories: CategoryTree;
+  companies: ICompany[];
+}
+
+const ProductsFilter = ({ categories, companies }: ProductsFilterProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -21,7 +28,14 @@ const ProductsFilter = ({ categories, companies }) => {
   const clearAllFiltersAndCompanies = () => {
     setFilterState(new Set());
     setCompanyState(new Set());
-    updateURL(searchParams, pathname, replace, new Set(), new Set());
+    const data = {
+      searchParams,
+      pathname,
+      replace,
+      companyState: new Set(),
+      filterState: new Set(),
+    };
+    updateURL(data);
   };
 
   return (
@@ -57,7 +71,7 @@ const ProductsFilter = ({ categories, companies }) => {
             pathname={pathname}
             replace={replace}
             categories={categories}
-            companiesState={companyState}
+            companyState={companyState}
             filterState={filterState}
             setFilterState={setFilterState}
           />
@@ -72,7 +86,6 @@ const ProductsFilter = ({ categories, companies }) => {
             searchParams={searchParams}
             replace={replace}
             filterState={filterState}
-            setFilterState={setFilterState}
             updateURL={updateURL}
           />
         )}

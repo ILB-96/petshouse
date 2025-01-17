@@ -14,7 +14,7 @@ const AddUserPage = () => {
   return (
     <div className="flex justify-center items-center">
       <form
-        action={addUser}
+        action={addUser as (formData: FormData) => Promise<void>}
         className="flex justify-center flex-col"
         method="post"
       >

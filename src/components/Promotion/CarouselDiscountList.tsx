@@ -2,12 +2,13 @@ import React from "react";
 import { CarouselItem } from "../ui/carousel";
 import { IDiscount } from "@/models/Discount";
 import CarouselDiscountCard from "./CarouselDiscountCard";
+import { PopulatedCompanyDiscount, PopulatedProductDiscount } from "@/types";
 
 interface DiscountCarouselListProps {
   discounts: IDiscount[];
 }
 export interface DiscountCarouselItemProps {
-  discount: IDiscount;
+  discount: IDiscount | PopulatedProductDiscount | PopulatedCompanyDiscount;
 }
 const CarouselDiscountList: React.FC<DiscountCarouselListProps> = ({
   discounts,

@@ -2,16 +2,16 @@
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
-import { FormFieldProps } from "./FormGenericType";
+import { FormFieldProps } from "@/types";
 import { cn } from "@/lib/utils";
 import { Label } from "../ui/label";
+import { Value } from "react-quill";
 
-// Dynamically import ReactQuill
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const FormRichText: React.FC<FormFieldProps> = ({ field, form, formField }) => {
   const [value, setValue] = useState<string | number | readonly string[]>(
-    formField.value || ""
+    (formField.value as string) || ""
   );
 
   const handleChange = (content: string) => {
@@ -24,7 +24,7 @@ const FormRichText: React.FC<FormFieldProps> = ({ field, form, formField }) => {
       <Label htmlFor={field.name}>{field.label}</Label>
       <ReactQuill
         theme="snow"
-        value={value}
+        value={value as Value}
         onChange={handleChange}
         className={cn(
           "focus-visible:ring-ring rounded-sm h-40",

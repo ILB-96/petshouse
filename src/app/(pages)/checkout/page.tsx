@@ -14,6 +14,14 @@ import { Icons } from "@/components/icons";
 import { calculateTotal } from "@/lib/cart";
 import { Separator } from "@/components/ui/separator";
 import CheckoutForm from "./form";
+import {
+  Key,
+  ReactElement,
+  JSXElementConstructor,
+  ReactNode,
+  ReactPortal,
+  AwaitedReactNode,
+} from "react";
 
 const CheckoutPage = async () => {
   const session = await getServerSession(authOptions);
@@ -50,20 +58,56 @@ const CheckoutPage = async () => {
                     <CardTitle>Order Summary</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {items.map((item) => {
-                      return (
-                        <div
-                          key={item._id.toString()}
-                          className="grid grid-cols-3 "
-                        >
-                          <span>{item.product.name}</span>
-                          <span className="mx-auto">{item.quantity}</span>
-                          <span className="ml-auto">
-                            ${item.quantity * item.product.newPrice}
-                          </span>
-                        </div>
-                      );
-                    })}
+                    {items.map(
+                      (item: {
+                        _id: { toString: () => Key | null | undefined };
+                        product: {
+                          name:
+                            | string
+                            | number
+                            | bigint
+                            | boolean
+                            | ReactElement<
+                                unknown,
+                                string | JSXElementConstructor<unknown>
+                              >
+                            | Iterable<ReactNode>
+                            | ReactPortal
+                            | Promise<AwaitedReactNode>
+                            | null
+                            | undefined;
+                          newPrice: number;
+                        };
+                        quantity:
+                          | string
+                          | number
+                          | bigint
+                          | boolean
+                          | ReactElement<
+                              unknown,
+                              string | JSXElementConstructor<unknown>
+                            >
+                          | Iterable<ReactNode>
+                          | Promise<AwaitedReactNode>
+                          | null
+                          | undefined;
+                      }) => {
+                        return (
+                          <div
+                            key={item._id.toString()}
+                            className="grid grid-cols-3 "
+                          >
+                            <span>{item.product.name}</span>
+                            <span className="mx-auto">{item.quantity}</span>
+                            <span className="ml-auto">
+                              $
+                              {(item.quantity as number) *
+                                item.product.newPrice}
+                            </span>
+                          </div>
+                        );
+                      }
+                    )}
                     <Separator className="my-3" />
                     <div className="flex justify-between">
                       <span>Subtotal</span>

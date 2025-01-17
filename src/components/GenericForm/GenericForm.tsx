@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import "./company.css";
+import "./form.css";
 import FormTextArea from "./FormTextArea";
 import FormCheckBox from "./FormCheckBox";
 import FormText from "./FormText";
@@ -18,6 +18,7 @@ import FormRichText from "./FormRichText";
 import FormDropdown from "./FormDropdown";
 import FormNumber from "./FormNumber";
 import FormImages from "./FormImages";
+import { FieldProps } from "@/types";
 
 const GenericForm = ({
   formSchema,
@@ -28,14 +29,7 @@ const GenericForm = ({
 }: {
   formSchema: ZodObject<ZodRawShape>;
   defaultValues?: Record<string, unknown>;
-  fields: {
-    name: string;
-    type?: string;
-    label: string;
-    hidden?: boolean;
-    values?: unknown[];
-    default?: unknown;
-  }[];
+  fields: FieldProps[];
   buttonName?: string;
   onSubmit: (data: unknown) => Promise<string>;
 }) => {

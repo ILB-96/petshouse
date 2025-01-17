@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { DiscountCarouselItemProps } from "./CarouselDiscountList";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import Image from "next/image";
-import { IProduct } from "@/models/Product";
 import { Button } from "../ui/button";
 import { NavLink } from "@/styles/style";
+import { PopulatedProductDiscount } from "@/types";
 
-const ProductDiscountCard: React.FC<DiscountCarouselItemProps> = ({
+const ProductDiscountCard: React.FC<{ discount: PopulatedProductDiscount }> = ({
   discount,
 }) => {
   const [timeLeft, setTimeLeft] = useState<string>("");
 
-  // Calculate and update time left till promotion ends
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
-      const endDate = new Date(discount.endDate); // Ensure discount.endDate is a valid Date string
+      const endDate = new Date(discount.endDate as Date);
       const diff = endDate.getTime() - now.getTime();
 
       if (diff <= 0) {
@@ -37,8 +35,8 @@ const ProductDiscountCard: React.FC<DiscountCarouselItemProps> = ({
       {/* Product Image */}
       <div className="relative w-full h-48 bg-gray-100">
         <Image
-          src={(discount.product as IProduct)?.images[0].source}
-          alt={(discount.product as IProduct)?.images[0].caption || "Product"}
+          src={discount.product?.images[0].source}
+          alt={discount.product?.images[0].caption || "Product"}
           layout="fill"
           objectFit="cover"
           className="rounded-t-lg"
@@ -54,8 +52,7 @@ const ProductDiscountCard: React.FC<DiscountCarouselItemProps> = ({
         {/* Product Description */}
         <p className="text-sm text-gray-600 mb-4">{discount.description}</p>
 
-        {/* Time Left */}
-        {timeLeft && (
+        {discount.endDate && timeLeft && (
           <div className="text-red-600 font-semibold text-sm">
             Time left: {timeLeft}
           </div>

@@ -7,22 +7,14 @@ import { useEffect, useState } from "react";
 import { findOneDiscount } from "@/actions/discount";
 import { discountSchemaZod, IDiscount } from "@/models/Discount";
 import { getDiscountSchemaByType } from "../discountSchemaByType";
+import { FieldProps } from "@/types";
 
 const DiscountViewPage = () => {
   const [discount, setDiscount] = useState<IDiscount | null>(null); // Ensure null is properly handled
   const [defaultValues, setDefaultValues] = useState({});
-  const [fields, setFields] = useState<
-    {
-      name: string;
-      type?: string;
-      label: string;
-      hidden?: boolean;
-      values?: unknown[];
-      default?: unknown;
-    }[]
-  >([]);
+  const [fields, setFields] = useState<FieldProps[]>([]);
   const [handleSubmit, setHandleSubmit] = useState<
-    ((data: unknown) => Promise<void>) | undefined
+    ((data: unknown) => Promise<string>) | undefined
   >(undefined);
   const router = useRouter();
   const params = useParams();
@@ -43,13 +35,13 @@ const DiscountViewPage = () => {
           const { info, fields, defaultValues, handleSubmit } =
             await getDiscountSchemaByType(discount);
 
-          const handleUpdate = async (data: unknown): Promise<void> => {
+          const handleUpdate = async (data: unknown): Promise<string> => {
             if (handleSubmit) {
               await handleSubmit(data, discount._id);
             }
+            return "Update successful";
           };
           const defaultData = { ...defaultValues, ...discount, ...info };
-          console.log(defaultData);
           setDefaultValues({ ...defaultValues, ...discount, ...info });
           setFields(fields);
           setHandleSubmit(() => handleUpdate);

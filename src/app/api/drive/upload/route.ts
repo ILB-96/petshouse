@@ -2,9 +2,10 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
 
 import { getOAuth2Client, uploadFileToDrive } from "@/lib/drive";
+import { AuthSession } from "@/types";
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
+  const session = (await getServerSession(authOptions)) as AuthSession;
   if (!session) {
     return new Response(JSON.stringify({ message: "Unauthorized" }), {
       status: 401,
@@ -13,18 +14,19 @@ export async function POST(req: Request) {
 
   try {
     const data = await req.formData();
-    const file = data.get("file");
-    const name = data.get("name");
-    if (!file) {
-      // If no file is received, return a JSON response with an error and a 400 status code
+    const file = data.get("file") as Blob;
+    const name = data.get("name") as string;
+    if (!file || !name) {
       return Response.json({ error: "No files received." }, { status: 400 });
     }
     const buffer = Buffer.from(await file.arrayBuffer());
 
     // Replace spaces in the file name with underscores
     const filename = name.replaceAll(" ", "_");
-    console.log("SESSION", session);
-    const oauth = getOAuth2Client(session.accessToken, session.refreshToken);
+    const oauth = getOAuth2Client(
+      session.accessToken as string,
+      session.refreshToken as string
+    );
     console.log("FILE", file);
     const uploadedFile = await uploadFileToDrive(
       oauth,
@@ -32,9 +34,6 @@ export async function POST(req: Request) {
       buffer,
       file.type
     );
-    console.log("File uploaded", uploadedFile);
-    uploadedFile.type = file.type;
-    uploadedFile.name = filename;
 
     return new Response(
       JSON.stringify({

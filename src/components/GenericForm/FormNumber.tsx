@@ -1,7 +1,7 @@
 "use state";
 import React from "react";
-import { FormFieldProps } from "./FormGenericType";
-import { Input } from "../ui/input";
+import { FormFieldProps } from "@/types";
+import { Input } from "@/components/ui/input";
 
 const FormNumber: React.FC<FormFieldProps> = ({ field, form, formField }) => {
   return (
@@ -12,6 +12,7 @@ const FormNumber: React.FC<FormFieldProps> = ({ field, form, formField }) => {
       aria-describedby={field.name}
       aria-invalid={!!form.formState.errors[field.name]}
       {...formField}
+      value={formField.value as number | undefined}
       onChange={(e) => {
         const value =
           e.target.value === "" ? undefined : Number(e.target.value);

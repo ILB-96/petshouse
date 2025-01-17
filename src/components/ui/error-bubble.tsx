@@ -1,7 +1,7 @@
 import React from "react";
-import { FieldError } from "react-hook-form";
+import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 interface ErrorBubbleProps {
-  error: FieldError | undefined;
+  error: FieldError | Merge<FieldError, FieldErrorsImpl<{}>> | undefined;
 }
 const ErrorBubble = ({ error }: ErrorBubbleProps) => {
   return (

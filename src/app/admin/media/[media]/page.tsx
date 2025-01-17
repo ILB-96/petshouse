@@ -1,5 +1,4 @@
 "use client";
-
 import { HeroTitle, MainContainer, SectionContainer } from "@/styles/style";
 import { useRouter, useParams } from "next/navigation";
 import GenericForm from "@/components/GenericForm/GenericForm";
@@ -7,15 +6,16 @@ import { editCompany, findOneCompany } from "@/actions/company";
 import { useEffect, useState } from "react";
 import { companySchemaZod, ICompany } from "@/models/Company";
 import { Icons } from "@/components/icons";
+import { FieldProps } from "@/types";
 
-const fields = [
+const fields: FieldProps[] = [
   { name: "name", label: "Company Name*", type: "text" },
   { name: "slug", label: "Company Slug*", type: "text" },
   { name: "url", label: "Company URL", type: "text" },
 ];
 
-const handleSubmit = async ({ name, slug, url }: ICompany) => {
-  const { message } = await editCompany({ name, slug, url });
+const handleSubmit = async (formData: unknown) => {
+  const { message } = await editCompany(formData as ICompany);
   return message;
 };
 
@@ -32,7 +32,6 @@ const CompanyViewPage = () => {
         router.push("/admin/companies");
         return;
       }
-      console.log("slug", slug);
 
       const company = await findOneCompany(slug as string);
       if (company) {

@@ -2,16 +2,15 @@ import React from "react";
 import { Card } from "../ui/card";
 import Image from "next/image";
 import CartItemButtons from "./CartItemButtons";
-import { ICartItem } from "@/models/CartItem";
+import { PopulatedCartItem } from "@/types";
 
-const CartItemCard = async ({ item }: { item: ICartItem }) => {
+const CartItemCard = async ({ item }: { item: PopulatedCartItem }) => {
   return (
     <Card className="mb-4 flex flex-col md:flex-row justify-between items-center p-4">
-      {/* Product Image */}
       <div className="w-full md:w-1/4 flex-shrink-0">
         <Image
-          src={item.product.images[0]?.source || "/placeholder.png"}
-          alt={item.product.images[0]?.caption || "Product image"}
+          src={item.product.images[0]?.source}
+          alt={item.product.images[0]?.caption || item.product.images[0].name}
           width={150}
           height={150}
           className="rounded-md object-cover w-full h-auto"
@@ -40,7 +39,7 @@ const CartItemCard = async ({ item }: { item: ICartItem }) => {
             <p className="text-red-400">{item.product.stock} left in stock.</p>
           ))}
       </div>
-      <CartItemButtons itemId={item._id.toString()} quantity={item.quantity} />
+      <CartItemButtons itemId={item._id as string} quantity={item.quantity} />
     </Card>
   );
 };

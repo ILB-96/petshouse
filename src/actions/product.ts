@@ -4,9 +4,8 @@ import { Category, Product, Company, Media } from "@/models";
 import { IProduct } from "@/models/Product";
 import { revalidatePath } from "next/cache";
 
-
+import { CategoryTree } from "./category";
 import { productSchemaZod } from "@/models/Product";
-import { ICategory } from "@/models/Category";
 
 export const createProduct = async (productData: IProduct) => {
   try {
@@ -140,7 +139,7 @@ export const getProducts = async (
     })
       .limit(products_per_page)
       .skip(products_per_page * (page - 1));
-    return { count, products };
+    return { count, products: JSON.parse(JSON.stringify(products)) };
   } catch (err) {
     console.log(err);
     throw new Error("Failed to fetch companies!");
@@ -164,25 +163,21 @@ export const deleteProduct = async (
 
   revalidatePath("/admin/products");
 };
-interface CategoryTree extends ICategory {
-  children?: CategoryTree[]; // Recursive definition
-}
-// Helper function to collect all category IDs from a category tree
+
 const getAllCategoryIds = (category: CategoryTree): string[] => {
   let ids = [category._id];
   if (category.children && category.children.length > 0) {
-    category.children.forEach((child: ICategory) => {
+    category.children.forEach((child: CategoryTree) => {
       ids = [...ids, ...getAllCategoryIds(child)];
     });
   }
   return ids;
 };
 
-// Helper function to find a category by slug in the tree
 const findCategoryBySlug = (
   category: CategoryTree,
   slug: string
-): ICategory | null => {
+): CategoryTree | null => {
   if (category.slug === slug) {
     return category;
   }

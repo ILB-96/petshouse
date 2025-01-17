@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { calculateTotal } from "@/lib/cart";
+import { PopulatedCartItem } from "@/types";
 
 interface Item {
   quantity: number;
@@ -11,7 +12,7 @@ interface Item {
   };
 }
 
-const CartSummaryCard = ({ cartItems }: { cartItems: Item[] }) => {
+const CartSummaryCard = ({ cartItems }: { cartItems: PopulatedCartItem[] }) => {
   const total = calculateTotal(cartItems);
   console.log();
   return (

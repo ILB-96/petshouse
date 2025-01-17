@@ -16,11 +16,10 @@ export const RegisterForm = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // Check if user is already logged in
     const checkSession = async () => {
       const session = await getSession();
       if (session?.user) {
-        router.push("/"); // Redirect to home if logged in
+        router.push("/");
       }
     };
     checkSession();
@@ -35,7 +34,7 @@ export const RegisterForm = () => {
       name: formValues.name,
     });
     if (r?.error) {
-      setError(r.error);
+      setError(String(r.error));
       setLoading(false);
       return;
     } else {

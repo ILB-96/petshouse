@@ -4,7 +4,12 @@ import { PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import styles from "./pagination.module.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const Pagination = ({ count, items_per_page = 2 }) => {
+interface PaginationProps {
+  count: number;
+  items_per_page?: number;
+}
+
+const Pagination = ({ count, items_per_page = 2 }: PaginationProps) => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
@@ -18,9 +23,11 @@ const Pagination = ({ count, items_per_page = 2 }) => {
     items_per_page * (parseInt(page.toString()) - 1) + items_per_page < count;
 
   const handleChangePage = (type: string) => {
-    type === "prev"
-      ? params.set("page", (parseInt(page.toString()) - 1).toString())
-      : params.set("page", (parseInt(page.toString()) + 1).toString());
+    if (type === "prev") {
+      params.set("page", (parseInt(page.toString()) - 1).toString());
+    } else {
+      params.set("page", (parseInt(page.toString()) + 1).toString());
+    }
     replace(`${pathname}?${params}`);
   };
 

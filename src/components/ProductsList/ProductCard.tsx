@@ -1,5 +1,4 @@
 "use client";
-import { IProduct } from "@/models/Product";
 import React, { useEffect, useState } from "react";
 import {
   Card,
@@ -16,18 +15,20 @@ import { getSession } from "next-auth/react";
 import { addItemToLocalStorageCart } from "@/lib/cartStorage";
 import { createCartItem } from "@/actions/cart-item";
 import { findDiscountsByProduct } from "@/actions/discount";
+import { PopulatedProduct } from "@/types";
+import { ICompany } from "@/models/Company";
+import { ICategory } from "@/models/Category";
 // import { IDiscount } from "@/models/Discount";
 
-
-const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
+const ProductCard: React.FC<{ product: PopulatedProduct }> = ({ product }) => {
   // const [discount, setDiscount] = useState<IDiscount>();
   const [price, setPrice] = useState<number>();
   useEffect(() => {
     const fetchDiscounts = async () => {
       const response = await findDiscountsByProduct(
-        product._id,
-        product.company._id,
-        product.category,
+        product._id as string,
+        (product.company as ICompany)._id as string,
+        product.category as ICategory,
         product.price
       );
       let price = product.price;
@@ -71,7 +72,9 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
       <CardHeader>
         <CardTitle>{product.name}</CardTitle>
         <CardDescription>
-          {`${product.company.name}, ${product.category.name}`}
+          {`${(product.company as ICompany).name}, ${
+            (product.category as ICategory).name
+          }`}
         </CardDescription>
       </CardHeader>
       <CardContent>

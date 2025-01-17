@@ -19,7 +19,6 @@ export const getOAuth2Client = (accessToken: string, refreshToken: string) => {
   return oauth2Client;
 };
 
-// Function to upload a file to Google Drive using a filename and buffer
 export const uploadFileToDrive = async (
   oauth2Client: OAuth2Client,
   filename: string,
@@ -39,39 +38,24 @@ export const uploadFileToDrive = async (
     };
 
     const res = await drive.files.create({
-      resource: fileMetadata,
+      requestBody: fileMetadata,
       media: media,
       fields: "id, name, webViewLink", // Return file metadata
     });
 
-    await drive.permissions.create({
-      fileId: res.data.id,
-      requestBody: {
-        role: "reader",
-        type: "anyone",
-      },
-    });
+    if (res.data.id) {
+      await drive.permissions.create({
+        fileId: res.data.id,
+        requestBody: {
+          role: "reader",
+          type: "anyone",
+        },
+      });
+    }
 
     return res.data;
   } catch (error) {
     console.error("Error uploading file to Google Drive:", error);
-    throw error;
-  }
-};
-
-// Function to list files from Google Drive
-export const listFilesFromDrive = async (oauth2Client: OAuth2Client) => {
-  const drive = google.drive({ version: "v3", auth: oauth2Client });
-
-  try {
-    const res = await drive.files.list({
-      pageSize: 10,
-      fields: "files(id, name, webViewLink)",
-    });
-
-    return res.data.files;
-  } catch (error) {
-    console.error("Error fetching files from Google Drive:", error);
     throw error;
   }
 };

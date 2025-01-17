@@ -3,7 +3,8 @@ import { MainContainer, SectionContainer } from "@/styles/style";
 import React from "react";
 import GenericForm from "@/components/GenericForm/GenericForm";
 import { createCompany } from "@/actions/company";
-import { companySchemaZod } from "@/models/Company";
+import { companySchemaZod, ICompany } from "@/models/Company";
+import { FieldProps } from "@/types";
 
 const defaultValues = {
   name: "",
@@ -11,22 +12,14 @@ const defaultValues = {
   url: "",
 };
 
-const fields = [
+const fields: FieldProps[] = [
   { name: "name", label: "Company Name*", type: "text" },
   { name: "slug", label: "Company Slug*", type: "text" },
   { name: "url", label: "Company URL", type: "text" },
 ];
 
-const handleSubmit = async ({
-  name,
-  slug,
-  url,
-}: {
-  name: string;
-  slug: string;
-  url: string;
-}) => {
-  const { message } = await createCompany({ name, slug, url });
+const handleSubmit = async (formData: unknown) => {
+  const { message } = await createCompany(formData as ICompany);
   return message ?? "Company created successfully";
 };
 

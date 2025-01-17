@@ -1,5 +1,4 @@
 "use client";
-
 import { HeroTitle, MainContainer, SectionContainer } from "@/styles/style";
 import { useRouter, useParams } from "next/navigation";
 import GenericForm from "@/components/GenericForm/GenericForm";
@@ -14,8 +13,8 @@ const fields = [
   { name: "url", label: "Company URL", type: "text" },
 ];
 
-const handleSubmit = async ({ name, slug, url }: ICompany) => {
-  const { message } = await editCompany({ name, slug, url });
+const handleSubmit = async (formData: unknown) => {
+  const { message } = await editCompany(formData as ICompany);
   return message;
 };
 

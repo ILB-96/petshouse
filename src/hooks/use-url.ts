@@ -1,6 +1,7 @@
+import { ReadonlyURLSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export const useURLState = (searchParams) => {
+export const useURLState = (searchParams: ReadonlyURLSearchParams) => {
   const [filterState, setFilterState] = useState(new Set());
   const [companyState, setCompanyState] = useState(new Set());
 

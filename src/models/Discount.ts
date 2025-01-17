@@ -80,7 +80,6 @@ export const discountSchema = new Schema<IDiscount>(
     maxUsage: { type: Number, min: 0 },
     discountPercentage: { type: Number, min: 0, max: 100 },
     discountAmount: { type: Number, min: 0 },
-    freeShipping: { type: Boolean },
     buyX: { type: Number, min: 0 },
     getProduct: { type: String, ref: "Product" },
     getY: { type: Number, min: 0 },

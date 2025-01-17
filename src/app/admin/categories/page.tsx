@@ -5,7 +5,7 @@ import SearchComp from "@/components/search/Search";
 import styles from "@/components/dashboard/users/users.module.css";
 import { deleteCategory } from "@/actions/category";
 
-import { SearchParams } from "@/models/types";
+import { SearchParams } from "@/types";
 import {
   Table,
   TableBody,

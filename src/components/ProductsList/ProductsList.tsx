@@ -2,8 +2,9 @@ import { IProduct } from "@/models/Product";
 import React from "react";
 import ProductCard from "./ProductCard";
 import { SectionContainer } from "@/styles/style";
+import { PopulatedProduct } from "@/types";
 interface ProductsListProps {
-  products: IProduct[];
+  products: PopulatedProduct[];
 }
 const ProductsList: React.FC<ProductsListProps> = ({ products }) => {
   return (

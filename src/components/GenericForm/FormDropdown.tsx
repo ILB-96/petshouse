@@ -1,9 +1,9 @@
 import React from "react";
-import { FormFieldProps } from "./FormGenericType";
+import { FormFieldProps } from "@/types";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { Button } from "../ui/button";
-import { FormControl, FormLabel, FormMessage } from "../ui/form";
-import { Popover, PopoverContent } from "../ui/popover";
+import { Button } from "@/components/ui/button";
+import { FormControl, FormLabel, FormMessage } from "@/components/ui/form";
+import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import {
   Command,
@@ -56,7 +56,7 @@ const FormDropdown: React.FC<FormFieldProps> = ({ field, form, formField }) => {
                     value={option.label}
                     key={option.value}
                     onSelect={() => {
-                      form.setValue(field.name, option.value); // Ensure `form` is properly set up
+                      form.setValue(field.name, option.value);
                     }}
                   >
                     {option.label}

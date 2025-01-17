@@ -22,12 +22,7 @@ export const createCartItem = async (
   if (itemExists) {
     itemExists.quantity += quantity;
     await itemExists.save();
-    return {
-      _id: itemExists._id.toString(),
-      cart: itemExists.cart.toString(),
-      product: itemExists.product.toString(),
-      quantity: itemExists.quantity,
-    };
+    return "Cart item updated successfully";
   }
 
   const newItem = new CartItem({
@@ -38,13 +33,7 @@ export const createCartItem = async (
 
   await newItem.save();
 
-  // Return a plain object with the necessary data
-  return {
-    _id: newItem._id.toString(),
-    cart: newItem.cart.toString(),
-    product: newItem.product.toString(),
-    quantity: newItem.quantity,
-  };
+  return "Cart item created successfully";
 };
 
 export const getCartItems = async (cartId: string) => {
@@ -52,11 +41,7 @@ export const getCartItems = async (cartId: string) => {
 
   const cartItems = await CartItem.find({ cart: cartId });
 
-  return cartItems.map((item) => ({
-    _id: item._id.toString(),
-    product: item.product.toString(),
-    quantity: item.quantity,
-  }));
+  return JSON.parse(JSON.stringify(cartItems));
 };
 
 export const getCartItemsCount = async (email: string) => {
@@ -64,7 +49,7 @@ export const getCartItemsCount = async (email: string) => {
   const user = await User.findOne({ email });
   const cart = await Cart.findOne({ user: user._id, status: "ACTIVE" });
   return {
-    user: user,
+    user: JSON.parse(JSON.stringify(user)),
     cartItemsCount: await CartItem.find({ cart: cart._id }).countDocuments(),
   };
 };
@@ -148,8 +133,8 @@ export const findCartItems = async (email: string) => {
     })
   );
   return {
-    userId: user._id,
-    cart,
-    items: newItems,
+    userId: user._id.toString(),
+    cart: JSON.parse(JSON.stringify(cart)),
+    items: JSON.parse(JSON.stringify(newItems)),
   };
 };

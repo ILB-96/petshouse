@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react"; // Assuming you're using next-auth for authentication
-import { User } from "@prisma/client";
-import { Role } from "@/models/User";
+import { IUser, Role } from "@/models/User";
 
 const useAdmin = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -13,9 +12,9 @@ const useAdmin = () => {
     const fetchUser = async () => {
       const session = await getSession();
       if (session?.user.role === Role.ADMIN) {
-        setUser(session?.user);
+        setUser(session?.user as IUser);
       } else {
-        router.push("/"); // Redirect to login if not authenticated
+        router.push("/");
       }
       setLoading(false);
     };

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { addItemToLocalStorageCart } from "@/lib/cartStorage";
+import { IMedia } from "@/models/Media";
 import { IProduct } from "@/models/Product";
 import { MainContainer, SectionContainer } from "@/styles/style";
 import { Separator } from "@radix-ui/react-dropdown-menu";
@@ -23,8 +24,10 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const ProductPage = () => {
-  const [product, setProduct] = useState<IProduct | null>(null);
+const ProductPage: React.FC = () => {
+  const [product, setProduct] = useState<
+    (IProduct & { images: IMedia[] }) | null
+  >(null);
   // const [discount, setDiscount] = useState<IDiscount>();
   const [price, setPrice] = useState<number>();
   const [loading, setLoading] = useState(true);
@@ -106,7 +109,9 @@ const ProductPage = () => {
           <div className="flex flex-col gap-4">
             <Image
               src={
-                product.images?.[activeImageIndex].source || "/placeholder.svg"
+                product.images[activeImageIndex]
+                  ? product.images[activeImageIndex].source
+                  : "/placeholder.svg"
               }
               alt={product.name}
               width={600}
@@ -114,7 +119,7 @@ const ProductPage = () => {
               className="rounded-lg object-cover w-full h-auto"
             />
             <div className="flex gap-4 overflow-x-auto">
-              {product.images?.map((image, index) => (
+              {product.images?.map((image: IMedia, index: number) => (
                 <Button
                   key={image.source}
                   asChild
@@ -128,7 +133,7 @@ const ProductPage = () => {
                 >
                   <Image
                     src={image.source}
-                    alt={image.caption}
+                    alt={image.caption || image.name}
                     width={100}
                     height={100}
                     className="rounded-lg object-cover w-24 h-24 cursor-pointer border border-gray-200 hover:border-gray-400"

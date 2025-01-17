@@ -55,12 +55,12 @@ export const OrderSchemaZod = z.object({
 });
 
 export type IOrder = z.infer<typeof OrderSchemaZod> &
-  Document & { _id: string | Types.ObjectId };
+  Document & { _id: string | Types.ObjectId; updatedAt: Date };
 
 const orderSchema = new Schema<IOrder>(
   {
     user: { type: Schema.Types.String, ref: "User", required: true },
-    fullname: { type: String, required: true },
+    fullName: { type: String, required: true },
     country: { type: String, required: true },
     city: { type: String, required: true },
     street: { type: String, required: true },

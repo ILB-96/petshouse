@@ -9,7 +9,7 @@ const CartItemButtons = ({
   itemId,
   quantity,
 }: {
-  itemId: number;
+  itemId: string;
   quantity: number;
 }) => {
   const [loading, setLoading] = useState(false);

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-const ClearAllFiltersButton = ({ onClick }) => {
+const ClearAllFiltersButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <div className="m-4">
       <Button

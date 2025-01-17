@@ -12,7 +12,7 @@ import { IOrder } from "@/models/Order";
 interface CheckoutFormProps {
   userId: string;
   cartId: string;
-  subtotal: string;
+  subtotal: number;
 }
 
 const CheckoutForm = ({ userId, cartId, subtotal }: CheckoutFormProps) => {
@@ -31,7 +31,7 @@ const CheckoutForm = ({ userId, cartId, subtotal }: CheckoutFormProps) => {
     const data = formData as IOrder;
     setLoading(true);
 
-    const orderData: IOrder = {
+    const orderData = {
       user: userId,
       fullName: data.fullName,
       country: data.country,
@@ -44,7 +44,7 @@ const CheckoutForm = ({ userId, cartId, subtotal }: CheckoutFormProps) => {
       status: "PENDING",
       paymentStatus: "PENDING",
       paymentMethod: data.paymentMethod,
-      subtotal: parseFloat(subtotal),
+      subtotal: subtotal,
       tax: 0,
       shipping: 11,
       paymentIntent: undefined,
@@ -52,7 +52,7 @@ const CheckoutForm = ({ userId, cartId, subtotal }: CheckoutFormProps) => {
       cart: cartId,
     };
 
-    await createOrder(orderData);
+    await createOrder(orderData as IOrder);
     setLoading(false);
     alert("Order placed successfully!");
   };

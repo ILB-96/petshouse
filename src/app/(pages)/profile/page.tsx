@@ -20,6 +20,7 @@ import {
 import { MainContainer, SectionContainer } from "@/styles/style";
 import { findUserOrders } from "@/actions/orders";
 import Loading from "@/components/Loading";
+import { IOrder } from "@/models/Order";
 
 const Profile: React.FC = () => {
   const { data: session, status } = useSession();
@@ -28,12 +29,12 @@ const Profile: React.FC = () => {
   useEffect(() => {
     // Fetch order history
     const fetchOrderHistory = async () => {
-      const data = await findUserOrders(session?.user._id);
+      const data = await findUserOrders(session?.user._id as string);
       console.log("Order History:", data);
       if (data) {
         setOrderHistory(
-          data.map((order) => {
-            const formattedDate = new Date(order.updatedAt).toLocaleDateString(
+          data.map((order: IOrder) => {
+            const formattedDate = new Date(order?.updatedAt).toLocaleDateString(
               "en-US",
               {
                 year: "numeric",
@@ -124,15 +125,17 @@ const Profile: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {orderHistory.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>{order.id}</TableCell>
-                    <TableCell>{order.date}</TableCell>
-                    <TableCell>{order.total}</TableCell>
+                {orderHistory.map((order: IOrder) => (
+                  <TableRow key={order._id as string}>
+                    <TableCell>{order._id as string}</TableCell>
+                    <TableCell>
+                      {order.updatedAt.toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>{order.subtotal}</TableCell>
                     <TableCell>
                       <Badge
                         variant={
-                          order.status === "Delivered" ? "success" : "warning"
+                          order.status === "Delivered" ? "default" : "outline"
                         }
                       >
                         {order.status}

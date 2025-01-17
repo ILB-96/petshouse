@@ -1,29 +1,7 @@
 import React from "react";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { ClassValue } from "clsx";
-
-export interface FormFieldProps {
-  field: {
-    type?: string;
-    name: string;
-    label: string;
-    default?: string;
-    hidden?: boolean;
-    values?: { label: string; value: string }[];
-  };
-  form: {
-    formState: {
-      errors: {
-        [key: string]: ClassValue;
-      };
-    };
-  };
-  formField: {
-    value: string | number | readonly string[] | undefined;
-    onChange: (value: string | number | readonly string[] | undefined) => void;
-  };
-}
+import { FormFieldProps } from "@/types";
 
 const FormGenericType: React.FC<FormFieldProps> = ({
   field,
@@ -45,14 +23,12 @@ const FormGenericType: React.FC<FormFieldProps> = ({
       )}
       value={
         isDate && formField.value
-          ? new Date(formField.value).toISOString().split("T")[0] // Display string format for date input
-          : formField.value
+          ? new Date(formField.value as string).toISOString().split("T")[0]
+          : (formField.value as string)
       }
       onChange={(e) => {
-        const newValue = isDate
-          ? new Date(e.target.value) // Convert string to Date object
-          : e.target.value;
-        formField.onChange(newValue); // Update state with Date object
+        const newValue = isDate ? new Date(e.target.value) : e.target.value;
+        formField.onChange(newValue as string);
       }}
     />
   );

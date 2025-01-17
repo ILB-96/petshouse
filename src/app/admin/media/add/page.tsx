@@ -1,13 +1,12 @@
 "use client";
 import { MainContainer, SectionContainer } from "@/styles/style";
 import React, { useState } from "react";
-import { MediaType } from "@/models/Media";
+import { IMedia, MediaType } from "@/models/Media";
 import { createMedia } from "@/actions/media";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
-
 
 const AddMediaPage = () => {
   const { toast } = useToast();
@@ -26,13 +25,14 @@ const AddMediaPage = () => {
 
     const fileData = await res.json();
     const media = await fileData.media;
-    console.log("HEY", media);
-    const { message } = await createMedia({
+    const mediaData = {
       name: media.name as string,
       source: `https://drive.google.com/uc?id=${media.id as string}`,
       caption: data.caption as string,
       type: media.type as MediaType,
-    });
+    };
+
+    const { message } = await createMedia(mediaData as IMedia);
 
     toast({ description: message });
     setIsSubmitting(false);

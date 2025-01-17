@@ -1,4 +1,4 @@
-import { models, Schema, Document, model } from "mongoose";
+import { models, Schema, Document, model, Types } from "mongoose";
 import { z } from "zod";
 
 // Define Zod validation schema
@@ -21,11 +21,9 @@ export const categorySchemaZod = z.object({
   deletedAt: z.date().optional(),
 });
 
-// TypeScript type based on Zod schema
 export type ICategory = z.infer<typeof categorySchemaZod> &
   Document & { _id: string | Types.ObjectId };
 
-// Define Mongoose schema
 const categorySchema = new Schema<ICategory>({
   name: { type: String, required: true },
   slug: { type: String, required: true, unique: true },

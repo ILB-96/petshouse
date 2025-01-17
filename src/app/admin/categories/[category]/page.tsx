@@ -14,8 +14,8 @@ const fields = [
   { name: "isDraft", label: "Category Draft Mode", type: "checkbox" },
 ];
 
-const handleSubmit = async ({ name, slug, parent }: ICategory) => {
-  const { message } = await editCategory({ name, slug, parent });
+const handleSubmit = async (formData: unknown) => {
+  const { message } = await editCategory(formData as ICategory);
   return message;
 };
 
@@ -33,9 +33,9 @@ const CategoryViewPage = () => {
         return;
       }
 
-      const category = await findOneCategory(slug as string);
+      const category = (await findOneCategory(slug as string)) as unknown;
       if (category) {
-        setCategory(category);
+        setCategory(category as ICategory);
       } else {
         router.push("/admin/categories");
       }

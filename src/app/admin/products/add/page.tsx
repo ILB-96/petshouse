@@ -21,8 +21,8 @@ const AddProductPage = () => {
     { name: "slug", label: "Product Slug*", type: "text" },
     { name: "sku", label: "SKU*", type: "text" },
     { name: "shortDescription", label: "Short Description*", type: "text" },
-    { name: "price", label: "Price*", type: "number", default: 1 },
-    { name: "stock", label: "Stock*", type: "number", default: 1 },
+    { name: "price", label: "Price*", type: "number", default: "1" },
+    { name: "stock", label: "Stock*", type: "number", default: "1" },
     {
       name: "category",
       label: "Category Slug*",

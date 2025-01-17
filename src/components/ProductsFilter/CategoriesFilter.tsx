@@ -4,6 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { handleCheckboxChange } from "@/lib/filter";
 import { Icons } from "@/components/icons";
+import { CategoryTree } from "@/actions/category";
+import { MainFilterProps } from "@/types";
+type CategoryFilterProps = MainFilterProps & {
+  categories: CategoryTree;
+  setFilterState: React.Dispatch<React.SetStateAction<Set<unknown>>>;
+};
 
 const CategoriesFilter = ({
   searchParams,
@@ -11,12 +17,12 @@ const CategoriesFilter = ({
   replace,
   categories,
   filterState,
-  companiesState,
+  companyState,
   setFilterState,
-}) => {
+}: CategoryFilterProps) => {
   const [expandedCategories, setExpandedCategories] = useState(new Set());
 
-  const toggleCategory = (categoryId) => {
+  const toggleCategory = (categoryId: string) => {
     const newExpanded = new Set(expandedCategories);
     if (newExpanded.has(categoryId)) {
       newExpanded.delete(categoryId);
@@ -26,7 +32,7 @@ const CategoriesFilter = ({
     setExpandedCategories(newExpanded);
   };
 
-  const renderCategories = (categoriesArray) => {
+  const renderCategories = (categoriesArray: CategoryTree[]) => {
     return (
       <ul>
         {categoriesArray.map((category) => (
@@ -56,17 +62,17 @@ const CategoriesFilter = ({
                   className="size-4"
                   checked={filterState.has(category.slug)}
                   onChange={(e) =>
-                    handleCheckboxChange(
+                    handleCheckboxChange({
                       searchParams,
                       pathname,
                       replace,
-                      companiesState,
+                      companyState,
                       categories,
                       category,
-                      e.target.checked,
+                      checked: e.target.checked,
                       filterState,
-                      setFilterState
-                    )
+                      setFilterState,
+                    })
                   }
                 />
                 {category.name}

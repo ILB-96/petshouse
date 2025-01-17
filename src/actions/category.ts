@@ -176,7 +176,7 @@ export const deleteCategory = async (
 
 // app/actions/getCategoryTree.ts
 
-interface CategoryTree {
+export interface CategoryTree {
   _id: string;
   name: string;
   slug: string;
@@ -190,10 +190,10 @@ export async function getCategoryTree(slug: string): Promise<CategoryTree> {
   const buildTree = async (
     parentSlug: string | null
   ): Promise<CategoryTree[]> => {
-    const categories = await Category.find({ parent: parentSlug }).lean();
+    const categories = await Category.find({ parent: parentSlug });
 
     // For each category, fetch its children recursively
-    const children = await Promise.all(
+    return await Promise.all(
       categories.map(async (category) => ({
         _id: (category._id as mongoose.Types.ObjectId).toString(),
         name: category.name,
@@ -203,22 +203,19 @@ export async function getCategoryTree(slug: string): Promise<CategoryTree> {
         children: await buildTree(category.slug),
       }))
     );
-
-    return children;
   };
 
   // Start building the tree from the given slug
   const rootCategory = (await Category.findOne({
     slug,
     isDraft: false,
-  }).lean()) as CategoryTree | null;
+  })) as ICategory;
   if (!rootCategory) {
     throw new Error(`Category with slug "${slug}" not found`);
   }
 
   return {
-    ...rootCategory,
-    _id: rootCategory._id.toString(),
+    ...JSON.parse(JSON.stringify(rootCategory)),
     children: await buildTree(rootCategory?.slug),
   };
 }
