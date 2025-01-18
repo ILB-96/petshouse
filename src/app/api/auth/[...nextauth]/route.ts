@@ -68,8 +68,8 @@ const handler = async (
       },
       async signIn({ account, profile, credentials }: SignInCallbackParams) {
         await connectDB();
-        const existingUser = await User.findOne({ email: profile?.email });
         if (account?.provider !== "credentials") {
+          const existingUser = await User.findOne({ email: profile?.email });
           let userRecord;
           if (!existingUser) {
             userRecord = new User({
@@ -90,8 +90,12 @@ const handler = async (
           cookieStore.delete("cart");
           return true;
         }
+        const user = await User.findOne({
+          email: (credentials?.email as string).toLowerCase(),
+        });
+        if (!user) throw new Error("Wrong Email");
         await syncCart(
-          existingUser._id,
+          user?._id as string,
           JSON.parse(credentials?.cart as string)
         );
         return true;

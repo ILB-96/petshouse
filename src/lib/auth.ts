@@ -51,14 +51,12 @@ export const authOptions: NextAuthOptions = {
         const user = await User.findOne({
           email: credentials?.email.toLowerCase(),
         }).select("+password");
-
         if (!user) throw new Error("Wrong Email");
 
         const passwordMatch = await bcrypt.compare(
           credentials!.password,
           user.password
         );
-
         if (!passwordMatch) throw new Error("Wrong Password");
         return user;
       },

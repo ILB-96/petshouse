@@ -6,10 +6,8 @@ export const connectDB = async () => {
       (process.env.DATABASE_URI as string) ||
         "mongodb://localhost:27017/petshouse"
     );
-    console.log("Database connected:", connection.connection.host);
     return true;
   } catch (error) {
-    console.error("Database connection error:", error);
     throw error;
   }
 };

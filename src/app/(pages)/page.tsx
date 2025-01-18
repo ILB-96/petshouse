@@ -94,7 +94,7 @@ export default function Home() {
       </SectionContainer>
 
       {/* Explore Our Capabilities Section */}
-      <SectionContainer id="features">
+      {/* <SectionContainer id="features">
         <SectionTitle>Explore Our&nbsp;Capabilities</SectionTitle>
         <FeaturesGrid>
           {features.map((feature) => (
@@ -110,7 +110,7 @@ export default function Home() {
             </FeatureCard>
           ))}
         </FeaturesGrid>
-      </SectionContainer>
+      </SectionContainer> */}
 
       {/* Call to Action Section */}
       <SectionContainer id="cta">
