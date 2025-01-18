@@ -1,3 +1,4 @@
+import { BodyContainer } from "@/styles/style";
 import AdminAccess from "./admin-access";
 import BreadCrumbs from "@/components/BreadCrumbs";
 
@@ -12,9 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <BodyContainer>
       <BreadCrumbs />
       <AdminAccess>{children}</AdminAccess>
-    </>
+    </BodyContainer>
   );
 }

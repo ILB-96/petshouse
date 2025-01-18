@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "@/styles/global.css";
+import { BodyContainer } from "@/styles/style";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "PetsHouse",
@@ -11,5 +14,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return { children };
+  return (
+    <BodyContainer>
+      <Navbar />
+      {children}
+      <Footer />
+    </BodyContainer>
+  );
 }

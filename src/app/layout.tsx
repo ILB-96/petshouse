@@ -20,12 +20,8 @@ export default function RootLayout({
     <html>
       <body>
         <Providers>
-          <BodyContainer>
-            <Navbar />
-            {children}
-            <Toaster />
-            <Footer />
-          </BodyContainer>
+          {children}
+          <Toaster />
         </Providers>
       </body>
     </html>
