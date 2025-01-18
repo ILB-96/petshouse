@@ -60,6 +60,7 @@
     "react-window": "^1.8.10",
     "recharts": "^2.13.3",
     "sass": "^1.79.4",
+    "sharp": "^0.33.5",
     "stripe": "^17.1.0",
     "styled-components": "^6.1.13",
     "tailwind-merge": "^2.5.3",
