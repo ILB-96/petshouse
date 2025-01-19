@@ -11,7 +11,7 @@ export const mediaSchemaZod = z.object({
   name: z.string().min(1, "Name is required"),
   source: z.string().min(1, "Source is required"),
   caption: z.string().optional(),
-  type: z.nativeEnum(MediaType),
+  type: z.string().min(1, "Type is required"),
 });
 
 export type IMedia = z.infer<typeof mediaSchemaZod> &
@@ -21,7 +21,7 @@ export const mediaSchema = new Schema<IMedia>({
   name: { type: String, required: true, unique: true },
   source: { type: String, required: true, unique: true },
   caption: { type: String },
-  type: { type: String, enum: Object.values(MediaType), required: true },
+  type: { type: String, required: true },
 });
 
 const Media = models?.Media || model<IMedia>("Media", mediaSchema);

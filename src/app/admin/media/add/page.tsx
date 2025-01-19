@@ -24,13 +24,17 @@ const AddMediaPage = () => {
     });
 
     const fileData = await res.json();
+    console.log("RESPONSE", fileData);
     const media = await fileData.media;
+    const type = await fileData.type;
+    console.log("media", media);
     const mediaData = {
       name: media.name as string,
       source: `https://drive.google.com/uc?id=${media.id as string}`,
       caption: data.caption as string,
-      type: media.type as MediaType,
+      type: type as MediaType,
     };
+    console.log("Media data", mediaData);
 
     const { message } = await createMedia(mediaData as IMedia);
 

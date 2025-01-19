@@ -19,7 +19,14 @@ declare module "next-auth" {
     };
   }
 }
-
+const GOOGLE_AUTHORIZATION_URL =
+  "https://accounts.google.com/o/oauth2/v2/auth?" +
+  new URLSearchParams({
+    scope: "https://www.googleapis.com/auth/drive openid email profile",
+    prompt: "consent",
+    access_type: "offline",
+    response_type: "code",
+  });
 export const authOptions: NextAuthOptions = {
   providers: [
     GitHubProvider({
@@ -30,14 +37,7 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          scope: "https://www.googleapis.com/auth/drive openid email profile",
-          access_type: "offline",
-          prompt: "consent",
-          cart: "",
-        },
-      },
+      authorization: GOOGLE_AUTHORIZATION_URL,
     }),
     CredentialsProvider({
       name: "Credentials",

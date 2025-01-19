@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -158,10 +158,7 @@ const Profile = () => {
           {/* Settings */}
           <TabsContent value="settings">
             <h2 className="text-lg font-semibold">Settings</h2>
-            <Button
-              variant="destructive"
-              onClick={() => router.push("/logout")}
-            >
+            <Button variant="destructive" onClick={async () => await signOut()}>
               Log Out
             </Button>
           </TabsContent>

@@ -16,6 +16,7 @@ export const createMedia = async (data: IMedia) => {
         error: "item already exists!",
       };
     }
+    console.log("DATA", data);
 
     const newItem = new Media({
       name: data.name,
@@ -23,9 +24,10 @@ export const createMedia = async (data: IMedia) => {
       caption: data.caption,
       type: data.type,
     });
+    console.log("NEWDATA", newItem);
 
     await newItem.save();
-    revalidatePath("/admin/Medias");
+    revalidatePath("/admin/media");
     return {
       message: "Item registered successfully",
     };

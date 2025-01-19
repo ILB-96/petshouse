@@ -11,13 +11,18 @@ export const productSchemaZod = z.object({
     .string()
     .min(1, "Slug is required")
     .max(300)
-    .transform((val) => val.toLowerCase().replace(/\s+/g, "-")),
+    .transform((val) =>
+      val
+        .toLowerCase()
+        .replace(/[^a-z]/g, "")
+        .replace(/\s+/g, "-")
+    ),
   sku: z
     .string()
     .min(1, "SKU is required")
     .max(100)
     .transform((val) => val.toUpperCase().replace(/\s+/g, "-")),
-  price: z.coerce.number().min(1, "Price is required").int(),
+  price: z.coerce.number().min(1, "Price is required"),
   stock: z.coerce.number().min(0, "Stock is required").int(),
   images: z.array(z.string()).optional(),
   shortDescription: z.string().min(1, "Short Description is required").max(300),
