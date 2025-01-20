@@ -5,11 +5,11 @@ import Cart from "./cart";
 
 const CartPage = async () => {
   return (
-    <Suspense fallback={<Loading />}>
-      <MainContainer>
+    <MainContainer>
+      <Suspense fallback={<Loading />}>
         <Cart />
-      </MainContainer>
-    </Suspense>
+      </Suspense>
+    </MainContainer>
   );
 };
 

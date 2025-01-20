@@ -10,7 +10,10 @@ interface PageProps {
 
 const CategoryPage: React.FC<PageProps> = async ({ searchParams }) => {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense
+      key={searchParams?.filters || searchParams?.category || "shop"}
+      fallback={<Loading />}
+    >
       <MainContainer>
         <Category searchParams={searchParams} />
       </MainContainer>

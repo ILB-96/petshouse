@@ -11,6 +11,9 @@ import AdminNav from "./AdminNav";
 import { findMainCategories } from "@/actions/category";
 import CartButton from "./CartButton";
 import { getCartItemsCount } from "@/actions/cart-item";
+import SmallNav from "./SmallNav";
+import Link from "next/link";
+import Image from "next/image";
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
   const categories = await findMainCategories();
@@ -26,10 +29,11 @@ const Navbar = async () => {
       {user?.role === Role.ADMIN ? <AdminNav /> : null}
       <NavContainer>
         <BigNav categories={categories} />
-        <div className="-col-start-3">
+        <SmallNav categories={categories} />
+        <div className="-col-start-3 max-sm:-col-start-7 max-sm:col-span-2">
           <CartButton count={cartItemsCount} />
         </div>
-        <div className="col-span-1">
+        <div className="col-span-1 max-sm:-col-start-4  max-sm:col-span-2">
           {session ? <SessionDropdown /> : <SignInButton />}
         </div>
       </NavContainer>

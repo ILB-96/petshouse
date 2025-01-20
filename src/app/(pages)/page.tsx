@@ -113,16 +113,16 @@ export default function Home() {
       </SectionContainer> */}
 
       {/* Call to Action Section */}
-      <SectionContainer id="cta">
+      {/* <SectionContainer id="cta">
         <TextContainer>
-          <SectionTitle>Ready to Save&nbsp;More?</SectionTitle>
+          <SectionTitle>Ready to &nbsp;More?</SectionTitle>
           <Paragraph>
             Join PetsHouse today and experience the ultimate convenience for you
             and your pet.
           </Paragraph>
           <PrimaryButton>Get Started</PrimaryButton>
         </TextContainer>
-      </SectionContainer>
+      </SectionContainer> */}
     </MainContainer>
   );
 }

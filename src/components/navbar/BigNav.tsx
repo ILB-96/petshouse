@@ -7,11 +7,11 @@ import Image from "next/image";
 import { ICategory } from "@/models/Category";
 import { Button } from "../ui/button";
 
-interface BigNavProps {
+export interface NavProps {
   categories: ICategory[];
 }
 
-const BigNav: React.FC<BigNavProps> = ({ categories }) => {
+const BigNav: React.FC<NavProps> = ({ categories }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();

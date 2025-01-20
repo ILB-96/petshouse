@@ -141,6 +141,9 @@ export const NavContent = styled.div`
     grid-column-start: 3;
   }
   height: fit-content;
+  @media (max-width: 640px) {
+    display: none;
+  }
 `;
 export const NavLink = styled(Link)`
   padding: var(--sm);
@@ -189,6 +192,9 @@ export const HeroContainer = styled.div`
   background-color: var(--surface);
   padding: var(--lg);
   border-radius: var(--md);
+  @media (max-width: 640px) {
+    flex-direction: column;
+  }
 `;
 export const TextContainer = styled.div`
   display: flex;
@@ -286,18 +292,26 @@ export const BenefitsContainer = styled.div`
   place-content: center;
   gap: 30px;
   padding: 0;
-  /* margin: 100px 0; */
 
-  /* @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  } */
   > div > img {
     opacity: 80%;
     border-radius: 999px;
     width: 30%;
     height: 30%;
   }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr; /* Single column layout */
+    gap: 15px; /* Reduce gap for smaller screens */
+    padding: 10px; /* Add some padding for spacing */
+
+    > div > img {
+      width: 50%; /* Adjust image size for smaller screens */
+      height: 50%;
+    }
+  }
 `;
+
 
 export const FeatureContainer = styled.div`
   padding: var(--lg) 0;

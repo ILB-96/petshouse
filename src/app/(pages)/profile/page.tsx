@@ -22,7 +22,7 @@ import { findUserOrders } from "@/actions/orders";
 import Loading from "@/components/Loading";
 import { IOrder } from "@/models/Order";
 
-const Profile = () => {
+const ProfilePage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [orderHistory, setOrderHistory] = React.useState([]);
@@ -168,4 +168,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;
