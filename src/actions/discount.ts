@@ -83,6 +83,7 @@ export const findAllDiscounts = async () => {
         model: "Media",
       },
     })
+    .populate({ path: "category", select: "name slug parent" })
     .populate({
       path: "getProduct",
       populate: {

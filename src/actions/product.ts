@@ -306,3 +306,24 @@ export const getFilteredProducts = async (
 };
 
 
+export const findProductsByCompany = async (company: string, limit: number) => {
+  await connectDB();
+  const products = await Product.find({ company })
+    .limit(limit)
+    .populate("images", "source caption");
+  return JSON.parse(JSON.stringify(products));
+};
+export const findProductsByCategory = async (
+  categories: CategoryTree,
+  limit: number
+) => {
+  await connectDB();
+  const categoryIds: string[] = getAllCategoryIds(categories);
+  const query: Record<string, unknown> = {
+    deletedAt: null,
+    category: { $in: categoryIds },
+  };
+  const products = await Product.find(query).populate("images").limit(limit);
+  return JSON.parse(JSON.stringify(products));
+};
+

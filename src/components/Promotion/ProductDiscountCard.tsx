@@ -1,35 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { NavLink } from "@/styles/style";
 import { PopulatedProductDiscount } from "@/types";
+import CardTimer from "./CardTimer";
+import TotalDiscountCard from "./TotalDiscountCard";
 
 const ProductDiscountCard: React.FC<{ discount: PopulatedProductDiscount }> = ({
   discount,
 }) => {
-  const [timeLeft, setTimeLeft] = useState<string>("");
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      const endDate = new Date(discount.endDate as Date);
-      const diff = endDate.getTime() - now.getTime();
-
-      if (diff <= 0) {
-        clearInterval(interval);
-        setTimeLeft("Promotion ended");
-      } else {
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [discount.endDate]);
-
   return (
     <Card className="shadow-lg rounded-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow">
       {/* Product Image */}
@@ -37,8 +17,8 @@ const ProductDiscountCard: React.FC<{ discount: PopulatedProductDiscount }> = ({
         <Image
           src={discount.product?.images[0].source}
           alt={discount.product?.images[0].caption || "Product"}
-          layout="fill"
-          objectFit="cover"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="rounded-t-lg"
         />
       </div>
@@ -51,27 +31,16 @@ const ProductDiscountCard: React.FC<{ discount: PopulatedProductDiscount }> = ({
 
         {/* Product Description */}
         <p className="text-sm text-gray-600 mb-4">{discount.description}</p>
-
-        {discount.endDate && timeLeft && (
-          <div className="text-red-600 font-semibold text-sm">
-            Time left: {timeLeft}
-          </div>
-        )}
+        <CardTimer endDate={discount.endDate as Date} />
       </CardContent>
 
-      <CardFooter className="flex items-center justify-between p-4 bg-gray-50">
+      <CardFooter className="flex items-center justify-between p-4 bg-gray-50 space-x-2">
         {/* Discount Details */}
         <div className="text-gray-700">
-          {discount.discountPercentage && (
-            <p className="text-sm font-semibold">
-              Save {discount?.discountPercentage}%!
-            </p>
-          )}
-          {discount.discountAmount && (
-            <p className="text-sm font-semibold">
-              Save {discount?.discountAmount}$!
-            </p>
-          )}
+          <TotalDiscountCard
+            amount={discount.discountAmount as number}
+            percentage={discount.discountPercentage as number}
+          />
           {discount.endDate && (
             <p className="text-xs text-gray-500">
               Ends on: {discount?.endDate?.toString().split("T")[0]}

@@ -18,7 +18,6 @@ const Promotion = () => {
     const fetchDiscounts = async () => {
       try {
         const response = await findAllDiscounts();
-        console.log(response);
         setDiscounts(response);
       } catch (error) {
         console.error("Error fetching discounts:", error);
