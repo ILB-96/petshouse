@@ -3,7 +3,7 @@ import BuyXGetYCard from "./BuyXGetYCard";
 import ProductDiscountCard from "./ProductDiscountCard";
 import { DiscountCarouselItemProps } from "./CarouselDiscountList";
 import GenericDiscountCard from "./GenericDiscountCard";
-import { PopulatedProductDiscount } from "@/types";
+import { PopulatedCategoryDiscount, PopulatedProductDiscount } from "@/types";
 import CompanyDiscountCard from "./CompanyDiscountCard";
 import CategoryDiscountCard from "./CategoryDiscountCard";
 
@@ -23,7 +23,9 @@ const CarouselDiscountCard: React.FC<DiscountCarouselItemProps> = ({
       );
     case "categoryDiscount":
       return (
-        <CategoryDiscountCard discount={discount as PopulatedProductDiscount} />
+        <CategoryDiscountCard
+          discount={discount as PopulatedCategoryDiscount}
+        />
       );
     default:
       return <GenericDiscountCard discount={discount} />;

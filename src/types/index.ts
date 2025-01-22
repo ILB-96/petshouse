@@ -74,3 +74,6 @@ export type PopulatedProductDiscount = IDiscount & {
 export type PopulatedCompanyDiscount = IDiscount & {
   company: ICompany;
 };
+export type PopulatedCategoryDiscount = IDiscount & {
+  category: ICategory;
+};

@@ -5,20 +5,16 @@ import {
 } from "@/actions/product";
 import React, { useEffect, useState } from "react";
 import GenericDiscountCard from "./GenericDiscountCard";
-import { PopulatedProduct, PopulatedProductDiscount } from "@/types";
+import { PopulatedCategoryDiscount, PopulatedProduct } from "@/types";
 import { getCategoryTree } from "@/actions/category";
 
 const CategoryDiscountCard: React.FC<{
-  discount: PopulatedProductDiscount;
+  discount: PopulatedCategoryDiscount;
 }> = ({ discount }) => {
   const [products, setProducts] = useState<PopulatedProduct[]>([]);
   useEffect(() => {
     const fetchProducts = async () => {
-      console.log(discount.category);
-      const categories = await getCategoryTree(
-        discount.category?.slug as string
-      );
-      console.log(categories);
+      const categories = await getCategoryTree(discount.category.slug);
       const products = await findProductsByCategory(categories, 3);
       setProducts(products);
     };
