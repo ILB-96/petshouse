@@ -75,12 +75,18 @@ export const editCompany = async (values: ICompany) => {
 export const findOneCompany = async (slug: string) => {
   try {
     await connectDB();
-    const company = await Company.findOne({ slug }).lean();
+    const company = await Company.findOne({ slug });
     return JSON.parse(JSON.stringify(company));
   } catch (e: unknown) {
     console.log(e);
     return null;
   }
+};
+export const findCompanyById = async (id: string) => {
+  await connectDB();
+  const company = await Company.findById(id);
+  if (!company) return null;
+  return JSON.parse(JSON.stringify(company));
 };
 export const findAllCompaniesSlug = async () => {
   try {

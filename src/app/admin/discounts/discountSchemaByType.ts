@@ -31,6 +31,8 @@ import {
 import { IDiscount } from "@/models/Discount";
 import { Category, Company } from "@/models";
 import { findOneProductById } from "@/actions/product";
+import { findCategoryById } from "@/actions/category";
+import { findCompanyById } from "@/actions/company";
 
 export const getDiscountSchemaByType = async (discount: IDiscount) => {
   switch (discount.type as string) {
@@ -46,7 +48,7 @@ export const getDiscountSchemaByType = async (discount: IDiscount) => {
         handleSubmit: buyXgetYHandleSubmit,
       };
     case "categoryDiscount":
-      const category = await Category.findById(discount?.category as string);
+      const category = await findCategoryById(discount?.category as string);
       return {
         info: { category: category.slug },
         fields: categoryFields,
@@ -54,7 +56,7 @@ export const getDiscountSchemaByType = async (discount: IDiscount) => {
         handleSubmit: categoryHandleSubmit,
       };
     case "companyDiscount":
-      const company = await Company.findById(discount?.company as string);
+      const company = await findCompanyById(discount?.company as string);
       return {
         info: { company: company.slug },
         fields: companyFields,

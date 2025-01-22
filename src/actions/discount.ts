@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/database";
 import { IDiscount } from "@/models/Discount";
 import { Category, Discount } from "@/models";
 import { ICategory } from "@/models/Category";
+import { revalidatePath } from "next/cache";
 
 export const findByCode = async (code: string) => {
   await connectDB();
@@ -43,6 +44,7 @@ export const updateDiscount = async (id: string, discountData: IDiscount) => {
   }
   discount.set(cleanedData);
   discount.save();
+  revalidatePath("/admin/discounts");
   return { message: "Discount updated successfully" };
 };
 
@@ -124,6 +126,7 @@ export const getDiscounts = async (
 export const findOneDiscount = async (id: string) => {
   await connectDB();
   const discount = await Discount.findById(id);
+  console.log(discount);
   if (!discount) {
     return null;
   }

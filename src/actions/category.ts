@@ -106,6 +106,14 @@ export const findOneCategory = async (slug: string) => {
     return null;
   }
 };
+export const findCategoryById = async (id: string) => {
+  await connectDB();
+  const category = await Category.findById(id);
+  if (!category) {
+    return null;
+  }
+  return JSON.parse(JSON.stringify(category));
+};
 export const findAllCategories = async () => {
   try {
     await connectDB();

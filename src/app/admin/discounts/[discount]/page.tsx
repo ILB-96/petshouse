@@ -8,6 +8,7 @@ import { findOneDiscount } from "@/actions/discount";
 import { discountSchemaZod, IDiscount } from "@/models/Discount";
 import { getDiscountSchemaByType } from "../discountSchemaByType";
 import { FieldProps } from "@/types";
+import Loading from "@/components/Loading";
 
 const DiscountViewPage = () => {
   const [discount, setDiscount] = useState<IDiscount | null>(null); // Ensure null is properly handled
@@ -31,6 +32,7 @@ const DiscountViewPage = () => {
       try {
         const discount = await findOneDiscount(id as string);
         if (discount) {
+          console.log(discount);
           setDiscount(discount);
           const { info, fields, defaultValues, handleSubmit } =
             await getDiscountSchemaByType(discount);
@@ -46,6 +48,7 @@ const DiscountViewPage = () => {
           setFields(fields);
           setHandleSubmit(() => handleUpdate);
         } else {
+          console.log(discount);
           router.push("/admin/discounts");
         }
       } catch (error) {
@@ -58,7 +61,7 @@ const DiscountViewPage = () => {
   }, [params, router]);
 
   if (!discount || !defaultValues || fields.length == 0 || !handleSubmit) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
   return (
     <MainContainer>
