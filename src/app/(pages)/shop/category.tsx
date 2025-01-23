@@ -37,6 +37,8 @@ const Category: React.FC<PageProps> = async ({ searchParams }) => {
     companiesFilter,
     products_per_page
   );
+  const isFiltered =
+    filters.length > 0 || companiesFilter.length > 0 || q.length > 0;
   return (
     <SectionContainer className="mx-auto">
       <div className="mb-8 flex items-center justify-between">
@@ -48,12 +50,14 @@ const Category: React.FC<PageProps> = async ({ searchParams }) => {
         </div>
         <div className="text-sm text-gray-500">{count} products found</div>
       </div>
-      <SearchSortContainer>
-        <ProductsFilter categories={categories} companies={companies} />
-        <SearchComp placeholder="Search for products by name..." />
-        <ProductsSortBy />
-      </SearchSortContainer>
-      <ProductsList products={products} />
+      {(products.length > 0 || isFiltered) && (
+        <SearchSortContainer>
+          <ProductsFilter categories={categories} companies={companies} />
+          <SearchComp placeholder="Search for products by name..." />
+          <ProductsSortBy />
+        </SearchSortContainer>
+      )}
+      <ProductsList products={products} isFiltered={isFiltered} />
       <Pagination count={count} items_per_page={products_per_page} />
     </SectionContainer>
   );

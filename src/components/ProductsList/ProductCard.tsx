@@ -18,11 +18,13 @@ import { findDiscountsByProduct } from "@/actions/discount";
 import { PopulatedProduct } from "@/types";
 import { ICompany } from "@/models/Company";
 import { ICategory } from "@/models/Category";
+import { useCart } from "@/providers/CartContext";
 // import { IDiscount } from "@/models/Discount";
 
 const ProductCard: React.FC<{ product: PopulatedProduct }> = ({ product }) => {
   // const [discount, setDiscount] = useState<IDiscount>();
   const [price, setPrice] = useState<number>();
+  const { addToCart } = useCart();
   useEffect(() => {
     const fetchDiscounts = async () => {
       const response = await findDiscountsByProduct(
@@ -46,18 +48,20 @@ const ProductCard: React.FC<{ product: PopulatedProduct }> = ({ product }) => {
     };
   }, [product]);
   const handleAddToCart = async () => {
+    console.log("HELLO");
     const session = await getSession();
     if (session?.user) {
       await createCartItem(product._id as string, session.user._id, 1);
     } else {
-      const cartItem = { product: product._id, quantity: 1 };
-      addItemToLocalStorageCart(cartItem);
+      console.log("HEY", product._id);
+      const cartItem = { product: product._id as string, quantity: 1 };
+      addToCart(cartItem);
     }
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (
-    <Card className="shadow-lg size-fit rounded-md">
+    <Card className="shadow-lg rounded-md h-full flex flex-col">
       {product.image && (
         <CardContent className="p-0">
           <Image
@@ -65,19 +69,21 @@ const ProductCard: React.FC<{ product: PopulatedProduct }> = ({ product }) => {
             alt={product.name}
             width={300}
             height={300}
-            className="w-full h-36 object-cover rounded-md"
+            className="w-full h-48 object-cover rounded-md"
           />
         </CardContent>
       )}
       <CardHeader>
-        <CardTitle>{product.name}</CardTitle>
-        <CardDescription>
+        <Link href={`/shop/${product.slug}`}>
+          <CardTitle className="line-clamp-2">{product.name}</CardTitle>
+        </Link>
+        <CardDescription className="truncate">
           {`${(product.company as ICompany).name}, ${
             (product.category as ICategory).name
           }`}
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-grow">
         {/* Add the product price here */}
         <p className="text-lg font-semibold text-gray-800">
           {price && price < product.price ? (
@@ -91,7 +97,7 @@ const ProductCard: React.FC<{ product: PopulatedProduct }> = ({ product }) => {
             `$${product.price.toFixed(2)}`
           )}
         </p>
-        <p>{product.shortDescription}</p>
+        <p className="line-clamp-3">{product.shortDescription}</p>
       </CardContent>
       <CardFooter className="flex justify-around items-center space-x-2">
         <Button onClick={handleAddToCart}>Add To Cart</Button>

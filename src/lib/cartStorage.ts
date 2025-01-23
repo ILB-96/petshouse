@@ -25,6 +25,5 @@ export const addItemToLocalStorageCart = (item: {
   } else {
     cart.push(item);
   }
-
   saveCartToLocalStorage(cart);
 };

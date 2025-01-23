@@ -1,21 +1,24 @@
-import { findCartItems } from "@/actions/cart-item";
+"use client";
 import CartList from "@/components/Cart/CartList";
 import CartSummaryCard from "@/components/Cart/CartSummaryCard";
 import { authOptions } from "@/lib/auth";
+import { useCart } from "@/providers/CartContext";
 import { SectionContainer } from "@/styles/style";
 import { getServerSession } from "next-auth";
 import React from "react";
 
-const Cart = async () => {
-  const session = await getServerSession(authOptions);
-  const { items } = await findCartItems(session?.user?.email || "");
+const Cart = () => {
+  const item = useCart();
+  if (item.cartItems.length === 0) {
+    return null;
+  }
   return (
     <>
       <SectionContainer>
-        <CartList cartItems={items} />
+        <CartList cartItems={item.cartItems} />
       </SectionContainer>
       <SectionContainer>
-        <CartSummaryCard cartItems={items} />
+        <CartSummaryCard cartItems={item.cartItems} />
       </SectionContainer>
     </>
   );

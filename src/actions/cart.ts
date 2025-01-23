@@ -38,5 +38,10 @@ export const syncCart = async (user: string, localCartItems: ICartItem[]) => {
   }
   return activeCart;
 };
+export const findCart = async (user: string) => {
+  await connectDB();
+  const cart = await Cart.findOne({ user, status: "ACTIVE" });
+  return JSON.parse(JSON.stringify(cart));
+};
 
 

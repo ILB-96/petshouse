@@ -8,7 +8,6 @@ export const createCartItem = async (
   quantity: number
 ) => {
   await connectDB();
-
   const cart = await Cart.findOne({ user: user, status: "ACTIVE" });
 
   if (!cart) {

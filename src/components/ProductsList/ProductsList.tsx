@@ -5,14 +5,20 @@ import { SectionContainer } from "@/styles/style";
 import { PopulatedProduct } from "@/types";
 interface ProductsListProps {
   products: PopulatedProduct[];
+  isFiltered?: boolean;
 }
-const ProductsList: React.FC<ProductsListProps> = ({ products }) => {
+const ProductsList: React.FC<ProductsListProps> = ({
+  products,
+  isFiltered,
+}) => {
   return (
     <SectionContainer>
       {!products.length && (
         <div className="flex justify-center items-center size-full">
           <p className="text-3xl font-semibold text-gray-500">
-            No products found.
+            {!isFiltered
+              ? "We are still working on getting products for this category."
+              : "No products found."}
           </p>
         </div>
       )}

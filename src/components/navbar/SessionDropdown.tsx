@@ -13,10 +13,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { sessionNavItems } from "./config";
 import { SignOutButton } from "./SignOutButton";
+import { SignInButton } from "./SignInButton";
 const SessionDropdown = () => {
   const { user, loading } = useAuth();
-  if (loading || !user) return <Icons.loader />;
-
+  if (loading) return <Icons.loader />;
+  if (!user) return <SignInButton />;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>

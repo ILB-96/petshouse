@@ -18,12 +18,7 @@ export async function getUserFromDatabase(email: string) {
       return null;
     }
 
-    // Return the user data with cartId
-    return {
-      _id: user._id,
-      role: user.role,
-      image: user.image || null,
-    };
+    return user; 
   } catch (error) {
     console.error(`Error fetching user from database: ${error}`);
     return null;

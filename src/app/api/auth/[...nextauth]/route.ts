@@ -15,6 +15,7 @@ import { AdapterUser } from "next-auth/adapters";
 import { NextApiRequest, NextApiResponse } from "next";
 import { JWT } from "next-auth/jwt";
 import { AuthSession } from "@/types";
+import { IUser } from "@/models/User";
 
 interface SessionCallbackParams {
   session: AuthSession;
@@ -51,13 +52,11 @@ const handler = async (
     ...authOptions,
     callbacks: {
       async session({ session, token }: SessionCallbackParams) {
-        const userFromDB = token.sub
-          ? await getUserFromDatabase(token?.email as string)
+        const userFromDB: IUser = (token.user as { email: string })
+          ? await getUserFromDatabase((token.user as { email: string }).email)
           : null;
         if (userFromDB) {
-          session.user._id = userFromDB._id;
-          session.user.role = userFromDB.role;
-          session.user.image = userFromDB.image || session.user.image;
+          session.user = JSON.parse(JSON.stringify(userFromDB));
           session.accessToken = token.accessToken;
           session.refreshToken = token.refreshToken;
         }
@@ -162,7 +161,7 @@ async function refreshAccessToken(token: JWT) {
       ...token,
       accessToken: refreshedTokens.access_token,
       accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
     };
   } catch (error) {
     console.log(error);
