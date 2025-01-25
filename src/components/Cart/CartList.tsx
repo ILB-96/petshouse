@@ -1,14 +1,16 @@
 import CartItemCard from "./CartItemCard";
 import React from "react";
 import { PopulatedCartItem } from "@/types";
+import { CartContextType } from "@/providers/CartContext";
 
-const CartList: React.FC<{ cartItems: PopulatedCartItem[] }> = ({
-  cartItems,
-}) => {
+const CartList: React.FC<{ cart: CartContextType }> = ({ cart }) => {
   return (
     <div className="p-4">
-      {cartItems.map((item: PopulatedCartItem) => (
-        <CartItemCard key={item._id as string} item={item} />
+      {cart.cartItems.map((item) => (
+        <CartItemCard
+          key={item.product._id as string}
+          item={item as PopulatedCartItem}
+        />
       ))}
     </div>
   );

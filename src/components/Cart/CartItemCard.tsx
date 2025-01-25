@@ -4,7 +4,7 @@ import Image from "next/image";
 import CartItemButtons from "./CartItemButtons";
 import { PopulatedCartItem } from "@/types";
 
-const CartItemCard = async ({ item }: { item: PopulatedCartItem }) => {
+const CartItemCard = ({ item }: { item: PopulatedCartItem }) => {
   return (
     <Card className="mb-4 flex flex-col md:flex-row justify-between items-center p-4">
       <div className="w-full md:w-1/4 flex-shrink-0">
@@ -39,7 +39,7 @@ const CartItemCard = async ({ item }: { item: PopulatedCartItem }) => {
             <p className="text-red-400">{item.product.stock} left in stock.</p>
           ))}
       </div>
-      <CartItemButtons itemId={item._id as string} quantity={item.quantity} />
+      <CartItemButtons item={item} />
     </Card>
   );
 };

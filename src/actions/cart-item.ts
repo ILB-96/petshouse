@@ -32,13 +32,16 @@ export const createCartItem = async (
 
   await newItem.save();
 
-  return "Cart item created successfully";
+  return JSON.parse(JSON.stringify(newItem));
 };
 
 export const getCartItems = async (cartId: string) => {
   await connectDB();
 
-  const cartItems = await CartItem.find({ cart: cartId });
+  const cartItems = await CartItem.find({ cart: cartId }).populate({
+    path: "product",
+    populate: { path: "images", model: "Media" },
+  });
 
   return JSON.parse(JSON.stringify(cartItems));
 };

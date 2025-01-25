@@ -1,24 +1,30 @@
 "use client";
 import CartList from "@/components/Cart/CartList";
 import CartSummaryCard from "@/components/Cart/CartSummaryCard";
-import { authOptions } from "@/lib/auth";
+import Loading from "@/components/Loading";
 import { useCart } from "@/providers/CartContext";
 import { SectionContainer } from "@/styles/style";
-import { getServerSession } from "next-auth";
+import { PopulatedCartItem } from "@/types";
 import React from "react";
 
 const Cart = () => {
-  const item = useCart();
-  if (item.cartItems.length === 0) {
-    return null;
+  const cart = useCart();
+  if (cart.isLoading) return <Loading />;
+
+  if (cart.cartItems.length === 0) {
+    return (
+      <SectionContainer>
+        <h1>Your cart is empty</h1>
+      </SectionContainer>
+    );
   }
   return (
     <>
       <SectionContainer>
-        <CartList cartItems={item.cartItems} />
+        <CartList cart={cart} />
       </SectionContainer>
       <SectionContainer>
-        <CartSummaryCard cartItems={item.cartItems} />
+        <CartSummaryCard cartItems={cart.cartItems as PopulatedCartItem[]} />
       </SectionContainer>
     </>
   );

@@ -5,22 +5,15 @@ import Link from "next/link";
 import { calculateTotal } from "@/lib/cart";
 import { PopulatedCartItem } from "@/types";
 
-interface Item {
-  quantity: number;
-  product: {
-    price: number;
-  };
-}
 
 const CartSummaryCard = ({ cartItems }: { cartItems: PopulatedCartItem[] }) => {
   const total = calculateTotal(cartItems);
-  console.log();
   return (
     <Card className="w-64 h-72 place-self-end mr-3">
       <CardHeader className="text-2xl font-semibold">Summary</CardHeader>
       <CardContent className="grid grid-cols-2 items-start">
         <h3>Subtotal</h3>
-        <p className="text-right">{total}$</p>
+        <p className="text-right">{total.toFixed(2)}$</p>
         <h3>Shipping</h3>
         <p className="text-right">11$</p>
         <h3>Tax</h3>
@@ -28,7 +21,7 @@ const CartSummaryCard = ({ cartItems }: { cartItems: PopulatedCartItem[] }) => {
       </CardContent>
       <CardFooter className="grid grid-cols-2 items-start text-xl">
         <h3 className="font-semibold">Total</h3>
-        <p className="text-right font-semibold">{total + 11}$</p>
+        <p className="text-right font-semibold">{(total + 11).toFixed(2)}$</p>
       </CardFooter>
       <div className="w-full flex justify-center">
         <Button

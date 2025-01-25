@@ -1,11 +1,11 @@
 "use client";
-import { findCart } from "@/actions/cart";
-import { getCartItems } from "@/actions/cart-item";
+import { findCartItems } from "@/actions/cart-item";
 import {
   getCartFromLocalStorage,
   saveCartToLocalStorage,
 } from "@/lib/cartStorage";
 import { ICartItem } from "@/models/CartItem";
+import { PopulatedCartItem } from "@/types";
 import { useSession } from "next-auth/react";
 import React, {
   createContext,
@@ -15,53 +15,68 @@ import React, {
   ReactNode,
 } from "react";
 
-type CartContextType = {
-  cartItems: any[]; // Adjust the type as needed
-  addToCart: (item: any) => void;
+export type CartContextType = {
+  cartItems: PopulatedCartItem[]; // Adjust the type as needed
+  addToCart: (item: PopulatedCartItem) => void;
   removeFromCart: (id: string) => void;
   cartCount: number;
+  isLoading: boolean;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cartItems, setCartItems] = useState<ICartItem[]>([]);
+  const [cartItems, setCartItems] = useState<PopulatedCartItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const session = useSession();
+
   useEffect(() => {
     const fetchCartData = async () => {
-      console.log("SESSION", session);
-      if (session.data?.user) {
-        const cartFromDb = await findCart(session.data.user._id as string);
-        const cartItemsFromDB = await getCartItems(cartFromDb._id as string);
-        console.log("CART FROM DB", cartItemsFromDB);
-        setCartItems(cartItemsFromDB);
-        return;
-      }
-      const cart = getCartFromLocalStorage();
-      console.log("WHAt", cart);
-      if (cart) {
-        setCartItems(JSON.parse(cart));
+      setIsLoading(true); // Start loading
+      try {
+        if (session.data?.user) {
+          const cartItemsFromDB = await findCartItems(
+            session.data.user.email as string
+          );
+          setCartItems(cartItemsFromDB.items);
+        } else {
+          const cart = getCartFromLocalStorage();
+          if (cart) {
+            setCartItems(JSON.parse(cart));
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch cart data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchCartData();
   }, [session]);
-  console.log("CART ITEMS", cartItems);
-  const addToCart = (item: ICartItem) => {
-    const existingItem = cartItems.find((i) => i.product === item.product);
+
+  const addToCart = (item: PopulatedCartItem) => {
+    const existingItem = cartItems.find(
+      (i) => (i.product._id as string) === item.product._id
+    );
     if (existingItem) {
       existingItem.quantity += item.quantity;
       setCartItems([...cartItems]);
-      saveCartToLocalStorage([...cartItems]);
+      if (!session.data?.user) saveCartToLocalStorage([...cartItems]);
+
       return;
     } else {
       setCartItems((prev) => [...prev, item]);
-      saveCartToLocalStorage([...cartItems, item]);
+      if (!session.data?.user) saveCartToLocalStorage([...cartItems, item]);
     }
   };
 
   const removeFromCart = (id: string) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+    if (!session.data?.user)
+      saveCartToLocalStorage(
+        cartItems.filter((item) => item.product._id !== id)
+      );
+    setCartItems((prev) => prev.filter((item) => item.product._id !== id));
   };
 
   return (
@@ -71,6 +86,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         addToCart,
         removeFromCart,
         cartCount: cartItems.length,
+        isLoading,
       }}
     >
       {children}

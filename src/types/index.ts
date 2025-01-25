@@ -64,7 +64,6 @@ export type PopulatedProduct = IProduct & {
 
 export type PopulatedCartItem = ICartItem & {
   product: PopulatedProduct;
-  user: IUser | string;
 };
 
 export type PopulatedProductDiscount = IDiscount & {

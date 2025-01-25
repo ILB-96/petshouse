@@ -1,12 +1,9 @@
-import { getServerSession } from "next-auth";
 import React from "react";
-import { authOptions } from "@/lib/auth";
 import { findMainCategories } from "@/actions/category";
 import { NavContainer } from "@/styles/style";
 import BigNav from "./BigNav";
 import SmallNav from "./SmallNav";
 import CartButton from "./CartButton";
-import { SignInButton } from "./SignInButton";
 import SessionDropdown from "./SessionDropdown";
 import AdminNav from "./AdminNav";
 

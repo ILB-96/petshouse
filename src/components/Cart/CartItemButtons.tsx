@@ -4,23 +4,21 @@ import { Icons } from "../icons";
 import { Button } from "../ui/button";
 import { deleteCartItem, setQuantity } from "@/actions/cart-item";
 import { Input } from "../ui/input";
+import { PopulatedCartItem } from "@/types";
+import { CartContextType, useCart } from "@/providers/CartContext";
 
-const CartItemButtons = ({
-  itemId,
-  quantity,
-}: {
-  itemId: string;
-  quantity: number;
-}) => {
+const CartItemButtons = ({ item }: { item: PopulatedCartItem }) => {
   const [loading, setLoading] = useState(false);
+  const { addToCart, removeFromCart } = useCart();
 
-  const setCount = async (e: React.FormEvent<HTMLFormElement>) => {
+  const setCount = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const count = (e.target as HTMLFormElement).count.value;
-    if (count === quantity.toString()) return;
     setLoading(true);
-    await setQuantity(itemId, count);
-    window.location.reload();
+    const count = parseInt(e.target.value);
+    if (count === item.quantity) return;
+    await setQuantity(item._id as string, count);
+    addToCart({ ...item, quantity: count } as PopulatedCartItem);
+    setLoading(false);
   };
 
   const handleRemoveItem = () => {
@@ -34,27 +32,20 @@ const CartItemButtons = ({
 
   const removeItem = async () => {
     setLoading(true);
-    await deleteCartItem(itemId);
-    window.location.reload();
+    removeFromCart(item.product._id as string);
+    await deleteCartItem(item._id as string);
+    setLoading(false);
   };
 
   return (
     <div className="w-full md:w-1/4 flex flex-col items-center md:items-end mt-4 md:mt-0 space-y-3">
-      <form className="flex flex-row-reverse" onSubmit={setCount}>
-        <Input
-          type="number"
-          defaultValue={quantity}
-          id="count"
-          className="w-[6ch] bg-transparent border-none text-lg font-medium"
-        />
-        <Button
-          type="submit"
-          disabled={loading}
-          className="px-2 py-1 bg-yellow-200 rounded-md text-gray-600 hover:bg-gray-100"
-        >
-          Update
-        </Button>
-      </form>
+      <Input
+        type="number"
+        defaultValue={item.quantity}
+        id="count"
+        className="w-[6ch] bg-transparent border-none text-lg font-medium"
+        onChange={(e) => setCount(e)}
+      />
       <Button
         onClick={handleRemoveItem}
         className="px-2 border border-red-500 rounded-md text-red-500 hover:bg-red-100 flex items-center"

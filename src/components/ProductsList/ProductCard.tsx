@@ -11,20 +11,22 @@ import {
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { addItemToLocalStorageCart } from "@/lib/cartStorage";
 import { createCartItem } from "@/actions/cart-item";
 import { findDiscountsByProduct } from "@/actions/discount";
-import { PopulatedProduct } from "@/types";
+import { PopulatedCartItem, PopulatedProduct } from "@/types";
 import { ICompany } from "@/models/Company";
 import { ICategory } from "@/models/Category";
 import { useCart } from "@/providers/CartContext";
+import { ICartItem } from "@/models/CartItem";
 // import { IDiscount } from "@/models/Discount";
 
 const ProductCard: React.FC<{ product: PopulatedProduct }> = ({ product }) => {
   // const [discount, setDiscount] = useState<IDiscount>();
   const [price, setPrice] = useState<number>();
   const { addToCart } = useCart();
+  const session = useSession();
   useEffect(() => {
     const fetchDiscounts = async () => {
       const response = await findDiscountsByProduct(
@@ -43,21 +45,27 @@ const ProductCard: React.FC<{ product: PopulatedProduct }> = ({ product }) => {
       // }
     };
     fetchDiscounts();
-    return () => {
-      console.log("ProductCard unmounted");
-    };
   }, [product]);
   const handleAddToCart = async () => {
-    console.log("HELLO");
-    const session = await getSession();
-    if (session?.user) {
-      await createCartItem(product._id as string, session.user._id, 1);
+    let cartItem: PopulatedCartItem | ICartItem;
+    if (session?.data?.user) {
+      cartItem = await createCartItem(
+        product._id as string,
+        session.data.user._id,
+        1
+      );
+      if (!cartItem) return;
+      cartItem = {
+        ...(cartItem as ICartItem),
+        product: { ...product, newPrice: price, images: [product.image] },
+      } as PopulatedCartItem;
     } else {
-      console.log("HEY", product._id);
-      const cartItem = { product: product._id as string, quantity: 1 };
-      addToCart(cartItem);
+      cartItem = {
+        product: { ...product, newPrice: price, images: [product.image] },
+        quantity: 1,
+      } as PopulatedCartItem;
     }
-    // window.location.reload();
+    addToCart(cartItem as PopulatedCartItem);
   };
 
   return (
